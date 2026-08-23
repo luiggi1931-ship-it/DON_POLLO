@@ -1,0 +1,858 @@
+/* Estilos para la página de lotes */
+.header-with-icon {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.chicken-icon {
+    font-size: 80px;
+    animation: bounce 2s infinite;
+    filter: drop-shadow(0 4px 8px rgba(46, 204, 113, 0.3));
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.header-text h1 {
+    margin: 0;
+    color: #2ecc71;
+}
+
+.header-text p {
+    margin: 5px 0 0 0;
+    color: #95a5a6;
+}
+
+.lotes-container {
+    padding: 20px;
+}
+
+/* Estadísticas */
+.stats-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: linear-gradient(135deg, rgba(26, 35, 46, 0.8) 0%, rgba(36, 52, 71, 0.8) 100%);
+    border-radius: 16px;
+    padding: 25px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 24px rgba(46, 204, 113, 0.2);
+    border-color: rgba(46, 204, 113, 0.3);
+}
+
+.stat-icon {
+    font-size: 48px;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.stat-info h3 {
+    margin: 0;
+    font-size: 32px;
+    color: #2ecc71;
+    font-weight: 700;
+}
+
+.stat-info p {
+    margin: 5px 0 0 0;
+    color: #95a5a6;
+    font-size: 14px;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(46, 204, 113, 0.4);
+}
+
+.btn-secondary {
+    background: #34495e;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background: #2c3e50;
+}
+
+.btn-danger {
+    background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-danger:hover {
+    background: linear-gradient(135deg, #c0392b 0%, #a93226 100%);
+}
+
+/* --- BARRA DE HERRAMIENTAS (BOTONES + BUSCADOR) --- */
+.actions-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.buttons-group {
+    display: flex;
+    gap: 10px;
+}
+
+.search-form {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: #2a323d;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 5px 15px;
+    width: 300px;
+    transition: all 0.3s ease;
+}
+
+.search-form:focus-within {
+    border-color: #2ecc71;
+    box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.1);
+}
+
+.search-icon {
+    color: #95a5a6;
+    margin-right: 10px;
+}
+
+.search-form input {
+    background: transparent;
+    border: none;
+    color: white;
+    width: 100%;
+    outline: none;
+    font-size: 14px;
+}
+
+.clear-search {
+    color: #e74c3c;
+    cursor: pointer;
+    margin-left: 10px;
+    font-size: 14px;
+    transition: transform 0.2s;
+}
+
+.clear-search:hover {
+    transform: scale(1.2);
+}
+
+/* Grid de lotes (diseño de jaulas) */
+.lotes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+}
+
+/* --- NUEVO DISEÑO DE TARJETA MODERNA --- */
+.lote-card {
+    background: #2a323d;
+    border-radius: 16px;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.lote-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.lote-card.cerrado {
+    opacity: 0.8;
+    filter: grayscale(0.6);
+}
+
+/* Barra de estado superior */
+.card-status-bar {
+    height: 4px;
+    width: 100%;
+}
+.card-status-bar.active { background: linear-gradient(90deg, #2ecc71, #27ae60); }
+.card-status-bar.closed { background: linear-gradient(90deg, #95a5a6, #7f8c8d); }
+
+.lote-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    flex: 1;
+}
+
+/* Header interno */
+.lote-header-modern {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.lote-title-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.lote-id-badge {
+    font-size: 12px;
+    color: #8a94a1;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.lote-type {
+    margin: 2px 0 0 0;
+    font-size: 18px;
+    color: #ffffff;
+    font-weight: 700;
+}
+
+.status-pill {
+    font-size: 10px;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+.status-pill.active { background: rgba(46, 204, 113, 0.15); color: #2ecc71; border: 1px solid rgba(46, 204, 113, 0.3); }
+.status-pill.closed { background: rgba(149, 165, 166, 0.15); color: #95a5a6; border: 1px solid rgba(149, 165, 166, 0.3); }
+
+/* Badge de Mortalidad */
+.mortalidad-badge {
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-right: auto; /* Empuja el status pill a la derecha */
+    margin-left: 10px;
+}
+
+.mortalidad-badge.low { background: rgba(46, 204, 113, 0.1); color: #2ecc71; border: 1px solid rgba(46, 204, 113, 0.2); }
+.mortalidad-badge.medium { background: rgba(241, 196, 15, 0.1); color: #f1c40f; border: 1px solid rgba(241, 196, 15, 0.2); }
+.mortalidad-badge.high { background: rgba(231, 76, 60, 0.1); color: #e74c3c; border: 1px solid rgba(231, 76, 60, 0.2); }
+
+
+/* Estadísticas principales */
+.lote-main-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 5px 0;
+}
+
+.stat-box {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.stat-icon-circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+.icon-bird { background: rgba(46, 204, 113, 0.2); }
+.icon-calendar { background: rgba(52, 152, 219, 0.2); }
+
+.stat-data { display: flex; flex-direction: column; }
+.stat-number { font-size: 18px; font-weight: 700; color: white; line-height: 1.2; }
+.stat-desc { font-size: 11px; color: #8a94a1; }
+
+/* Distribución en Jaulas (Simulada) */
+.lote-cages-info {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 10px 12px;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.cages-title {
+    font-size: 10px;
+    color: #8a94a1;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.cages-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+}
+
+.cage-item {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 6px;
+    text-align: center;
+    padding: 5px;
+    font-size: 11px;
+    color: #94a3b8;
+}
+
+.cage-item span {
+    margin-right: 4px;
+}
+
+.cage-item strong {
+    color: white;
+    font-weight: 700;
+}
+
+.cage-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    font-size: 11px;
+    color: #8a94a1;
+    font-style: italic;
+}
+
+/* Metadatos */
+.lote-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.meta-item {
+    font-size: 13px;
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.meta-item i { width: 16px; text-align: center; opacity: 0.7; }
+.small-text { font-size: 11px; margin-left: 24px; opacity: 0.6; }
+
+/* Botones de acción modernos */
+.lote-actions-modern {
+    display: flex;
+    gap: 8px;
+    margin-top: auto;
+    padding-top: 10px;
+}
+
+.btn-icon-modern {
+    flex: 1;
+    border: none;
+    border-radius: 8px;
+    padding: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.05);
+    color: #94a3b8;
+}
+
+.btn-icon-modern:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    transform: translateY(-2px);
+}
+
+.btn-icon-modern.edit:hover { background: rgba(241, 196, 15, 0.2); color: #f1c40f; }
+.btn-icon-modern.death:hover { background: rgba(231, 76, 60, 0.2); color: #e74c3c; }
+.btn-icon-modern.delete:hover { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+
+/* --- FIN NUEVO DISEÑO --- */
+
+/* Mantener estilos de botones generales y modales */
+.btn-primary {
+    background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(46, 204, 113, 0.4);
+}
+
+.badge-estado {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.badge-activo {
+    background: rgba(46, 204, 113, 0.2);
+    color: #2ecc71;
+    border: 1px solid rgba(46, 204, 113, 0.4);
+}
+
+.badge-cerrado {
+    background: rgba(149, 165, 166, 0.2);
+    color: #95a5a6;
+    border: 1px solid rgba(149, 165, 166, 0.4);
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-content {
+    background: linear-gradient(135deg, #1a232e 0%, #243447 100%);
+    margin: 3% auto;
+    padding: 0;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 700px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    animation: slideDown 0.4s ease;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-small {
+    max-width: 500px;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 30px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    position: sticky;
+    top: 0;
+    background: linear-gradient(135deg, #1a232e 0%, #243447 100%);
+    z-index: 10;
+}
+
+.modal-header h2 {
+    margin: 0;
+    color: #2ecc71;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.close,
+.close-proveedor,
+.close-tipo-ave,
+.close-confirmar,
+.close-detalle {
+    color: #95a5a6;
+    font-size: 32px;
+    font-weight: 300;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    line-height: 1;
+}
+
+.close:hover,
+.close-proveedor:hover,
+.close-tipo-ave:hover,
+.close-confirmar:hover,
+.close-detalle:hover {
+    color: #e74c3c;
+}
+
+/* Formulario */
+.form-lote,
+#formProveedor,
+#formTipoAve {
+    padding: 30px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group.flex-grow {
+    grid-column: 1 / -1;
+}
+
+.form-group label {
+    color: #ecf0f1;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    background: rgba(26, 35, 46, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 12px 15px;
+    color: #ecf0f1;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: #2ecc71;
+    box-shadow: 0 0 0 3px rgba(46, 204, 113, 0.2);
+}
+
+.form-group textarea {
+    resize: vertical;
+    font-family: inherit;
+}
+
+.input-with-button {
+    display: flex;
+    gap: 10px;
+}
+
+.input-with-button select {
+    flex: 1;
+}
+
+.btn-icon {
+    background: #2ecc71;
+    color: white;
+    border: none;
+    width: 45px;
+    height: 45px;
+    border-radius: 8px;
+    font-size: 24px;
+    font-weight: 300;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-icon:hover {
+    background: #27ae60;
+    transform: scale(1.05);
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Estado vacío */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #95a5a6;
+}
+
+.empty-state-icon {
+    font-size: 80px;
+    margin-bottom: 20px;
+    opacity: 0.5;
+}
+
+.empty-state h3 {
+    color: #ecf0f1;
+    margin-bottom: 10px;
+}
+
+/* Modal de detalles */
+.detalle-info {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.detalle-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background: rgba(26, 35, 46, 0.5);
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.detalle-row strong {
+    color: #95a5a6;
+    font-size: 14px;
+}
+
+.detalle-row span {
+    color: #ecf0f1;
+    font-weight: 600;
+    text-align: right;
+}
+
+.dias-badge {
+    background: linear-gradient(135deg, rgba(52, 152, 219, 0.3), rgba(41, 128, 185, 0.3));
+    padding: 6px 12px;
+    border-radius: 20px;
+    color: #3498db !important;
+    border: 1px solid rgba(52, 152, 219, 0.4);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+/* Animaciones adicionales */
+@keyframes slideInRight {
+    from {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateX(400px);
+        opacity: 0;
+    }
+}
+
+/* Scrollbar personalizado para modales */
+.modal-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+    background: rgba(26, 35, 46, 0.5);
+    border-radius: 10px;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+    background: rgba(46, 204, 113, 0.5);
+    border-radius: 10px;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+    background: rgba(46, 204, 113, 0.7);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .modal-content {
+        width: 95%;
+        margin: 10% auto;
+    }
+    
+    .lotes-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .stats-container {
+        grid-template-columns: 1fr;
+    }
+
+    .chicken-icon {
+        font-size: 60px;
+    }
+
+    .header-with-icon {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .lote-actions {
+        flex-direction: column;
+    }
+
+    .btn-action {
+        width: 100%;
+    }
+
+    .actions-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .search-form { width: auto; }
+
+    .stat-card {
+        flex-direction: row;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .lotes-container {
+        padding: 10px;
+    }
+
+    .modal-content {
+        margin: 5% auto;
+        max-height: 95vh;
+    }
+
+    .form-lote,
+    #formProveedor,
+    #formTipoAve {
+        padding: 20px;
+    }
+
+    .modal-header {
+        padding: 20px;
+    }
+
+    .modal-header h2 {
+        font-size: 18px;
+    }
+}
+
+/* Mejoras visuales adicionales */
+.form-group input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+}
+
+select {
+    cursor: pointer;
+}
+
+option {
+    background: #1a232e;
+    color: #ecf0f1;
+}
+
+/* Efecto de carga */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.loading {
+    animation: pulse 1.5s ease-in-out infinite;
+}

@@ -1,0 +1,306 @@
+{% extends "base.html" %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/configuracion.css') }}">
+{% endblock %}
+{% block content %}
+<div class="containerC">
+    <header>
+        <h1>Configuración</h1>
+    </header>
+    <div class="tabs">
+        <button class="tab-button active" data-tab="parametros">
+            Parámetros
+        </button>
+        <button class="tab-button" data-tab="p.actuadores">
+            Pruebas de Actuadores
+        </button>
+        <button class="tab-button" data-tab="jaula">
+            Jaula
+        </button>
+    </div>
+    <div class="contentC">
+        <div id="parametros" class="tab-panel active">
+            <h2>Parametros Ambientales</h2>
+            <div class="parametros-grid">
+            <!-- HUMEDAD -->
+                <div class="bloque">
+                    <table class="tablaP">
+                        <thead>
+                            <tr>
+                                <th rowspan="2">Etapa</th>
+                                <th colspan="2" class="header-humedad">Humedad</th>
+                            </tr>
+                            <tr>
+                                <th>Mínima %</th>
+                                <th>Máxima %</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Pequeño</td>
+                                <td><input type="number" id="humedad_pequeno_min" min="60" value="60"></td>
+                                <td><input type="number" id="humedad_pequeno_max" max="75" value="70"></td>
+                            </tr>
+                            <tr>
+                                <td>Crecimiento</td>
+                                <td><input type="number" id="humedad_mediano_min" min="55" value="55"></td>
+                                <td><input type="number" id="humedad_mediano_max" max="65" value="65"></td>
+                            </tr>
+                            <tr>
+                                <td>Grande</td>
+                                <td><input type="number" id="humedad_grande_min" min="50" value="50"></td>
+                                <td><input type="number" id="humedad_grande_max" max="60" value="60"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- TEMPERATURA -->
+                <div class="bloque">
+                    <table class="tablaP">
+                        <thead>
+                            <tr>
+                                <th rowspan="2">Etapa</th>
+                                <th colspan="2" class="header-temperatura">Temperatura</th>
+                            </tr>
+                            <tr>
+                                <th>Mínima°C</th>
+                                <th>Máxima°C</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Pequeño</td>
+                                <td><input type="number" id="temperatura_pequeno_min" min="32" value="32"></td>
+                                <td><input type="number" id="temperatura_pequeno_max" max="34" value="34"></td>
+                            </tr>
+                            <tr>
+                                <td>Crecimiento</td>
+                                <td><input type="number" id="temperatura_mediano_min" min="21" value="21"></td>
+                                <td><input type="number" id="temperatura_mediano_max" max="26" value="26"></td>
+                            </tr>
+                            <tr>
+                                <td>Grande</td>
+                                <td><input type="number" id="temperatura_grande_min" min="18" value="18"></td>
+                                <td><input type="number" id="temperatura_grande_max" max="24" value="24"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- AMÓNICO -->
+                <div class="bloque">
+                    <table class="tablaP">
+                        <thead>
+                            <tr>
+                                <th rowspan="2">Etapa</th>
+                                <th colspan="2" class="header-amonico">Amónico</th>
+                            </tr>
+                            <tr>
+                                <th>Mínima ppm</th>
+                                <th>Máxima ppm</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Pequeño</td>
+                                <td><input type="number" id="amonico_pequeno_min" min="0" value="0"></td>
+                                <td><input type="number" id="amonico_pequeno_max" max="10" value="10"></td>
+                            </tr>
+                            <tr>
+                                <td>Crecimiento</td>
+                                <td><input type="number" id="amonico_mediano_min" min="10" value="10"></td>
+                                <td><input type="number" id="amonico_mediano_max" max="15" value="15"></td>
+                            </tr>
+                            <tr>
+                                <td>Grande</td>
+                                <td><input type="number" id="amonico_grande_min" min="15" value="15"></td>
+                                <td><input type="number" id="amonico_grande_max" max="20" value="20"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- ILUMINACIÓN -->
+                <div class="bloque">
+                    <table class="tablaP">
+                        <thead>
+                            <tr>
+                                <th rowspan="2">Etapa</th>
+                                <th colspan="2" class="header-iluminacion">Iluminación</th>
+                            </tr>
+                            <tr>
+                                <th>Mínima luz</th>
+                                <th>Máxima luz  </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Pequeño</td>
+                                <td><input type="number" id="iluminacion_pequeno_min" min="30"value="30"></td>
+                                <td><input type="number" id="iluminacion_pequeno_max" max="45" value="40"></td>
+                            </tr>
+                            <tr>
+                                <td>Crecimiento</td>
+                                <td><input type="number" id="iluminacion_mediano_min" min="15" value="15"></td>
+                                <td><input type="number" id="iluminacion_mediano_max" max="20" value="20"></td>
+                            </tr>
+                            <tr>
+                                <td>Grande</td>
+                                <td><input type="number" id="iluminacion_grande_min" min="5" value="5"></td>
+                                <td><input type="number" id="iluminacion_grande_max" max="10" value="10"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- COMIDA -->
+                <div class="bloque">
+                    <table class="tablaP">
+                        <thead>
+                            <tr>
+                                <th rowspan="2">Etapa</th>
+                                <th colspan="2" class="header-comida">Comida</th>
+                            </tr>
+                            <tr>
+                                <th>Mínima G</th>
+                                <th>Máxima G</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Pequeño</td>
+                                <td><input type="number" id="comida_pequeno_min" min="15" value="15"></td>
+                                <td><input type="number" id="comida_pequeno_max" max="30" value="30"></td>
+                            </tr>
+                            <tr>
+                                <td>Crecimiento</td>
+                                <td><input type="number" id="comida_mediano_min" min="60" value="60"></td>
+                                <td><input type="number" id="comida_mediano_max" max="90" value="90"></td>
+                            </tr>
+                            <tr>
+                                <td>Grande</td>
+                                <td><input type="number" id="comida_grande_min" min="110" value="110"></td>
+                                <td><input type="number" id="comida_grande_max" max="150" value="150"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- AGUA -->
+                <div class="bloque">
+                    <table class="tablaP">
+                        <thead>
+                            <tr>
+                                <th rowspan="2">Etapa</th>
+                                <th colspan="2" class="header-agua">Agua</th>
+                            </tr>
+                            <tr>
+                                <th>Mínima ml</th>
+                                <th>Máxima ml</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Pequeño</td>
+                                <td><input type="number" id="agua_pequeno_min" min="30" value="30"></td>
+                                <td><input type="number" id="agua_pequeno_max" max="50" value="50"></td>
+                            </tr>
+                            <tr>
+                                <td>Crecimiento</td>
+                                <td><input type="number" id="agua_mediano_min" min="120" value="120"></td>
+                                <td><input type="number" id="agua_mediano_max" max="180" value="180"></td>
+                            </tr>
+                            <tr>
+                                <td>Grande</td>
+                                <td><input type="number" id="agua_grande_min" min="250" value="250"></td>
+                                <td><input type="number" id="agua_grande_max" max="300" value="300"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div id="p.actuadores" class="tab-panel">
+            <h2>Prueba de actuadores generales</h2>  
+            <div class="actuadores-grid">
+                <div class="actuador-card">
+                    <h3>Ventilador</h3>
+                    <div class="ventilador-container">
+                        <div class="ventilador" id="ventilador">
+                            <div class="aspa"></div>
+                            <div class="aspa"></div>
+                            <div class="aspa"></div>
+                            <div class="centro"></div>
+                        </div>
+                    </div>
+                    <div class="control-buttons">
+                        <button class="btn-encender" onclick="encenderVentilador()">
+                            Encender
+                        </button>
+                        <button class="btn-apagar" onclick="apagarVentilador()">
+                            Apagar
+                        </button>
+                    </div>
+                    <div class="estado-display apagado">
+                        <span id="estado-ventilador">Apagado</span>
+                    </div>
+                </div>
+                <!-- Puedes agregar más actuadores aquí -->
+                <div class="actuador-card">
+                    <h3>Ventilador</h3>
+                    <div class="ventilador-container">
+                        <div class="ventilador" id="ventilador">
+                            <div class="aspa"></div>
+                            <div class="aspa"></div>
+                            <div class="aspa"></div>
+                            <div class="centro"></div>
+                        </div>
+                    </div>
+                    <div class="control-buttons">
+                        <button class="btn-encender" onclick="encenderVentilador()">
+                            Encender
+                        </button>
+                        <button class="btn-apagar" onclick="apagarVentilador()">
+                            Apagar
+                        </button>
+                    </div>
+                    <div class="estado-display apagado">
+                        <span id="estado-ventilador">Apagado</span>
+                    </div>
+                </div>
+                <div class="actuador-card">
+                    <h3>Ventilador</h3>
+                    <div class="ventilador-container">
+                        <div class="ventilador" id="ventilador">
+                            <div class="aspa"></div>
+                            <div class="aspa"></div>
+                            <div class="aspa"></div>
+                            <div class="centro"></div>
+                        </div>
+                    </div>
+                    <div class="control-buttons">
+                        <button class="btn-encender" onclick="encenderVentilador()">
+                            Encender
+                        </button>
+                        <button class="btn-apagar" onclick="apagarVentilador()">
+                            Apagar
+                        </button>
+                    </div>
+                    <div class="estado-display apagado">
+                        <span id="estado-ventilador">Apagado</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+            <div id="jaula" class="tab-panel">
+                <h2>Prueba de jaula</h2>
+            </div>
+        </div>
+    </div>
+    <!-- Botones de acción -->
+<div class="botones-container">
+    <button class="btn-guardar" onclick="guardarDatos()"> Guardar Datos</button>
+    <button class="btn-reset" onclick="resetearDatos()"> Resetear</button>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/configuracion.js') }}"></script>
+{% endblock %}

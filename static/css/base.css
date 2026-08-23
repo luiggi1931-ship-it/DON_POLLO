@@ -1,0 +1,332 @@
+/* --- VARIABLES Y CONFIGURACIÓN (Tus variables originales) --- */
+:root {
+    --sidebar-bg: #1a222d;
+    --sidebar-hover: #2d3748;
+    --sidebar-active: #17a2b8;
+    --text-muted: #8a94a1;
+    --text-light: #ffffff;
+    --topbar-bg: #20927f;
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-elastic: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+body { 
+    margin: 0; 
+    font-family: 'Inter', 'Segoe UI', sans-serif; 
+    display: flex; 
+    background: #3e74aa;
+    overflow-x: hidden; 
+    min-height: 100vh; /* Asegura que el body siempre cubra el alto total */
+}
+
+.container { 
+    display: flex; 
+    width: 100%; 
+    min-height: 100vh;
+}
+
+/* --- COMPONENTES PARA EL DRAWER --- */
+
+.sidebar-toggle {
+    position: fixed;
+    left: 15px;
+    top: 4px; 
+    z-index: 1100; 
+    background: var(--sidebar-bg);
+    color: white;
+    border: none;
+    width: 32px; 
+    height: 32px; 
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
+    transition: var(--transition-smooth);
+}
+
+.sidebar-toggle.active {
+    left: 275px; 
+}
+
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1040;
+    display: none; 
+    backdrop-filter: blur(2px);
+}
+
+.sidebar-overlay.active {
+    display: block;
+}
+
+/* --- SIDEBAR --- */
+.sidebar { 
+    width: 260px; 
+    background: var(--sidebar-bg); 
+    color: var(--text-light); 
+    display: flex; 
+    flex-direction: column;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+    z-index: 1050;
+    position: fixed;
+    left: -260px; 
+    top: 0;
+    height: 100vh;
+    transition: var(--transition-smooth);
+}
+
+.sidebar.open {
+    left: 0;
+}
+
+/* --- LOGO --- */
+.logo { 
+    padding: 20px 20px; 
+    display: flex; 
+    align-items: center; 
+    gap: 12px; 
+    border-bottom: 1px solid rgba(255,255,255,0.05); 
+    margin-bottom: 10px;
+}
+
+.logo-img { 
+    width: 110px; 
+    height: auto; 
+}
+
+.logo span { 
+    font-weight: 700; 
+    letter-spacing: 1px; 
+    font-size: 1rem; 
+    color: var(--text-light); 
+}
+
+/* --- NAVEGACIÓN --- */
+.sidebar nav ul { 
+    list-style: none; 
+    padding: 0; margin: 0; 
+}
+
+.sidebar nav li { 
+    margin: 2px 0; 
+    transition: var(--transition-elastic); 
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.sidebar nav li:hover { 
+    background: var(--sidebar-hover);
+    transform: translateX(8px); 
+}
+
+.sidebar nav li a {
+    text-decoration: none;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    width: 100%;
+    transition: var(--transition-smooth);
+}
+
+.sidebar nav li i { 
+    width: 20px; 
+    font-size: 1.2rem; 
+    padding: 12px 25px; 
+    transition: var(--transition-smooth); 
+}
+
+.sidebar nav li:hover a, .sidebar nav li:hover i { 
+    color: var(--text-light); 
+}
+
+.sidebar nav li.active { 
+    background: rgba(23, 162, 184, 0.15); 
+}
+
+.sidebar nav li.active a, .sidebar nav li.active i { 
+    color: var(--sidebar-active); 
+}
+
+.sidebar nav li.active::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%; 
+    width: 4px;
+    background: var(--sidebar-active);
+    border-radius: 0 4px 4px 0;
+}
+
+/* --- CONTENIDO PRINCIPAL --- */
+.main-content { 
+    flex: 1; 
+    display: flex; 
+    flex-direction: column; 
+    width: 100%; 
+    min-height: 100vh;
+}
+
+.top-bar { 
+    background: var(--topbar-bg); 
+    padding: 0 25px; 
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05); 
+    height: 40px; 
+}
+
+.top-bar span { 
+    color: var(--text-light); 
+    font-size: 0.95rem; 
+    margin-right: 12px; 
+    font-weight: 500;
+}
+
+.content-area { 
+    padding: 10px 20px 20px 20px; 
+    flex: 1; 
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- ANIMACIÓN CAMPANA MINIATURA --- */
+.icon-bell {
+    width: 16px; 
+    height: 16px; 
+    border: 3px solid #e2e2e2;
+    border-bottom: none;
+    border-radius: 20px 20px 0 0;
+    position: relative;
+    margin: 5px;
+    cursor: pointer;
+}
+.icon-bell::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: -3px;
+    width: 22px; 
+    height: 2px; 
+    background-color: #fffefe;
+}
+.icon-bell::after {
+    content: '';
+    position: absolute;
+    bottom: -4px; left: 50%;
+    transform: translateX(-50%);
+    width: 5px; 
+    height: 5px; 
+    background-color: #fdfdfd;
+    border-radius: 50%;
+}
+
+.icon-bell:hover {
+    animation: ring 0.5s ease-in-out;
+    transform-origin: top center; 
+}
+
+@keyframes ring {
+    0% { transform: rotate(0); }
+    25% { transform: rotate(15deg); }
+    50% { transform: rotate(-15deg); }
+    75% { transform: rotate(10deg); }
+    100% { transform: rotate(0); }
+}
+
+
+/* --- ESTILOS DEL REPRODUCTOR DE MÚSICA --- */
+.music-player-card {
+    background: rgba(0, 0, 0, 0.2); 
+    padding: 15px;
+    margin: 20px 10px; 
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    text-align: center;
+    backdrop-filter: blur(5px);
+}
+
+.music-info h4 {
+    font-size: 0.9rem;
+    color: white;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.music-info p {
+    font-size: 0.7rem;
+    color: #94a3b8;
+    margin: 2px 0 10px 0;
+}
+
+.progress-container {
+    background: #3b4452;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    height: 4px;
+    width: 100%;
+}
+
+.progress {
+    background-color: #3b82f6; 
+    border-radius: 5px;
+    height: 100%;
+    width: 0%; 
+    transition: width 0.1s linear;
+}
+
+.music-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 10px;
+}
+
+.control-btn {
+    background: none;
+    border: none;
+    color: #94a3b8;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: 0.3s;
+}
+
+.play-main {
+    background: #3b82f6;
+    color: white;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+}
+
+/* --- AJUSTES RESPONSIVOS (MOVIL Y ZOOM) --- */
+@media (max-width: 480px) {
+    .sidebar {
+        width: 240px; /* Sidebar un poquito más angosto en movil */
+        left: -240px;
+    }
+    .sidebar-toggle.active {
+        left: 250px; /* Botón ajustado para que no se salga de la pantalla */
+    }
+    .top-bar span {
+        display: none; /* Quitamos la palabra "Notificaciones" para que no choque con el botón */
+    }
+}

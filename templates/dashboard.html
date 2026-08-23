@@ -1,0 +1,250 @@
+{% extends 'base.html' %} {% block extra_css %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/dashboard.css') }}"
+/>
+{% endblock %} {% block extra_js %}
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+{% endblock %} {% block content %}
+<div class="monitor-wrapper">
+  <div class="dashboard-header">
+    <div class="header-left">
+      <h2>
+        Don Pollo <span class="subtitle">| Monitoreo en Tiempo Real</span>
+      </h2>
+    </div>
+
+    <div class="header-controls">
+      <div class="lote-selector-wrapper">
+        <i class="fas fa-layer-group"></i>
+        <select id="lote-select" onchange="cambiarLote(this.value)">
+          <option value="lote1">Lote A-101 (Semana 1)</option>
+          <option value="lote2">Lote B-205 (Semana 3)</option>
+          <option value="lote3" selected>Lote C-308 (Semana 6)</option>
+        </select>
+      </div>
+      <div class="live-indicator"><span class="dot"></span> LIVE</div>
+    </div>
+  </div>
+
+  <div class="sensor-grid">
+    <div class="sensor-card status-normal" id="card-ammonia">
+      <i class="fas fa-flask icon-ammonia"></i>
+      <div class="card-data">
+        <p>Amoniaco</p>
+        <b id="val-ammonia">12 ppm</b>
+        <span class="status-badge" id="badge-ammonia">Normal</span>
+      </div>
+    </div>
+
+    <div class="sensor-card status-optimo" id="card-temp">
+      <i class="fas fa-thermometer-half icon-temp"></i>
+      <div class="card-data">
+        <p>Temperatura</p>
+        <b id="val-temp">31.5 °C</b>
+        <span class="status-badge" id="badge-temp">Óptimo</span>
+      </div>
+    </div>
+
+    <div class="sensor-card status-normal" id="card-humidity">
+      <i class="fas fa-tint icon-humidity"></i>
+      <div class="card-data">
+        <p>Humedad</p>
+        <b id="val-humidity">65%</b>
+        <span class="status-badge" id="badge-humidity">Normal</span>
+      </div>
+    </div>
+
+    <div class="sensor-card status-normal" id="card-light">
+      <div class="light-container">
+        <i class="fas fa-lightbulb icon-light" id="light-bulb"></i>
+      </div>
+      <div class="card-data">
+        <p>Iluminación</p>
+        <b id="val-light">320 lx</b>
+        <span class="status-badge" id="badge-light">Estable</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="main-viz-row">
+    <div class="water-widget main-card">
+      <div class="card-header-flex">
+        <div class="chart-title">
+          <i class="fas fa-tint"></i> Consumo de Agua
+        </div>
+        <div class="timeframe-selector">
+          <button
+            class="active"
+            onclick="changeTimeframe(this, 'water', 'actual')"
+          >
+            ACTUAL
+          </button>
+          <button onclick="changeTimeframe(this, 'water', '1d')">1D</button>
+          <button onclick="changeTimeframe(this, 'water', '5d')">5D</button>
+          <button onclick="changeTimeframe(this, 'water', '1m')">1Mes</button>
+          <button onclick="changeTimeframe(this, 'water', '1y')">1Año</button>
+        </div>
+      </div>
+      <div class="chart-content-layout">
+        <div class="canvas-container">
+          <canvas id="waterChart"></canvas>
+        </div>
+        <div class="stats-sidebar">
+          <div class="mini-stat-box blue">
+            <small>CONSUMO HOY</small>
+            <b id="water-today">145.5 L</b>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="food-widget main-card">
+      <div class="card-header-flex">
+        <div class="chart-title">
+          <i class="fas fa-seedling"></i> Consumo de Alimento
+        </div>
+        <div class="timeframe-selector">
+          <button
+            class="active"
+            onclick="changeTimeframe(this, 'food', 'actual')"
+          >
+            ACTUAL
+          </button>
+          <button onclick="changeTimeframe(this, 'food', '1d')">1D</button>
+          <button onclick="changeTimeframe(this, 'food', '5d')">5D</button>
+          <button onclick="changeTimeframe(this, 'food', '1m')">1Mes</button>
+          <button onclick="changeTimeframe(this, 'food', '1y')">1Año</button>
+        </div>
+      </div>
+      <div class="chart-content-layout">
+        <div class="canvas-container">
+          <canvas id="foodChart"></canvas>
+        </div>
+        <div class="stats-sidebar">
+          <div class="mini-stat-box purple">
+            <small>ENTREGADO</small>
+            <b id="food-delivered">82.4 Kg</b>
+          </div>
+          <div class="mini-stat-box red">
+            <small>PÉRDIDA EST.</small>
+            <b id="food-loss">1.2 Kg</b>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="zones-hex-container">
+    <button
+      class="zone-hex-item"
+      id="zone-container-1"
+      onclick="verDetalleZona(1)"
+    >
+      <div class="hex-shape">
+        <i class="fas fa-egg"></i>
+      </div>
+      <div class="zone-details">
+        <small>ZONA 1</small>
+        <b id="val-z1">32.0°C</b>
+      </div>
+    </button>
+
+    <button
+      class="zone-hex-item"
+      id="zone-container-2"
+      onclick="verDetalleZona(2)"
+    >
+      <div class="hex-shape">
+        <i class="fas fa-egg"></i>
+      </div>
+      <div class="zone-details">
+        <small>ZONA 2</small>
+        <b id="val-z2">31.2°C</b>
+      </div>
+    </button>
+
+    <button
+      class="zone-hex-item"
+      id="zone-container-3"
+      onclick="verDetalleZona(3)"
+    >
+      <div class="hex-shape">
+        <i class="fas fa-egg"></i>
+      </div>
+      <div class="zone-details">
+        <small>ZONA 3</small>
+        <b id="val-z3">30.8°C</b>
+      </div>
+    </button>
+
+    <button
+      class="zone-hex-item"
+      id="zone-container-4"
+      onclick="verDetalleZona(4)"
+    >
+      <div class="hex-shape">
+        <i class="fas fa-egg"></i>
+      </div>
+      <div class="zone-details">
+        <small>ZONA 4</small>
+        <b id="val-z4">30.8°C</b>
+      </div>
+    </button>
+  </div>
+
+  <div id="zone-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modal-title">ZONA X</h3>
+        <button class="close-btn" onclick="closeModal()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="camera-feed">
+          <div class="rec-badge"><i class="fas fa-circle"></i> REC</div>
+          <div class="camera-overlay"></div>
+          <img
+            src="https://images.unsplash.com/photo-1543350204-5853f6567086?q=80&w=600&auto=format&fit=crop"
+            alt="Cámara Zona"
+            class="cam-img"
+          />
+        </div>
+
+        <div class="zone-stats-grid">
+          <div class="stat-item">
+            <small>Aves Contadas</small>
+            <b id="modal-birds">0</b>
+          </div>
+          <div class="stat-item">
+            <small>Mortalidad Hoy</small>
+            <b id="modal-mortality" class="danger-text">0</b>
+          </div>
+          <div class="stat-item">
+            <small>CO2 Local</small>
+            <b id="modal-co2">0 ppm</b>
+          </div>
+          <div class="stat-item">
+            <small>Estado Cama</small>
+            <span class="badge-ok" id="modal-bed">Seca</span>
+          </div>
+        </div>
+
+        <div class="modal-controls">
+          <p>Acciones Rápidas</p>
+          <div class="btn-row">
+            <button class="control-btn" onclick="toggleAction(this)">
+              <i class="fas fa-fan"></i> Ventilación
+            </button>
+            <button class="control-btn" onclick="toggleAction(this)">
+              <i class="fas fa-lightbulb"></i> Luz Aux.
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
