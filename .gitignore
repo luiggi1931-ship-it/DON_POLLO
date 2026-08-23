@@ -4,9 +4,11 @@ __pycache__/
 
 # Variables de entorno — NUNCA subir al repositorio
 .env
+.env.docker
 
-# Flask-Migrate
-migrations/
+# Scripts de migración puntuales
+migrate_*.py
+update_db.py
 
 # IDEs
 .vscode/

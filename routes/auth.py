@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_user, logout_user, login_required
+from urllib.parse import urlparse
 from models.usuario import Usuario
 
 auth_bp = Blueprint('auth', __name__)
@@ -16,6 +17,9 @@ def login():
         if usuario and usuario.check_password(password) and usuario.estado == 1:
             login_user(usuario)
             next_page = request.args.get('next')
+            # Prevenir open redirect: solo permite rutas internas
+            if next_page and urlparse(next_page).netloc:
+                next_page = None
             return redirect(next_page or url_for('general.dashboard'))
         else:
             flash('Usuario o contraseña incorrectos.', 'error')

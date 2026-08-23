@@ -2,18 +2,19 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
-# Instalar dependencias del sistema
+# Dependencias del sistema para mysqlclient
 RUN apt-get update && apt-get install -y --no-install-recommends \
     default-libmysqlclient-dev gcc pkg-config \
     && rm -rf /var/lib/apt/lists/*
 
-# Copiar e instalar dependencias Python
+# Dependencias Python primero (caching de capas)
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copiar código fuente
+# Código fuente
 COPY . .
 
 EXPOSE 5000
 
-CMD ["python", "app.py"]
+# Gunicorn: 4 workers, bind 0.0.0.0 para aceptar conexiones externas
+CMD ["gunicorn", "--workers=4", "--bind=0.0.0.0:5000", "--timeout=120", "app:app"]

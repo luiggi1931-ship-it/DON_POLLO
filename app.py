@@ -1,10 +1,7 @@
 from flask import Flask
-from flask_migrate import Migrate
 from flask_login import LoginManager
 from config import Config
 from models import db, login_manager
-
-migrate = Migrate()
 
 
 def _seed_admin(app):
@@ -32,7 +29,6 @@ def create_app():
 
     # Inicializar extensiones
     db.init_app(app)
-    migrate.init_app(app, db)
     login_manager.init_app(app)
 
     # Registrar Blueprints

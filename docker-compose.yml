@@ -1,6 +1,6 @@
-version: '3.8'
 
 services:
+
   db:
     image: mysql:8.0
     container_name: donpollo-db
@@ -25,10 +25,8 @@ services:
     restart: always
     ports:
       - "5000:5000"
-    environment:
-      - SECRET_KEY=11fe9f8e92d56813782930a90788481cac7ae836d199ae6dcbc677fdafc2c3a7
-      - DATABASE_URL=mysql+pymysql://root:donpollo123@db/granjadepollitos
-      - FLASK_ENV=production
+    env_file:
+      - .env.docker          # Archivo separado para variables de producción en Docker
     depends_on:
       db:
         condition: service_healthy

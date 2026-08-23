@@ -1,0 +1,13 @@
+# Excluir de la imagen Docker lo que no necesita el contenedor
+.git
+.gitignore
+.env
+.env.docker
+__pycache__
+*.pyc
+*.pyo
+*.md
+.vscode
+.idea
+Thumbs.db
+.DS_Store
