@@ -90,8 +90,8 @@
         </div>
 
         <!-- Botón de cierre de sesión -->
-        <form action="{{ url_for('auth.logout') }}" method="POST" style="margin: 12px 8px 8px;">
-          <button type="submit" class="nav-btn" style="width:100%; background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.2); border-radius:8px; color:#f87171; cursor:pointer; display:flex; align-items:center; gap:8px; padding:10px 14px;">
+        <form action="{{ url_for('auth.logout') }}" method="POST" class="logout-form">
+          <button type="submit" class="btn-logout">
             <i class="fas fa-sign-out-alt"></i> <span>Cerrar Sesión</span>
           </button>
         </form>
@@ -101,33 +101,48 @@
     <!-- CONTENIDO PRINCIPAL -->
     <main class="main-content">
       <header class="top-bar">
-        <div class="icon-bell"></div>
-        <span> Notificaciones </span>
+        <!-- Contenedor relativo para posicionar el popup -->
+        <div class="topbar-actions">
+          <div class="notif-wrapper" id="notifToggle">
+            <i class="fas fa-bell"></i>
+            <span class="notif-badge">2</span>
+          </div>
+
+          <!-- Popup de Notificaciones -->
+          <div class="notif-popup" id="notifPopup">
+            <div class="notif-header">
+              <h4>Notificaciones</h4>
+              <span class="mark-read">Marcar leídas</span>
+            </div>
+            <div class="notif-body">
+              <div class="notif-item unread">
+                <div class="notif-icon warning"><i class="fas fa-exclamation-triangle"></i></div>
+                <div class="notif-content">
+                  <p><strong>Lote #3</strong>: Alta mortalidad detectada.</p>
+                  <span>Hace 10 min</span>
+                </div>
+              </div>
+              <div class="notif-item unread">
+                <div class="notif-icon info"><i class="fas fa-info-circle"></i></div>
+                <div class="notif-content">
+                  <p>Sistema actualizado v2.1</p>
+                  <span>Hace 2 horas</span>
+                </div>
+              </div>
+            </div>
+            <div class="notif-footer">
+              <a href="#">Ver todas</a>
+            </div>
+          </div>
+        </div>
       </header>
 
       <!-- Flash Messages -->
       {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
-          <div style="padding: 0 24px; margin-top: 12px;">
+          <div class="flash-container" style="margin-top: 16px;">
             {% for category, message in messages %}
-              <div style="
-                padding: 12px 16px;
-                border-radius: 8px;
-                margin-bottom: 8px;
-                font-size: 13px;
-                display: flex;
-                align-items: center;
-                gap: 10px;
-                {% if category == 'error' %}
-                  background: rgba(239,68,68,0.12);
-                  border: 1px solid rgba(239,68,68,0.3);
-                  color: #f87171;
-                {% else %}
-                  background: rgba(52,211,153,0.12);
-                  border: 1px solid rgba(52,211,153,0.3);
-                  color: #34d399;
-                {% endif %}
-              ">
+              <div class="flash-msg {{ category }}">
                 <i class="fas fa-{{ 'exclamation-circle' if category == 'error' else 'check-circle' }}"></i>
                 {{ message }}
               </div>

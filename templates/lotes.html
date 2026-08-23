@@ -60,11 +60,11 @@
         <form action="{{ url_for('lotes.lotes') }}" method="GET" class="search-form">
             <i class="fas fa-search search-icon"></i>
             <input type="text" name="search" placeholder="Buscar proveedor o tipo..."
-                   value="{{ request.args.get('search', '') }}" autocomplete="off">
+                value="{{ request.args.get('search', '') }}" autocomplete="off">
             {% if request.args.get('search') %}
-                <a href="{{ url_for('lotes.lotes') }}" class="clear-search" title="Limpiar búsqueda">
-                    <i class="fas fa-times"></i>
-                </a>
+            <a href="{{ url_for('lotes.lotes') }}" class="clear-search" title="Limpiar búsqueda">
+                <i class="fas fa-times"></i>
+            </a>
             {% endif %}
         </form>
     </div>
@@ -72,118 +72,110 @@
     <!-- Grid de tarjetas de lotes -->
     <div class="lotes-grid" id="lotesGrid">
         {% if lotes is not defined or lotes|length == 0 %}
-            <!-- Estado vacío -->
-            <div class="empty-state empty-state-fullwidth">
-                <div class="empty-state-icon">🐔</div>
-                <h3>No hay lotes registrados</h3>
-                <p>Comienza registrando tu primer lote de aves.</p>
-            </div>
+        <!-- Estado vacío -->
+        <div class="empty-state empty-state-fullwidth">
+            <div class="empty-state-icon">🐔</div>
+            <h3>No hay lotes registrados</h3>
+            <p>Comienza registrando tu primer lote de aves.</p>
+        </div>
         {% else %}
-            {% for lote in lotes %}
-            <div class="lote-card {{ 'cerrado' if lote.estado_activo_cerrado == 0 else '' }}">
-                <div class="card-status-bar {{ 'active' if lote.estado_activo_cerrado == 1 else 'closed' }}"></div>
+        {% for lote in lotes %}
+        <div class="lote-card {{ 'cerrado' if lote.estado_activo_cerrado == 0 else '' }}">
+            <div class="card-status-bar {{ 'active' if lote.estado_activo_cerrado == 1 else 'closed' }}"></div>
 
-                <div class="lote-content">
-                    <div class="lote-header-modern">
-                        <div class="lote-title-group">
-                            <span class="lote-id-badge">#{{ lote.id_lote_ }}</span>
-                            <h3 class="lote-type">{{ lote.tipo_ave }}</h3>
-                        </div>
-
-                        <!-- Badge de mortalidad con color semántico -->
-                        {% set pct = lote.mortalidad_porcentaje %}
-                        <div class="mortalidad-badge {% if pct < 3 %}low{% elif pct < 5 %}medium{% else %}high{% endif %}"
-                             title="Porcentaje de mortalidad">
-                            <i class="fas fa-chart-line"></i> {{ pct }}% Mort.
-                        </div>
-
-                        <span class="status-pill {{ 'active' if lote.estado_activo_cerrado == 1 else 'closed' }}">
-                            {{ 'ACTIVO' if lote.estado_activo_cerrado == 1 else 'CERRADO' }}
-                        </span>
+            <div class="lote-content">
+                <div class="lote-header-modern">
+                    <div class="lote-title-group">
+                        <span class="lote-id-badge">#{{ lote.id_lote_ }}</span>
+                        <h3 class="lote-type">{{ lote.tipo_ave }}</h3>
                     </div>
 
-                    <!-- Estadísticas principales de la tarjeta -->
-                    <div class="lote-main-stats">
-                        <div class="stat-box">
-                            <div class="stat-icon-circle icon-bird">🐔</div>
-                            <div class="stat-data">
-                                <span class="stat-number">{{ lote.saldo_actual }}</span>
-                                <span class="stat-desc">Aves Vivas</span>
-                            </div>
-                        </div>
-                        <div class="stat-box">
-                            <div class="stat-icon-circle icon-calendar">📅</div>
-                            <div class="stat-data">
-                                <span class="stat-number">{{ lote.edad_dias }}</span>
-                                <span class="stat-desc">Días</span>
-                            </div>
-                        </div>
+                    <!-- Badge de mortalidad con color semántico -->
+                    {% set pct = lote.mortalidad_porcentaje %}
+                    <div class="mortalidad-badge {% if pct < 3 %}low{% elif pct < 5 %}medium{% else %}high{% endif %}"
+                        title="Porcentaje de mortalidad">
+                        <i class="fas fa-chart-line"></i> {{ pct }}% Mort.
                     </div>
 
-                    <!-- Distribución en jaulas -->
-                    <div class="lote-cages-info">
-                        <div class="cages-title">Distribución en Jaulas</div>
-                        <div class="cages-grid">
-                            {% if lote.asignaciones %}
-                                {% for asignacion in lote.asignaciones %}
-                                <div class="cage-item" title="Ubicación: {{ asignacion.jaula.ubicacion }}">
-                                    <span>J-{{ asignacion.jaula.id_jaula_ }}</span>
-                                    <strong>{{ asignacion.cantidad_aves }}</strong>
-                                </div>
-                                {% endfor %}
-                            {% else %}
-                                <div class="cage-empty">Sin jaulas asignadas</div>
-                            {% endif %}
+                    <span class="status-pill {{ 'active' if lote.estado_activo_cerrado == 1 else 'closed' }}">
+                        {{ 'ACTIVO' if lote.estado_activo_cerrado == 1 else 'CERRADO' }}
+                    </span>
+                </div>
+
+                <!-- Estadísticas principales de la tarjeta -->
+                <div class="lote-main-stats">
+                    <div class="stat-box">
+                        <div class="stat-icon-circle icon-bird">🐔</div>
+                        <div class="stat-data">
+                            <span class="stat-number">{{ lote.saldo_actual }}</span>
+                            <span class="stat-desc">Aves Vivas</span>
                         </div>
                     </div>
-
-                    <!-- Metadatos del lote -->
-                    <div class="lote-meta">
-                        <div class="meta-item">
-                            <i class="fas fa-truck"></i> {{ lote.proveedor }}
+                    <div class="stat-box">
+                        <div class="stat-icon-circle icon-calendar">📅</div>
+                        <div class="stat-data">
+                            <span class="stat-number">{{ lote.edad_dias }}</span>
+                            <span class="stat-desc">Días</span>
                         </div>
-                        <div class="meta-item">
-                            <i class="fas fa-clock"></i> Ingreso: {{ lote.fecha_ingreso }}
-                        </div>
-                        <div class="meta-item small-text">
-                            Inicial: {{ lote.cantidad_inicial }} aves
-                        </div>
-                    </div>
-
-                    <!-- Botones de acción de la tarjeta -->
-                    <div class="lote-actions-modern">
-                        <button class="btn-icon-modern edit"
-                            type="button"
-                            data-id="{{ lote.id_lote_ }}"
-                            data-fecha="{{ lote.fecha_ingreso }}"
-                            data-cantidad="{{ lote.cantidad_inicial }}"
-                            data-edad="{{ lote.edad_inicial }}"
-                            data-proveedor="{{ lote.proveedor }}"
-                            data-tipo="{{ lote.tipo_ave }}"
-                            data-peso="{{ lote.peso_inicial }}"
-                            data-estado="{{ lote.estado_activo_cerrado }}"
-                            data-cierre="{{ lote.fecha_cierre if lote.fecha_cierre else '' }}"
-                            data-obs="{{ lote.observaciones if lote.observaciones else '' }}"
-                            onclick="cargarDatosEdicion(this)"
-                            title="Editar">
-                            <i class="fas fa-pen"></i>
-                        </button>
-
-                        <button class="btn-icon-modern death"
-                            onclick="abrirModalMortalidad('{{ lote.id_lote_ }}')"
-                            title="Registrar Baja">
-                            <i class="fas fa-skull"></i>
-                        </button>
-
-                        <button class="btn-icon-modern delete"
-                            onclick="eliminarLote('{{ lote.id_lote_ }}')"
-                            title="Eliminar">
-                            <i class="fas fa-trash"></i>
-                        </button>
                     </div>
                 </div>
+
+                <!-- Distribución en jaulas -->
+                <div class="lote-cages-info">
+                    <div class="cages-title">Distribución en Jaulas</div>
+                    <div class="cages-grid">
+                        {% if lote.asignaciones %}
+                        {% for asignacion in lote.asignaciones %}
+                        <div class="cage-item" title="Ubicación: {{ asignacion.jaula.ubicacion }}">
+                            <span>J-{{ asignacion.jaula.id_jaula_ }}</span>
+                            <strong>{{ asignacion.cantidad_aves }}</strong>
+                        </div>
+                        {% endfor %}
+                        {% else %}
+                        <div class="cage-empty">Sin jaulas asignadas</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Metadatos del lote -->
+                <div class="lote-meta">
+                    <div class="meta-item">
+                        <i class="fas fa-truck"></i> {{ lote.proveedor }}
+                    </div>
+                    <div class="meta-item">
+                        <i class="fas fa-clock"></i> Ingreso: {{ lote.fecha_ingreso }}
+                    </div>
+                    <div class="meta-item small-text">
+                        Inicial: {{ lote.cantidad_inicial }} aves
+                    </div>
+                </div>
+
+                <!-- Botones de acción de la tarjeta -->
+                <div class="lote-actions-modern">
+                    <button class="btn-icon-modern edit" type="button" data-id="{{ lote.id_lote_ }}"
+                        data-fecha="{{ lote.fecha_ingreso }}" data-cantidad="{{ lote.cantidad_inicial }}"
+                        data-edad="{{ lote.edad_inicial }}" data-proveedor="{{ lote.proveedor }}"
+                        data-tipo="{{ lote.tipo_ave }}" data-peso="{{ lote.peso_inicial }}"
+                        data-estado="{{ lote.estado_activo_cerrado }}"
+                        data-cierre="{{ lote.fecha_cierre if lote.fecha_cierre else '' }}"
+                        data-obs="{{ lote.observaciones if lote.observaciones else '' }}"
+                        onclick="cargarDatosEdicion(this)" title="Editar">
+                        <i class="fas fa-pen"></i>
+                    </button>
+
+                    <button class="btn-icon-modern death" onclick="abrirModalMortalidad('{{ lote.id_lote_ }}')"
+                        title="Registrar Baja">
+                        <i class="fas fa-skull"></i>
+                    </button>
+
+                    <button class="btn-icon-modern delete" onclick="eliminarLote('{{ lote.id_lote_ }}')"
+                        title="Eliminar">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
             </div>
-            {% endfor %}
+        </div>
+        {% endfor %}
         {% endif %}
     </div>
 </div>
@@ -276,12 +268,12 @@
                 <label class="jaulas-selector__label">Seleccionar Jaulas (Selecciona 4):</label>
                 <div class="jaulas-selector__grid">
                     {% for jaula in jaulas %}
-                        {% if jaula.estado == 1 %}
-                        <label class="jaula-option">
-                            <input type="checkbox" name="jaulas_seleccionadas" value="{{ jaula.id_jaula_ }}">
-                            <span class="jaula-option__nombre">{{ jaula.ubicacion }}</span>
-                        </label>
-                        {% endif %}
+                    {% if jaula.estado == 1 %}
+                    <label class="jaula-option">
+                        <input type="checkbox" name="jaulas_seleccionadas" value="{{ jaula.id_jaula_ }}">
+                        <span class="jaula-option__nombre">{{ jaula.ubicacion }}</span>
+                    </label>
+                    {% endif %}
                     {% endfor %}
                 </div>
                 <p class="jaulas-selector__hint">
@@ -311,9 +303,8 @@
             <p>¿Seguro que deseas eliminar este lote?</p>
             <div class="form-actions">
                 <button type="button" class="btn-secondary" id="btnCancelarEliminar">Cancelar</button>
-                <!-- data-url-eliminar-lote: Flask genera la URL, JS reemplaza __ID__ con el id real -->
-                <button type="button" class="btn-danger" id="btnConfirmarEliminar"
-                    data-url-eliminar-lote="{{ url_for('lotes.eliminar_lote', id_lote='__ID__') }}">
+                <!-- La URL base se inyecta como variable JS en el bloque extra_js -->
+                <button type="button" class="btn-danger" id="btnConfirmarEliminar">
                     Eliminar
                 </button>
             </div>
@@ -327,29 +318,48 @@
      ===================================================== -->
 <div id="modalMortalidad" class="modal">
     <div class="modal-content modal-small">
-        <div class="modal-header">
-            <h2>Registrar Baja (Mortalidad)</h2>
+        <div class="modal-header modal-header--danger">
+            <h2><i class="fas fa-book-dead"></i> Registrar Baja</h2>
             <span class="close-mortalidad">&times;</span>
         </div>
 
-        <form action="{{ url_for('lotes.registrar_mortalidad') }}" method="POST">
+        <form action="{{ url_for('lotes.registrar_mortalidad') }}" method="POST" class="form-mortalidad">
             <input type="hidden" id="idLoteMortalidad" name="id_lote">
 
-            <div class="form-group">
-                <label>Fecha</label>
-                <input type="date" name="fecha" required value="{{ now }}">
-            </div>
-            <div class="form-group">
-                <label>Cantidad de Aves</label>
-                <input type="number" name="cantidad" min="1" required placeholder="Ej: 5">
-            </div>
-            <div class="form-group">
-                <label>Causa</label>
-                <input type="text" name="causa" required placeholder="Ej: Muerte súbita, Ahogo...">
+            <div class="mortalidad-warning">
+                <i class="fas fa-exclamation-triangle"></i>
+                <p>Las bajas se descontarán automáticamente del saldo actual del lote. Esta acción afectará los reportes
+                    de mortalidad.</p>
             </div>
 
-            <div class="form-actions">
-                <button type="submit" class="btn-danger">Registrar Baja</button>
+            <div class="form-group">
+                <label><i class="fas fa-calendar-day"></i> Fecha del Evento</label>
+                <input type="date" name="fecha" required value="{{ now }}">
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-skull-crossbones"></i> Cantidad (Aves Muertas)</label>
+                <input type="number" name="cantidad" min="1" required placeholder="Ej: 5">
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-file-medical-alt"></i> Causa Principal</label>
+                <select name="causa" required>
+                    <option value="" disabled selected>Seleccione un diagnóstico...</option>
+                    <option value="Muerte súbita">Muerte súbita (Infarto)</option>
+                    <option value="Ahogo / Asfixia">Ahogo / Asfixia </option>
+                    <option value="Enfermedad Respiratoria">Enfermedad Respiratoria</option>
+                    <option value="Descarte (Bajo peso/Enfermo)">Descarte (Selección)</option>
+                    <option value="Estrés por calor">Estrés por calor</option>
+                    <option value="Baja temperatura">Baja temperatura</option>
+                    <option value="Otra causa no determinada">Otra causa no determinada</option>
+                </select>
+            </div>
+
+            <div class="form-actions form-actions--mortalidad">
+                <button type="button" class="btn-secondary close-mortalidad-btn">Cancelar</button>
+                <button type="submit" class="btn-danger btn-mortalidad"><i class="fas fa-check-circle"></i> Confirmar
+                    Baja</button>
             </div>
         </form>
     </div>
@@ -371,7 +381,15 @@
             <form action="{{ url_for('lotes.guardar_jaula') }}" method="POST" class="jaula-form-rapido">
                 <div class="form-group jaula-form-rapido__input">
                     <label>Ubicación / Nombre</label>
-                    <input type="text" name="ubicacion" placeholder="Ej: Jaula 1 - Galpón A" required>
+                    <input type="text" name="ubicacion" placeholder="Ej: Jaula 1" required>
+                </div>
+                <div class="form-group" style="width: 110px;">
+                    <label>Área (m²)</label>
+                    <input type="number" step="0.01" name="metros_cuadrados" placeholder="0.00">
+                </div>
+                <div class="form-group" style="width: 140px;">
+                    <label>Fecha Creación</label>
+                    <input type="date" name="fecha_creacion" required value="{{ now }}">
                 </div>
                 <button type="submit" class="btn-primary jaula-form-rapido__btn">Agregar</button>
             </form>
@@ -383,6 +401,8 @@
                         <tr class="jaulas-tabla__head-row">
                             <th>ID</th>
                             <th>Ubicación</th>
+                            <th>Área (m²)</th>
+                            <th>Creada</th>
                             <th>Estado</th>
                             <th>Lote Actual</th>
                             <th>Acción</th>
@@ -393,26 +413,26 @@
                         <tr class="jaulas-tabla__row">
                             <td>J-{{ jaula.id_jaula_ }}</td>
                             <td>{{ jaula.ubicacion }}</td>
+                            <td>{{ "%.2f"|format(jaula.metros_cuadrados) if jaula.metros_cuadrados else '-' }}</td>
+                            <td>{{ jaula.fecha_creacion.strftime('%Y-%m-%d') if jaula.fecha_creacion else '-' }}</td>
                             <td>
-                                <span class="badge-estado {{ 'badge-activo' if jaula.estado == 1 else 'badge-cerrado' }}">
+                                <span
+                                    class="badge-estado {{ 'badge-activo' if jaula.estado == 1 else 'badge-cerrado' }}">
                                     {{ 'DISPONIBLE' if jaula.estado == 1 else 'OCUPADA' }}
                                 </span>
                             </td>
                             <td>
                                 {% if jaula.lote_actual %}
-                                    <span class="jaula-lote-ref">#{{ jaula.lote_actual.id_lote_ }}</span>
+                                <span class="jaula-lote-ref">#{{ jaula.lote_actual.id_lote_ }}</span>
                                 {% else %}
-                                    <span class="jaula-lote-vacia">-</span>
+                                <span class="jaula-lote-vacia">-</span>
                                 {% endif %}
                             </td>
                             <td>
-                                <!-- data-id y data-url permiten que el JS construya la URL sin hardcodearla -->
-                                <button type="button"
-                                    class="btn-icon-modern delete btn-jaula-eliminar"
-                                    data-id="{{ jaula.id_jaula_ }}"
-                                    data-url="{{ url_for('lotes.eliminar_jaula', id_jaula='__ID__') }}"
-                                    onclick="eliminarJaula(this.dataset.id, this.dataset.url)"
-                                    title="Eliminar Jaula">
+                                <!-- url_for usa el ID real del loop: sin placeholders, sin errores de tipo -->
+                                <button type="button" class="btn-icon-modern delete btn-jaula-eliminar"
+                                    data-url="{{ url_for('lotes.eliminar_jaula', id_jaula=jaula.id_jaula_) }}"
+                                    onclick="eliminarJaula(this.dataset.url)" title="Eliminar Jaula">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </td>
@@ -428,5 +448,11 @@
 {% endblock %}
 
 {% block extra_js %}
+{# Variable JS con la URL base de eliminar lote: Jinja usa id=1 (int válido),
+JS reemplaza el '1' final por el ID real cuando el usuario confirma eliminar. #}
+<script>
+    window.URL_ELIMINAR_LOTE = "{{ url_for('lotes.eliminar_lote', id_lote=1) }}"
+        .replace(/\/1$/, '/');
+</script>
 <script src="{{ url_for('static', filename='js/lotes.js') }}" defer></script>
 {% endblock %}

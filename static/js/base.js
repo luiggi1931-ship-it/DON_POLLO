@@ -19,4 +19,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
     toggleBtn.addEventListener('click', toggleMenu);
     overlay.addEventListener('click', toggleMenu);
+
+    // --- Notificaciones ---
+    const notifToggle = document.getElementById('notifToggle');
+    const notifPopup = document.getElementById('notifPopup');
+
+    if (notifToggle && notifPopup) {
+        notifToggle.addEventListener('click', (e) => {
+            e.stopPropagation();
+            notifPopup.classList.toggle('active');
+        });
+
+        // Cerrar al hacer clic fuera
+        document.addEventListener('click', (e) => {
+            if (!notifToggle.contains(e.target) && !notifPopup.contains(e.target)) {
+                notifPopup.classList.remove('active');
+            }
+        });
+    }
 });

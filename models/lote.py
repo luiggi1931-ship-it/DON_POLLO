@@ -19,6 +19,20 @@ class Lote(db.Model):
     # Relación con Mortalidad 
     mortalidades = db.relationship('Mortalidad', backref='lote', lazy=True)
 
+    def __init__(self, fecha_ingreso, cantidad_inicial, proveedor, tipo_ave, peso_inicial, estado_activo_cerrado, id_usuario, edad_inicial=0, fecha_cierre=None, observaciones=None, **kwargs):
+        super().__init__(**kwargs)
+        self.fecha_ingreso = fecha_ingreso
+        self.cantidad_inicial = cantidad_inicial
+        self.edad_inicial = edad_inicial
+        self.proveedor = proveedor
+        self.tipo_ave = tipo_ave
+        self.peso_inicial = peso_inicial
+        self.estado_activo_cerrado = estado_activo_cerrado
+        self.fecha_cierre = fecha_cierre
+        self.observaciones = observaciones
+        self.id_usuario = id_usuario
+
+
     @property
     def edad_dias(self):
         fin = self.fecha_cierre if self.fecha_cierre else date.today()

@@ -10,5 +10,14 @@ class Mortalidad(db.Model):
     causa = db.Column(db.String(150), nullable=False)
     id_lote_ = db.Column(db.Integer, db.ForeignKey('lote.id_lote_'), nullable=False)
 
+    def __init__(self, cantidad, causa, id_lote_, fecha=None, **kwargs):
+        super().__init__(**kwargs)
+        if fecha:
+            self.fecha = fecha
+        self.cantidad = cantidad
+        self.causa = causa
+        self.id_lote_ = id_lote_
+
+
     def __repr__(self):
         return f'<Mortalidad {self.cantidad} en Lote {self.id_lote_}>'

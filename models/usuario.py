@@ -14,6 +14,14 @@ class Usuario(UserMixin, db.Model):
     estado = db.Column('estado_activo_inactivo', db.Integer, nullable=False)
     fecha_creacion = db.Column(db.Date, nullable=False)
 
+    def __init__(self, nombre, correo, rol, estado, fecha_creacion, **kwargs):
+        super().__init__(**kwargs)
+        self.nombre = nombre
+        self.correo = correo
+        self.rol = rol
+        self.estado = estado
+        self.fecha_creacion = fecha_creacion
+
     # Flask-Login requiere get_id() que devuelva un string
     def get_id(self):
         return str(self.id_usuario)

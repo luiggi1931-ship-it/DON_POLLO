@@ -15,5 +15,13 @@ class AsignacionJaula(db.Model):
     jaula = db.relationship('Jaula', backref='asignaciones')
     lote = db.relationship('Lote', backref='asignaciones')
 
+    def __init__(self, fecha_inicio, cantidad_aves, id_lote_, id_jaula_, fecha_fin=None, **kwargs):
+        super().__init__(**kwargs)
+        self.fecha_inicio = fecha_inicio
+        self.fecha_fin = fecha_fin
+        self.cantidad_aves = cantidad_aves
+        self.id_lote_ = id_lote_
+        self.id_jaula_ = id_jaula_
+
     def __repr__(self):
         return f'<Asignacion {self.cantidad_aves} aves en Jaula {self.id_jaula_}>'

@@ -121,11 +121,11 @@ document.addEventListener('DOMContentLoaded', function() {
     if (btnConfirmarEliminar) {
         btnConfirmarEliminar.addEventListener('click', () => {
             if (idLoteAEliminar) {
-                // Lee la URL generada por Flask desde el atributo data-url del botón
-                const urlBase = btnConfirmarEliminar.getAttribute('data-url-eliminar-lote');
-                const form    = document.createElement('form');
-                form.method   = 'POST';
-                form.action   = urlBase.replace('__ID__', idLoteAEliminar);
+                // URL_ELIMINAR_LOTE es inyectada por Jinja en lotes.html (extra_js)
+                // Ej: "/eliminar_lote/" + 5 => "/eliminar_lote/5"
+                const form  = document.createElement('form');
+                form.method = 'POST';
+                form.action = window.URL_ELIMINAR_LOTE + idLoteAEliminar;
                 document.body.appendChild(form);
                 form.submit();
             }
@@ -133,12 +133,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // --- 4.1 LÓGICA DE ELIMINACIÓN DE JAULA ---
-    window.eliminarJaula = function(id, urlBase) {
-        // urlBase viene del atributo data-url-eliminar-jaula generado con url_for
+    window.eliminarJaula = function(url) {
+        // url viene de data-url generado por url_for con el ID real en el loop Jinja
         if (confirm('\u00bfEstás seguro de eliminar esta jaula?')) {
             const form  = document.createElement('form');
             form.method = 'POST';
-            form.action = urlBase.replace('__ID__', id);
+            form.action = url;
             document.body.appendChild(form);
             form.submit();
         }

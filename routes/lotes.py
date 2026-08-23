@@ -97,7 +97,18 @@ def registrar_mortalidad():
 def guardar_jaula():
     try:
         data = request.form
-        nueva_jaula = Jaula(ubicacion=data['ubicacion'], estado=1)
+        metros = data.get('metros_cuadrados')
+        fecha = data.get('fecha_creacion')
+
+        metros_val = float(metros) if metros else None
+        fecha_val = fecha if fecha else None
+
+        nueva_jaula = Jaula(
+            ubicacion=data['ubicacion'],
+            estado=1,
+            metros_cuadrados=metros_val,
+            fecha_creacion=fecha_val
+        )
         db.session.add(nueva_jaula)
         db.session.commit()
         flash('Jaula agregada correctamente.', 'success')

@@ -7,5 +7,10 @@ class Variable(db.Model):
     nombre = db.Column(db.String(50), unique=True, nullable=False) 
     unidad_medida = db.Column(db.String(20), nullable=False)       
 
+    def __init__(self, nombre, unidad_medida, **kwargs):
+        super().__init__(**kwargs)
+        self.nombre = nombre
+        self.unidad_medida = unidad_medida
+
     def __repr__(self):
         return f'<Variable {self.nombre}>'

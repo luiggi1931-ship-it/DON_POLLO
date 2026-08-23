@@ -17,3 +17,13 @@ class Configuracion(db.Model):
     # Relaciones para acceder a los nombres fácilmente
     variable = db.relationship('Variable', backref='configuraciones')
     etapa = db.relationship('Etapa', backref='configuraciones')
+
+    def __init__(self, id_variable, id_etapa, valor_min, valor_max, fecha_actualizacion=None, **kwargs):
+        super().__init__(**kwargs)
+        self.id_variable = id_variable
+        self.id_etapa = id_etapa
+        self.valor_min = valor_min
+        self.valor_max = valor_max
+        if fecha_actualizacion:
+            self.fecha_actualizacion = fecha_actualizacion
+
