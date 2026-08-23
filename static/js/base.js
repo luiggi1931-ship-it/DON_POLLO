@@ -37,4 +37,16 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     }
+
+    // --- Flatpickr Global (Selector de Fechas) ---
+    if (typeof flatpickr !== 'undefined') {
+        flatpickr("input[type=date]", {
+            locale: "es",           // Idioma español
+            dateFormat: "Y-m-d",    // Formato real que se envía a Flask/BD
+            altInput: true,         // Oculta el original y muestra uno bonito
+            altFormat: "d M Y",     // Formato visible: 23 Ago 2026
+            disableMobile: "true",  // Fuerza a usar el calendario bonito, no el nativo del cel/tablet
+            theme: "dark"           // Fuerza explícita del tema oscuro (si lo soporta así)
+        });
+    }
 });

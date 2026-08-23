@@ -37,34 +37,33 @@
   gap: 18px;
 }
 
-/* Icono del pollo: animación sutil */
-.chicken-icon {
-  font-size: 52px;
-  animation: float-gentle 3s ease-in-out infinite;
-  filter: drop-shadow(0 4px 12px rgba(233, 161, 37, 0.3));
-}
-
-@keyframes float-gentle {
-  0%, 100% { transform: translateY(0) rotate(-3deg); }
-  50%       { transform: translateY(-6px) rotate(3deg); }
+/* Icono moderno de cabecera */
+.header-icon {
+  width: 56px;
+  height: 56px;
+  background: var(--gold-dim);
+  color: var(--gold);
+  border: 1px solid var(--gold-border);
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  box-shadow: 0 8px 24px rgba(233, 161, 37, 0.15);
 }
 
 .header-text h1 {
   margin: 0;
-  font-size: 26px;
-  font-weight: 700;
+  font-size: 28px;
+  font-weight: 800;
+  color: #ffffff;
   letter-spacing: -0.5px;
-  /* Gradiente dorado en el título */
-  background: linear-gradient(135deg, #fff 40%, var(--gold-light));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
 }
 
 .header-text p {
   margin: 4px 0 0;
   color: var(--text-muted);
-  font-size: 13px;
+  font-size: 14px;
 }
 
 /* ============================================================
@@ -74,22 +73,22 @@
 
 .stats-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 16px;
   margin-bottom: 28px;
 }
 
 .stat-card {
   background: var(--surface);
-  border-radius: 14px;
-  padding: 20px 22px;
+  border-radius: 16px;
+  padding: 24px;
   display: flex;
   align-items: center;
-  gap: 18px;
+  gap: 20px;
   border: 1px solid var(--border);
   position: relative;
   overflow: hidden;
-  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s;
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s, border-color 0.2s;
   cursor: default;
 }
 
@@ -98,42 +97,61 @@
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0;
-  height: 2px;
+  height: 3px;
   background: linear-gradient(90deg, var(--gold), var(--gold-light));
   transform: scaleX(0);
-  transition: transform 0.3s ease;
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   transform-origin: left;
 }
 
 .stat-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
   border-color: var(--gold-border);
 }
 
 .stat-card:hover::before { transform: scaleX(1); }
 
-.stat-icon {
-  font-size: 40px;
-  filter: drop-shadow(0 2px 6px rgba(233, 161, 37, 0.2));
+/* Iconos de métricas con resplandor (Glow) */
+.stat-icon-glow {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.stat-icon-glow.gold { background: rgba(233, 161, 37, 0.12); color: #e9a125; box-shadow: 0 0 20px rgba(233, 161, 37, 0.2); border: 1px solid rgba(233,161,37,0.25); }
+.stat-icon-glow.green { background: rgba(29, 176, 106, 0.12); color: #1db06a; box-shadow: 0 0 20px rgba(29, 176, 106, 0.2); border: 1px solid rgba(29,176,106,0.25); }
+.stat-icon-glow.blue { background: rgba(52, 152, 219, 0.12); color: #3498db; box-shadow: 0 0 20px rgba(52, 152, 219, 0.2); border: 1px solid rgba(52,152,219,0.25); }
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.stat-info p {
+  margin: 0 0 4px 0;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: var(--text-muted);
 }
 
 .stat-info h3 {
   margin: 0;
-  font-size: 30px;
+  font-size: 34px;
   font-weight: 800;
-  color: var(--gold);
+  color: #ffffff;
   line-height: 1;
   letter-spacing: -1px;
 }
 
-.stat-info p {
-  margin: 4px 0 0;
-  color: var(--text-muted);
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
 
 /* ============================================================
    BARRA DE ACCIONES (BOTONES + BUSCADOR)
@@ -280,13 +298,13 @@
   border-radius: 14px;
   border: 1px solid var(--border);
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
-  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s;
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s, border-color 0.2s;
   display: flex;
   flex-direction: column;
   position: relative;
   overflow: hidden;
   /* Animación de entrada escalonada (aplicada por JS si se desea) */
-  animation: card-in 0.4s ease both;
+  animation: card-in 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
 @keyframes card-in {
@@ -552,7 +570,7 @@
   inset: 0;
   background: rgba(0, 0, 0, 0.65);
   backdrop-filter: blur(6px);
-  animation: modal-bg-in 0.25s ease;
+  animation: modal-bg-in 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
 @keyframes modal-bg-in {
@@ -568,7 +586,7 @@
   max-width: 680px;
   border: 1px solid var(--border);
   box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(233,161,37,0.06);
-  animation: slideDown 0.3s cubic-bezier(0.16,1,0.3,1);
+  animation: slideDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   max-height: 90vh;
   overflow-y: auto;
 }
@@ -576,14 +594,14 @@
 .modal-small { max-width: 440px; }
 
 @keyframes slideDown {
-  from { transform: translateY(-32px) scale(0.97); opacity: 0; }
+  from { transform: translateY(20px) scale(0.95); opacity: 0; }
   to   { transform: translateY(0) scale(1);        opacity: 1; }
 }
 
 /* Animación de cierre (aplicada desde JS) */
 @keyframes slideUp {
   from { transform: translateY(0) scale(1);        opacity: 1; }
-  to   { transform: translateY(-24px) scale(0.97); opacity: 0; }
+  to   { transform: translateY(15px) scale(0.97);  opacity: 0; }
 }
 
 .modal-header {
@@ -867,6 +885,36 @@ option { background: #1a2130; color: var(--text); }
   border: 1px solid rgba(231,76,60,0.2);
 }
 
+/* Modal ampliado para jaulas */
+.modal-jaulas { max-width: 860px; }
+
+/* Badge de ID de jaula */
+.jaula-id-badge {
+  display: inline-block;
+  background: var(--gold-dim);
+  color: var(--gold);
+  border: 1px solid var(--gold-border);
+  border-radius: 6px;
+  padding: 2px 7px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+/* Badges de tipo de jaula */
+.badge-tipo {
+  display: inline-block;
+  border-radius: 6px;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+  border: 1px solid;
+}
+.badge-tipo--pequeno  { background: rgba(52,152,219,0.12); color: #3498db; border-color: rgba(52,152,219,0.25); }
+.badge-tipo--mediano  { background: var(--gold-dim);        color: var(--gold); border-color: var(--gold-border); }
+.badge-tipo--grande   { background: rgba(155,89,182,0.12);  color: #9b59b6; border-color: rgba(155,89,182,0.25); }
+
 /* ============================================================
    SCROLLBAR PERSONALIZADA
    ============================================================ */
@@ -898,6 +946,42 @@ option { background: #1a2130; color: var(--text); }
 /* ============================================================
    RESPONSIVE
    ============================================================ */
+/* ============================================================
+   EXPERIMENTAL: MODAL HIPER-OPTIMIZADO (GPU ONLY)
+   ============================================================ */
+.modal-optimized {
+  display: flex !important; /* Siempre en el DOM, centrado con flex */
+  position: fixed !important;
+  left: 0 !important;
+  top: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.25s var(--ease-spring), visibility 0.25s;
+  z-index: 1050 !important;
+}
+
+.modal-optimized.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.modal-optimized .modal-content {
+  transform: translateY(20px) scale(0.95);
+  transition: transform 0.35s var(--ease-spring);
+  animation: none !important; /* Desactivar los viejos keyframes */
+  margin: 0; /* Flex se encarga de centrar */
+}
+
+.modal-optimized.active .modal-content {
+  transform: translateY(0) scale(1);
+}
+
 @media (max-width: 768px) {
   .form-row           { grid-template-columns: 1fr; }
   .modal-content      { width: 95%; margin: 6% auto; }

@@ -105,6 +105,7 @@ def guardar_jaula():
 
         nueva_jaula = Jaula(
             ubicacion=data['ubicacion'],
+            tipo_jaula=data.get('tipo_jaula', 'mediano'),
             estado=1,
             metros_cuadrados=metros_val,
             fecha_creacion=fecha_val

@@ -5,13 +5,15 @@ class Jaula(db.Model):
 
     id_jaula_ = db.Column(db.Integer, primary_key=True)
     ubicacion = db.Column(db.String(150), nullable=False)
-    estado = db.Column(db.Integer, nullable=False) # 1=Disponible, 0=Ocupada
+    tipo_jaula = db.Column(db.String(20), nullable=False, default='mediano')  # pequeño | mediano | grande
+    estado = db.Column(db.Integer, nullable=False)  # 1=Disponible, 0=Ocupada
     metros_cuadrados = db.Column(db.Numeric(10, 2), nullable=True)
     fecha_creacion = db.Column(db.Date, nullable=True)
 
-    def __init__(self, ubicacion, estado, metros_cuadrados=None, fecha_creacion=None, **kwargs):
+    def __init__(self, ubicacion, estado, tipo_jaula='mediano', metros_cuadrados=None, fecha_creacion=None, **kwargs):
         super().__init__(**kwargs)
         self.ubicacion = ubicacion
+        self.tipo_jaula = tipo_jaula
         self.estado = estado
         self.metros_cuadrados = metros_cuadrados
         self.fecha_creacion = fecha_creacion

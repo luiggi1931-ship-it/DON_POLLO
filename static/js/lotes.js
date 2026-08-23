@@ -66,7 +66,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const obs      = btn.getAttribute('data-obs');
 
         document.getElementById('idLote').value          = id;
-        document.getElementById('fechaIngreso').value    = fecha;
+        
+        // Manejo compatible con Flatpickr para Fecha de Ingreso
+        const inputIngreso = document.getElementById('fechaIngreso');
+        if (inputIngreso._flatpickr) inputIngreso._flatpickr.setDate(fecha);
+        else inputIngreso.value = fecha;
         document.getElementById('cantidadInicial').value = cantidad;
         document.getElementById('edadInicial').value     = edad || 0;
         document.getElementById('proveedor').value       = proveedor;
@@ -76,15 +80,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
         const selectEstado = document.getElementById('estado');
         const rowCierre    = document.getElementById('rowFechaCierre');
+        const inputCierre  = document.getElementById('fechaCierre');
 
         if (estado == '1' || estado == 'True' || estado == 'ACTIVO') {
             selectEstado.value = 'ACTIVO';
             rowCierre.style.display = 'none';
-            document.getElementById('fechaCierre').value = '';
+            if (inputCierre._flatpickr) inputCierre._flatpickr.clear();
+            else inputCierre.value = '';
         } else {
             selectEstado.value = 'CERRADO';
             rowCierre.style.display = 'flex';
-            document.getElementById('fechaCierre').value = cierre;
+            if (inputCierre._flatpickr) inputCierre._flatpickr.setDate(cierre);
+            else inputCierre.value = cierre;
         }
 
         document.getElementById('modalTitle').textContent = 'Editar Lote #' + id;
@@ -99,16 +106,19 @@ document.addEventListener('DOMContentLoaded', function() {
     window.toggleFechaCierre = function() {
         const estado = document.getElementById('estado').value;
         const row = document.getElementById('rowFechaCierre');
+        const inputCierre = document.getElementById('fechaCierre');
         
         if (estado === 'CERRADO') {
             row.style.display = 'flex';
-            // Opcional: Poner la fecha de hoy automáticamente al cerrar
-            if (!document.getElementById('fechaCierre').value) {
-                document.getElementById('fechaCierre').valueAsDate = new Date();
+            if (!inputCierre.value) {
+                const today = new Date().toISOString().split('T')[0];
+                if (inputCierre._flatpickr) inputCierre._flatpickr.setDate(today);
+                else inputCierre.value = today;
             }
         } else {
             row.style.display = 'none';
-            document.getElementById('fechaCierre').value = '';
+            if (inputCierre._flatpickr) inputCierre._flatpickr.clear();
+            else inputCierre.value = '';
         }
     };
 
@@ -147,11 +157,15 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- 5. LÓGICA MORTALIDAD ---
     window.abrirModalMortalidad = function(idLote) {
         document.getElementById('idLoteMortalidad').value = idLote;
-        // Poner fecha de hoy por defecto
         const today = new Date().toISOString().split('T')[0];
-        document.querySelector('#modalMortalidad input[type="date"]').value = today;
         
-        modalMortalidad.style.display = 'block';
+        const inputFecha = document.querySelector('#modalMortalidad input[name="fecha"]');
+        if (inputFecha) {
+            if (inputFecha._flatpickr) inputFecha._flatpickr.setDate(today);
+            else inputFecha.value = today;
+        }
+        
+        abrirModal(modalMortalidad);
     };
 
     // --- HELPERS: Abrir/cerrar modales con animación ---
@@ -165,8 +179,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function cerrarModal(modal) {
         const content = modal.querySelector('.modal-content');
-        // Animación de salida
-        content.style.animation = 'slideUp 0.25s ease forwards';
+        // Animación de salida fluida
+        content.style.animation = 'slideUp 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) forwards';
         setTimeout(() => {
             modal.style.display = 'none';
             content.style.animation = '';
