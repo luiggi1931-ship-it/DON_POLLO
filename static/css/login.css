@@ -1,0 +1,421 @@
+/* ============================================================
+   login.css — Estilos de la pantalla de inicio de sesión
+   Patrón: dark mode empresarial con panel dividido
+   ============================================================ */
+
+/* ---- Variables de diseño ---- */
+:root {
+  --gold:        #e9a125;
+  --gold-light:  #f5c842;
+  --gold-dim:    rgba(233, 161, 37, 0.12);
+  --bg:          #080c10;
+  --border:      rgba(255, 255, 255, 0.07);
+  --text:        #e8edf3;
+  --muted:       #5a6272;
+  --muted-dark:  #2e3440;
+}
+
+/* ---- Reset básico ---- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  /* height fijo para evitar que popups externos (autocompletado, antivirus)
+     desplacen el layout y generen el área negra inferior */
+  height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+/* ============================================================
+   PANEL IZQUIERDO — Branding y animaciones
+   ============================================================ */
+
+.left-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 60px;
+  /* overflow aquí, no en body, para que los decorativos no salgan del panel */
+  overflow: hidden;
+  height: 100vh;
+}
+
+/* Resplandor de fondo animado */
+.left-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 30% 40%, rgba(233, 161, 37, 0.18) 0%, transparent 70%),
+    radial-gradient(ellipse 60% 80% at 70% 80%, rgba(52, 211, 153, 0.06) 0%, transparent 60%);
+  animation: breathe 6s ease-in-out infinite alternate;
+}
+
+@keyframes breathe {
+  from { opacity: 0.7; transform: scale(1); }
+  to   { opacity: 1;   transform: scale(1.05); }
+}
+
+/* Cuadrícula de fondo */
+.grid-bg {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 40%, transparent 100%);
+}
+
+/* Orbes flotantes */
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  animation: float linear infinite;
+  opacity: 0;
+}
+
+.orb-1 { width: 200px; height: 200px; background: rgba(233, 161, 37, 0.25); top: 15%;  left: 20%; animation-duration: 12s; }
+.orb-2 { width: 140px; height: 140px; background: rgba(52, 211, 153, 0.15); bottom: 25%; right: 15%; animation-duration: 15s; animation-delay: -5s; }
+.orb-3 { width: 100px; height: 100px; background: rgba(139, 92, 246, 0.12); top: 60%;  left: 10%; animation-duration: 18s; animation-delay: -9s; }
+
+@keyframes float {
+  0%   { transform: translate(0, 0) scale(1);       opacity: 0.6; }
+  33%  { transform: translate(20px, -30px) scale(1.1); opacity: 0.9; }
+  66%  { transform: translate(-15px, 20px) scale(0.95); opacity: 0.7; }
+  100% { transform: translate(0, 0) scale(1);       opacity: 0.6; }
+}
+
+/* Sección de marca */
+.brand {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.brand-logo {
+  width: 90px;
+  height: 90px;
+  border-radius: 22px;
+  object-fit: contain;
+  margin-bottom: 20px;
+  border: 1px solid rgba(233, 161, 37, 0.3);
+  padding: 8px;
+  background: rgba(233, 161, 37, 0.06);
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 40px rgba(233, 161, 37, 0.2); }
+  50%       { box-shadow: 0 0 60px rgba(233, 161, 37, 0.4), 0 0 100px rgba(233, 161, 37, 0.1); }
+}
+
+.brand h1 {
+  font-size: 36px;
+  font-weight: 800;
+  letter-spacing: -1px;
+  /* Gradiente texto dorado-blanco */
+  background: linear-gradient(135deg, #fff 30%, var(--gold-light));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 10px;
+}
+
+.brand p {
+  font-size: 14px;
+  color: var(--muted);
+  font-weight: 400;
+  letter-spacing: 0.3px;
+  max-width: 280px;
+}
+
+/* Estadísticas del panel izquierdo */
+.stats-strip {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  gap: 32px;
+  margin-top: 52px;
+  animation: slideUp 0.8s 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.stat { text-align: center; }
+
+.stat-num {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--gold);
+  display: block;
+}
+
+.stat-label {
+  font-size: 11px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-top: 3px;
+  display: block;
+}
+
+.stat-divider {
+  width: 1px;
+  background: var(--border);
+  align-self: stretch;
+}
+
+/* ============================================================
+   PANEL DERECHO — Formulario de login
+   ============================================================ */
+
+.right-panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 80px;
+  background: rgba(10, 14, 20, 0.6);
+  border-left: 1px solid var(--border);
+  position: relative;
+  /* altura fija + scroll interno por si el contenido crece (ej. mensajes flash) */
+  height: 100vh;
+  overflow-y: auto;
+}
+
+/* Línea dorada superior decorativa */
+.right-panel::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0.3;
+}
+
+.login-box {
+  width: 100%;
+  max-width: 380px;
+  animation: slideUp 0.7s 0.1s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Animación de entrada */
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Badge de seguridad */
+.secure-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: #34d399;
+  background: rgba(52, 211, 153, 0.08);
+  border: 1px solid rgba(52, 211, 153, 0.2);
+  border-radius: 20px;
+  padding: 3px 10px;
+  margin-bottom: 28px;
+}
+
+.secure-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #34d399;
+  animation: blink 1.5s ease-in-out infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+
+/* Encabezado del formulario */
+.login-header { margin-bottom: 36px; }
+
+.login-header h2 {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--text);
+  letter-spacing: -0.5px;
+  margin-bottom: 6px;
+}
+
+.login-header p {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* ---- Flash messages ---- */
+.flash-wrap { margin-bottom: 24px; }
+
+.flash-msg {
+  padding: 11px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.flash-msg.error {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  color: #f87171;
+}
+
+.flash-msg.success {
+  background: rgba(52, 211, 153, 0.1);
+  border: 1px solid rgba(52, 211, 153, 0.25);
+  color: #34d399;
+}
+
+/* ---- Campos del formulario ---- */
+.form-group { margin-bottom: 20px; }
+
+.form-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 8px;
+}
+
+.input-wrap { position: relative; }
+
+.input-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  pointer-events: none;
+  transition: color 0.2s;
+}
+
+/* El ícono cambia a dorado al enfocar el campo */
+.form-group:focus-within .input-icon { color: var(--gold); }
+
+.form-input {
+  width: 100%;
+  padding: 13px 14px 13px 42px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+
+.form-input::placeholder { color: var(--muted-dark); }
+
+.form-input:focus {
+  border-color: rgba(233, 161, 37, 0.45);
+  background: rgba(233, 161, 37, 0.04);
+  box-shadow: 0 0 0 3px rgba(233, 161, 37, 0.08);
+}
+
+/* ---- Botón de submit ---- */
+.btn-submit {
+  width: 100%;
+  padding: 14px;
+  margin-top: 8px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-light));
+  border: none;
+  border-radius: 10px;
+  color: #0a0e14;
+  font-size: 15px;
+  font-weight: 700;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.15s, box-shadow 0.2s;
+  box-shadow: 0 4px 24px rgba(233, 161, 37, 0.25);
+}
+
+/* Brillo interior al hacer hover */
+.btn-submit::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.15), transparent);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.btn-submit:hover { transform: translateY(-1px); box-shadow: 0 8px 32px rgba(233, 161, 37, 0.4); }
+.btn-submit:hover::before { opacity: 1; }
+.btn-submit:active { transform: translateY(0); }
+
+.btn-text {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Animación shimmer (destello) sobre el botón */
+.btn-submit::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+  0%   { left: -100%; }
+  100% { left: 200%; }
+}
+
+/* ---- Divisor y pie ---- */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 24px 0 0;
+}
+
+.divider-line { flex: 1; height: 1px; background: var(--border); }
+.divider-text { font-size: 11px; color: var(--muted); white-space: nowrap; }
+
+.login-footer {
+  margin-top: 28px;
+  text-align: center;
+  font-size: 11px;
+  color: var(--muted-dark);
+}
+
+.login-footer span { color: var(--muted); }
+
+/* ---- Responsive: oculta panel izquierdo en móvil ---- */
+@media (max-width: 768px) {
+  body { grid-template-columns: 1fr; height: auto; min-height: 100vh; }
+  .left-panel { display: none; }
+  .right-panel { padding: 40px 24px; height: auto; min-height: 100vh; }
+}

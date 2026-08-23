@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: donpollo-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: donpollo123
+      MYSQL_DATABASE: granjadepollitos
+    ports:
+      - "3306:3306"
+    volumes:
+      - donpollo_data:/var/lib/mysql
+      - ./granjadepollitos.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-pdonpollo123"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  web:
+    build: .
+    container_name: donpollo-web
+    restart: always
+    ports:
+      - "5000:5000"
+    environment:
+      - SECRET_KEY=11fe9f8e92d56813782930a90788481cac7ae836d199ae6dcbc677fdafc2c3a7
+      - DATABASE_URL=mysql+pymysql://root:donpollo123@db/granjadepollitos
+      - FLASK_ENV=production
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  donpollo_data:

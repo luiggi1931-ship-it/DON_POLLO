@@ -53,11 +53,11 @@
             </button>
         </div>
 
-        <form action="{{ url_for('main.lotes') }}" method="GET" class="search-form">
+        <form action="{{ url_for('lotes.lotes') }}" method="GET" class="search-form">
             <i class="fas fa-search search-icon"></i>
             <input type="text" name="search" placeholder="Buscar proveedor o tipo..." value="{{ request.args.get('search', '') }}" autocomplete="off">
             {% if request.args.get('search') %}
-                <a href="{{ url_for('main.lotes') }}" class="clear-search" title="Limpiar búsqueda"><i class="fas fa-times"></i></a>
+                <a href="{{ url_for('lotes.lotes') }}" class="clear-search" title="Limpiar búsqueda"><i class="fas fa-times"></i></a>
             {% endif %}
         </form>
     </div>
@@ -181,7 +181,7 @@
             <span class="close">&times;</span>
         </div>
         
-        <form id="formLote" class="form-lote" action="/guardar_lote" method="POST">
+        <form id="formLote" class="form-lote" action="{{ url_for('lotes.guardar_lote') }}" method="POST">
             <input type="hidden" id="idLote" name="id_lote">
             
             <div class="form-row">
@@ -291,7 +291,9 @@
             <p>¿Seguro que deseas eliminar este lote?</p>
             <div class="form-actions">
                 <button type="button" class="btn-secondary" id="btnCancelarEliminar">Cancelar</button>
-                <button type="button" class="btn-danger" id="btnConfirmarEliminar">Eliminar</button>
+                <button type="button" class="btn-danger" id="btnConfirmarEliminar"
+                    data-url-eliminar-lote="{{ url_for('lotes.eliminar_lote', id_lote='__ID__') }}">
+                    Eliminar</button>
             </div>
         </div>
     </div>
@@ -305,7 +307,7 @@
             <span class="close-mortalidad">&times;</span>
         </div>
         
-        <form action="/registrar_mortalidad" method="POST">
+        <form action="{{ url_for('lotes.registrar_mortalidad') }}" method="POST">
             <input type="hidden" id="idLoteMortalidad" name="id_lote">
             
             <div class="form-group">
@@ -340,7 +342,7 @@
         
         <div style="padding: 20px;">
             <!-- Formulario Rápido para Nueva Jaula -->
-            <form action="/guardar_jaula" method="POST" style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; gap: 10px; align-items: flex-end;">
+            <form action="{{ url_for('lotes.guardar_jaula') }}" method="POST" style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 8px; margin-bottom: 20px; display: flex; gap: 10px; align-items: flex-end;">
                 <div class="form-group" style="flex: 2;">
                     <label style="font-size: 12px;">Ubicación / Nombre</label>
                     <input type="text" name="ubicacion" placeholder="Ej: Jaula 1 - Galpón A" required style="margin-bottom: 0;">
@@ -378,7 +380,9 @@
                                 {% endif %}
                             </td>
                             <td style="padding: 10px;">
-                                <button type="button" class="btn-icon-modern delete" onclick="eliminarJaula('{{ jaula.id_jaula_ }}')" title="Eliminar Jaula" style="width: 30px; height: 30px; background: rgba(231, 76, 60, 0.2); color: #e74c3c;">
+                                <button type="button" class="btn-icon-modern delete" 
+                                    onclick="eliminarJaula('{{ jaula.id_jaula_ }}', '{{ url_for('lotes.eliminar_jaula', id_jaula='__ID__') }}')" 
+                                    title="Eliminar Jaula" style="width: 30px; height: 30px; background: rgba(231, 76, 60, 0.2); color: #e74c3c;">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </td>

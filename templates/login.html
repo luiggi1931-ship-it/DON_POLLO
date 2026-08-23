@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Don Pollito — Sistema de gestión avícola. Inicia sesión para acceder al panel de control.">
+  <title>Don Pollo | Iniciar Sesión</title>
+
+  <!-- Fuente principal del sistema -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Estilos propios de la pantalla de login -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+
+  <!-- Keyframe inline para el spinner de carga (generado desde JS) -->
+  <style>
+    @keyframes spin-login { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+  <!-- ======================================================
+       PANEL IZQUIERDO — Identidad de marca y animaciones
+       ====================================================== -->
+  <div class="left-panel">
+
+    <!-- Cuadrícula de fondo decorativa -->
+    <div class="grid-bg"></div>
+
+    <!-- Orbes de luz flotantes -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <!-- Logo y nombre del sistema -->
+    <div class="brand">
+      <img
+        src="{{ url_for('static', filename='img/DON_pollo_ITB.png') }}"
+        alt="Logo Don Pollo"
+        class="brand-logo"
+        onerror="this.style.display='none'"
+      >
+      <h1>DON POLLITO</h1>
+      <p>Plataforma de gestión avícola inteligente para monitoreo en tiempo real</p>
+    </div>
+
+    <!-- Métricas del sistema (el contador se anima desde login.js) -->
+    <div class="stats-strip">
+      <div class="stat">
+        <span class="stat-num" id="counter-lotes">0</span>
+        <span class="stat-label">Lotes Activos</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <span class="stat-num">24/7</span>
+        <span class="stat-label">Monitoreo</span>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat">
+        <span class="stat-num">IoT</span>
+        <span class="stat-label">Conectado</span>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- ======================================================
+       PANEL DERECHO — Formulario de inicio de sesión
+       ====================================================== -->
+  <div class="right-panel">
+    <div class="login-box">
+
+      <!-- Indicador de conexión segura -->
+      <div class="secure-badge">
+        <span class="secure-dot"></span>
+        Conexión segura
+      </div>
+
+      <!-- Encabezado -->
+      <div class="login-header">
+        <h2>Bienvenido de nuevo</h2>
+        <p>Ingresa tus credenciales para acceder al sistema</p>
+      </div>
+
+      <!-- Mensajes flash (errores / confirmaciones de Flask) -->
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div class="flash-wrap">
+            {% for category, message in messages %}
+              <div class="flash-msg {{ category }}">
+                {% if category == 'error' %}
+                  <!-- Ícono de advertencia -->
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="12"/>
+                    <line x1="12" y1="16" x2="12.01" y2="16"/>
+                  </svg>
+                {% else %}
+                  <!-- Ícono de éxito -->
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="20 6 9 17 4 12"/>
+                  </svg>
+                {% endif %}
+                {{ message }}
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      <!-- Formulario principal -->
+      <form method="POST" action="{{ url_for('auth.login') }}" id="loginForm">
+
+        <!-- Campo: nombre de usuario -->
+        <div class="form-group">
+          <label class="form-label" for="login-user">Usuario</label>
+          <div class="input-wrap">
+            <!-- Ícono de persona (SVG inline para evitar dependencia de FontAwesome) -->
+            <svg class="input-icon" width="15" height="15" viewBox="0 0 24 24"
+                 fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+            <input
+              type="text"
+              id="login-user"
+              name="nombre"
+              class="form-input"
+              placeholder="Nombre de usuario"
+              required
+              autocomplete="username"
+              autofocus
+            >
+          </div>
+        </div>
+
+        <!-- Campo: contraseña -->
+        <div class="form-group">
+          <label class="form-label" for="login-pass">Contraseña</label>
+          <div class="input-wrap">
+            <!-- Ícono de candado -->
+            <svg class="input-icon" width="15" height="15" viewBox="0 0 24 24"
+                 fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            <input
+              type="password"
+              id="login-pass"
+              name="password"
+              class="form-input"
+              placeholder="••••••••"
+              required
+              autocomplete="current-password"
+            >
+          </div>
+        </div>
+
+        <!-- Botón de envío (el JS agrega estado de carga al hacer click) -->
+        <button type="submit" class="btn-submit" id="btn-login">
+          <span class="btn-text">
+            <!-- Ícono de entrada -->
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2.5">
+              <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+              <polyline points="10 17 15 12 10 7"/>
+              <line x1="15" y1="12" x2="3" y2="12"/>
+            </svg>
+            Iniciar Sesión
+          </span>
+        </button>
+
+      </form>
+
+      <!-- Separador visual -->
+      <div class="divider">
+        <div class="divider-line"></div>
+        <span class="divider-text">Sistema de Gestión Avícola</span>
+        <div class="divider-line"></div>
+      </div>
+
+      <!-- Pie de página -->
+      <div class="login-footer">
+        &copy; 2026 Don Pollito &mdash; <span>Instituto Tecnológico</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Script propio de la pantalla de login -->
+  <script src="{{ url_for('static', filename='js/login.js') }}"></script>
+
+</body>
+</html>

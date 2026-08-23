@@ -31,32 +31,32 @@
       
       <nav class="sidebar-nav">
         <ul>
-          <li class="{% if request.endpoint == 'main.dashboard' or request.path == '/' %}active{% endif %}">
-            <a href="{{ url_for('main.dashboard') }}" class="nav-btn">
+          <li class="{% if request.endpoint == 'general.dashboard' or request.path == '/' %}active{% endif %}">
+            <a href="{{ url_for('general.dashboard') }}" class="nav-btn">
               <i class="fas fa-th-large"></i> <span>Dashboard</span>
             </a>
           </li>
           
-          <li class="{% if request.endpoint == 'main.lotes' %}active{% endif %}">
-            <a href="{{ url_for('main.lotes') }}" class="nav-btn">
+          <li class="{% if request.endpoint and request.endpoint.startswith('lotes.') %}active{% endif %}">
+            <a href="{{ url_for('lotes.lotes') }}" class="nav-btn">
               <i class="fas fa-boxes-stacked"></i> <span>Lotes</span>
             </a>
           </li>
           
-          <li class="{% if request.endpoint == 'main.configuracion' %}active{% endif %}">
-            <a href="{{ url_for('main.configuracion') }}" class="nav-btn">
+          <li class="{% if request.endpoint and request.endpoint.startswith('configuracion.') %}active{% endif %}">
+            <a href="{{ url_for('configuracion.configuracion') }}" class="nav-btn">
               <i class="fas fa-cogs"></i> <span>Configuración</span>
             </a>
           </li>
           
-          <li class="{% if request.endpoint == 'main.reportes' %}active{% endif %}">
-            <a href="{{ url_for('main.reportes') }}" class="nav-btn">
+          <li class="{% if request.endpoint == 'general.reportes' %}active{% endif %}">
+            <a href="{{ url_for('general.reportes') }}" class="nav-btn">
               <i class="fas fa-clipboard-list"></i> <span>Reportes</span>
             </a>
           </li>
           
-          <li class="{% if request.endpoint == 'main.pruebas' %}active{% endif %}">
-            <a href="{{ url_for('main.pruebas') }}" class="nav-btn">
+          <li class="{% if request.endpoint == 'general.pruebas' %}active{% endif %}">
+            <a href="{{ url_for('general.pruebas') }}" class="nav-btn">
               <i class="fas fa-flask"></i> <span>Pruebas</span>
             </a>
           </li>
@@ -64,6 +64,7 @@
 
         <div class="sidebar-spacer" style="flex-grow: 1;"></div>
 
+        <!-- Reproductor de música -->
         <div class="music-player-card">
           <div class="music-info">
             <h4 id="song-title">Cargando...</h4>
@@ -87,6 +88,13 @@
 
           <audio id="audio-player"></audio>
         </div>
+
+        <!-- Botón de cierre de sesión -->
+        <form action="{{ url_for('auth.logout') }}" method="POST" style="margin: 12px 8px 8px;">
+          <button type="submit" class="nav-btn" style="width:100%; background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.2); border-radius:8px; color:#f87171; cursor:pointer; display:flex; align-items:center; gap:8px; padding:10px 14px;">
+            <i class="fas fa-sign-out-alt"></i> <span>Cerrar Sesión</span>
+          </button>
+        </form>
       </nav>
     </aside>
 
@@ -96,6 +104,37 @@
         <div class="icon-bell"></div>
         <span> Notificaciones </span>
       </header>
+
+      <!-- Flash Messages -->
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div style="padding: 0 24px; margin-top: 12px;">
+            {% for category, message in messages %}
+              <div style="
+                padding: 12px 16px;
+                border-radius: 8px;
+                margin-bottom: 8px;
+                font-size: 13px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                {% if category == 'error' %}
+                  background: rgba(239,68,68,0.12);
+                  border: 1px solid rgba(239,68,68,0.3);
+                  color: #f87171;
+                {% else %}
+                  background: rgba(52,211,153,0.12);
+                  border: 1px solid rgba(52,211,153,0.3);
+                  color: #34d399;
+                {% endif %}
+              ">
+                <i class="fas fa-{{ 'exclamation-circle' if category == 'error' else 'check-circle' }}"></i>
+                {{ message }}
+              </div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
 
       <div class="content-area">
         {% block content %}{% endblock %}

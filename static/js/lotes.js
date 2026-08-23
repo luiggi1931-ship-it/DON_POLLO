@@ -20,98 +20,78 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- 1. LÓGICA DE APERTURA DE MODAL "NUEVO LOTE" ---
     if (btnNuevoLote) {
         btnNuevoLote.addEventListener('click', () => {
-            // Limpiamos el formulario completo
             formLote.reset();
-            
-            // IMPORTANTE: Asegurar que el ID oculto esté vacío para que Flask sepa que es CREAR
             document.getElementById('idLote').value = '';
-            
-            // Restablecer títulos y estado visual
             document.getElementById('modalTitle').textContent = 'Registrar Nuevo Lote';
             document.getElementById('btnSubmit').textContent = 'Registrar Lote';
             document.getElementById('rowFechaCierre').style.display = 'none';
-            // Mostrar selector de jaulas al crear
+            ocultarErrorJaulas(); // Limpiar error previo
             if(document.getElementById('groupJaulas')) document.getElementById('groupJaulas').style.display = 'block';
-            
-            // Mostrar modal
-            modalLote.style.display = 'block';
+            abrirModal(modalLote);
         });
 
-        // VALIDACIÓN AL ENVIAR FORMULARIO (Solo si es nuevo lote)
+        // Validación al enviar: mínimo 4 jaulas seleccionadas
         formLote.addEventListener('submit', function(e) {
             const idLote = document.getElementById('idLote').value;
-            
-            // Si idLote está vacío, es un registro NUEVO
             if (!idLote) {
                 const checkboxes = document.querySelectorAll('input[name="jaulas_seleccionadas"]:checked');
-                
                 if (checkboxes.length !== 4) {
-                    e.preventDefault(); // Detener envío
-                    alert(`❌ Error: Debes seleccionar exactamente 4 jaulas.\n\nHas seleccionado: ${checkboxes.length}`);
+                    e.preventDefault();
+                    // Muestra error visual dentro del modal, sin alert() nativo
+                    mostrarErrorJaulas(`Debes seleccionar exactamente 4 jaulas. Has seleccionado: ${checkboxes.length}`);
                     return false;
                 }
             }
-            // Si es edición, no validamos jaulas porque esa sección está oculta
             return true;
         });
     }
 
     // --- 1.1 LÓGICA DE APERTURA DE MODAL "GESTIONAR JAULAS" ---
     if (btnGestionJaulas) {
-        btnGestionJaulas.addEventListener('click', () => {
-            modalJaulas.style.display = 'block';
-        });
+        btnGestionJaulas.addEventListener('click', () => abrirModal(modalJaulas));
     }
 
     // --- 2. LÓGICA DE EDICIÓN (La función "Blindada") ---
     // Esta función se llama directamente desde el HTML con onclick="cargarDatosEdicion(this)"
     window.cargarDatosEdicion = function(btn) {
-        // Extraemos los datos seguros desde el botón
-        const id = btn.getAttribute('data-id');
-        const fecha = btn.getAttribute('data-fecha'); // YYYY-MM-DD
+        const id       = btn.getAttribute('data-id');
+        const fecha    = btn.getAttribute('data-fecha');
         const cantidad = btn.getAttribute('data-cantidad');
-        const edad = btn.getAttribute('data-edad');
-        const proveedor = btn.getAttribute('data-proveedor');
-        const tipo = btn.getAttribute('data-tipo');
-        const peso = btn.getAttribute('data-peso');
-        const estado = btn.getAttribute('data-estado'); // '1' o '0' (o 'True'/'False')
-        const cierre = btn.getAttribute('data-cierre'); // YYYY-MM-DD o vacío
-        const obs = btn.getAttribute('data-obs');
+        const edad     = btn.getAttribute('data-edad');
+        const proveedor= btn.getAttribute('data-proveedor');
+        const tipo     = btn.getAttribute('data-tipo');
+        const peso     = btn.getAttribute('data-peso');
+        const estado   = btn.getAttribute('data-estado');
+        const cierre   = btn.getAttribute('data-cierre');
+        const obs      = btn.getAttribute('data-obs');
 
-        // Rellenamos el formulario
-        document.getElementById('idLote').value = id;
-        document.getElementById('fechaIngreso').value = fecha;
+        document.getElementById('idLote').value          = id;
+        document.getElementById('fechaIngreso').value    = fecha;
         document.getElementById('cantidadInicial').value = cantidad;
-        document.getElementById('edadInicial').value = edad || 0;
-        document.getElementById('proveedor').value = proveedor;
-        document.getElementById('tipoAve').value = tipo;
-        document.getElementById('pesoInicial').value = peso;
-        document.getElementById('observaciones').value = obs;
+        document.getElementById('edadInicial').value     = edad || 0;
+        document.getElementById('proveedor').value       = proveedor;
+        document.getElementById('tipoAve').value         = tipo;
+        document.getElementById('pesoInicial').value     = peso;
+        document.getElementById('observaciones').value   = obs;
 
-        // Lógica del Select de Estado
         const selectEstado = document.getElementById('estado');
-        const rowCierre = document.getElementById('rowFechaCierre');
+        const rowCierre    = document.getElementById('rowFechaCierre');
 
-        // Flask guarda 1/0, pero a veces Jinja puede pasar True/False o string
         if (estado == '1' || estado == 'True' || estado == 'ACTIVO') {
             selectEstado.value = 'ACTIVO';
             rowCierre.style.display = 'none';
-            document.getElementById('fechaCierre').value = ''; 
+            document.getElementById('fechaCierre').value = '';
         } else {
             selectEstado.value = 'CERRADO';
-            rowCierre.style.display = 'flex'; // Usamos flex porque en CSS .form-row es flex
+            rowCierre.style.display = 'flex';
             document.getElementById('fechaCierre').value = cierre;
         }
 
-        // Cambiar textos para modo edición
         document.getElementById('modalTitle').textContent = 'Editar Lote #' + id;
-        document.getElementById('btnSubmit').textContent = 'Actualizar Lote';
-        
-        // Ocultar selector de jaulas al editar (para mantener integridad)
+        document.getElementById('btnSubmit').textContent  = 'Actualizar Lote';
         if(document.getElementById('groupJaulas')) document.getElementById('groupJaulas').style.display = 'none';
 
-        // Mostrar modal
-        modalLote.style.display = 'block';
+        abrirModal(modalLote);
     };
 
     // --- 3. LÓGICA DE ESTADO (Mostrar/Ocultar Fecha Cierre) ---
@@ -135,16 +115,17 @@ document.addEventListener('DOMContentLoaded', function() {
     // --- 4. LÓGICA DE ELIMINACIÓN ---
     window.eliminarLote = function(id) {
         idLoteAEliminar = id;
-        modalConfirmar.style.display = 'block';
+        abrirModal(modalConfirmar);
     };
 
     if (btnConfirmarEliminar) {
         btnConfirmarEliminar.addEventListener('click', () => {
             if (idLoteAEliminar) {
-                // Crear un formulario dinámico para enviar POST (Más seguro que GET)
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.action = `/eliminar_lote/${idLoteAEliminar}`;
+                // Lee la URL generada por Flask desde el atributo data-url del botón
+                const urlBase = btnConfirmarEliminar.getAttribute('data-url-eliminar-lote');
+                const form    = document.createElement('form');
+                form.method   = 'POST';
+                form.action   = urlBase.replace('__ID__', idLoteAEliminar);
                 document.body.appendChild(form);
                 form.submit();
             }
@@ -152,11 +133,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // --- 4.1 LÓGICA DE ELIMINACIÓN DE JAULA ---
-    window.eliminarJaula = function(id) {
-        if(confirm('¿Estás seguro de eliminar esta jaula?')) {
-            const form = document.createElement('form');
+    window.eliminarJaula = function(id, urlBase) {
+        // urlBase viene del atributo data-url-eliminar-jaula generado con url_for
+        if (confirm('\u00bfEstás seguro de eliminar esta jaula?')) {
+            const form  = document.createElement('form');
             form.method = 'POST';
-            form.action = `/eliminar_jaula/${id}`;
+            form.action = urlBase.replace('__ID__', id);
             document.body.appendChild(form);
             form.submit();
         }
@@ -172,28 +154,56 @@ document.addEventListener('DOMContentLoaded', function() {
         modalMortalidad.style.display = 'block';
     };
 
-    // --- 5. LÓGICA PARA CERRAR MODALES (Botones Cancelar y X) ---
-    
-    // Función genérica para cerrar cualquier modal
-    function cerrarModal(modal) {
-        modal.style.display = 'none';
+    // --- HELPERS: Abrir/cerrar modales con animación ---
+    function abrirModal(modal) {
+        modal.style.display = 'block';
+        // Forzar reflow para que la animación de entrada funcione
+        modal.querySelector('.modal-content').style.animation = 'none';
+        modal.querySelector('.modal-content').offsetHeight; // reflow
+        modal.querySelector('.modal-content').style.animation = '';
     }
 
-    // Eventos para botones Cancelar
+    function cerrarModal(modal) {
+        const content = modal.querySelector('.modal-content');
+        // Animación de salida
+        content.style.animation = 'slideUp 0.25s ease forwards';
+        setTimeout(() => {
+            modal.style.display = 'none';
+            content.style.animation = '';
+        }, 240);
+    }
+
+    // --- HELPERS: Mensajes de error en el modal de jaulas ---
+    function mostrarErrorJaulas(msg) {
+        let errEl = document.getElementById('error-jaulas');
+        if (!errEl) {
+            errEl = document.createElement('p');
+            errEl.id = 'error-jaulas';
+            errEl.style.cssText = 'color:#f87171;font-size:12px;margin-top:8px;display:flex;align-items:center;gap:6px;';
+            // Insertar debajo del bloque de jaulas
+            const group = document.getElementById('groupJaulas');
+            if (group) group.appendChild(errEl);
+        }
+        errEl.textContent = '\u26a0\ufe0f ' + msg;
+    }
+
+    function ocultarErrorJaulas() {
+        const errEl = document.getElementById('error-jaulas');
+        if (errEl) errEl.textContent = '';
+    }
+
+    // Botones cancelar y X
     if(btnCancelar) btnCancelar.onclick = () => cerrarModal(modalLote);
     if(btnCancelarEliminar) btnCancelarEliminar.onclick = () => cerrarModal(modalConfirmar);
 
-    // Eventos para las "X" (clase .close y similares)
     document.querySelectorAll('.close, .close-confirmar, .close-mortalidad, .close-jaulas').forEach(x => {
-        x.onclick = function() {
-            cerrarModal(this.closest('.modal'));
-        }
+        x.onclick = function() { cerrarModal(this.closest('.modal')); };
     });
 
-    // Cerrar al hacer clic fuera del contenido del modal
+    // Cerrar al hacer clic en el fondo oscuro del modal
     window.onclick = function(event) {
         if (event.target.classList.contains('modal')) {
-            event.target.style.display = "none";
+            cerrarModal(event.target);
         }
-    }
-});
+    };
+});

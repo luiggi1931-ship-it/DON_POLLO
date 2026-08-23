@@ -11,13 +11,10 @@
     filter: drop-shadow(0 4px 8px rgba(46, 204, 113, 0.3));
 }
 
+/* Animación del pollo: sutil, no distractora */
 @keyframes bounce {
-    0%, 100% {
-        transform: translateY(0);
-    }
-    50% {
-        transform: translateY(-10px);
-    }
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-5px); }
 }
 
 .header-text h1 {
@@ -430,28 +427,7 @@
 
 /* --- FIN NUEVO DISEÑO --- */
 
-/* Mantener estilos de botones generales y modales */
-.btn-primary {
-    background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 20px;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
-}
-
-.btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(46, 204, 113, 0.4);
-}
+/* btn-primary ya definido arriba (líneas 81-101) — eliminado duplicado */
 
 .badge-estado {
     display: inline-block;
@@ -713,27 +689,16 @@
     font-weight: 700;
 }
 
-/* Animaciones adicionales */
-@keyframes slideInRight {
-    from {
-        transform: translateX(400px);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
+/* Animaciones de entrada y salida de modales */
+@keyframes slideDown {
+    from { transform: translateY(-50px); opacity: 0; }
+    to   { transform: translateY(0);     opacity: 1; }
 }
 
-@keyframes slideOutRight {
-    from {
-        transform: translateX(0);
-        opacity: 1;
-    }
-    to {
-        transform: translateX(400px);
-        opacity: 0;
-    }
+/* slideUp: se usa al cerrar el modal (desde lotes.js) */
+@keyframes slideUp {
+    from { transform: translateY(0);    opacity: 1; }
+    to   { transform: translateY(-40px); opacity: 0; }
 }
 
 /* Scrollbar personalizado para modales */
