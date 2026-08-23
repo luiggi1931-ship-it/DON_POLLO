@@ -196,7 +196,7 @@ document.addEventListener('DOMContentLoaded', function() {
     if(btnCancelar) btnCancelar.onclick = () => cerrarModal(modalLote);
     if(btnCancelarEliminar) btnCancelarEliminar.onclick = () => cerrarModal(modalConfirmar);
 
-    document.querySelectorAll('.close, .close-confirmar, .close-mortalidad, .close-jaulas').forEach(x => {
+    document.querySelectorAll('.close, .close-confirmar, .close-mortalidad, .close-mortalidad-btn, .close-jaulas').forEach(x => {
         x.onclick = function() { cerrarModal(this.closest('.modal')); };
     });
 
