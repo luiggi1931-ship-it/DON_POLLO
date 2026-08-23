@@ -821,3 +821,140 @@ option {
 .loading {
     animation: pulse 1.5s ease-in-out infinite;
 }
+
+/* ============================================================
+   Clases que reemplazan estilos inline eliminados del HTML
+   ============================================================ */
+
+/* Botones de la barra de herramientas (sin margin-bottom) */
+.btn-toolbar {
+    margin-bottom: 0;
+}
+
+/* Estado vacío que ocupa todo el ancho del grid */
+.empty-state-fullwidth {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px;
+    color: #7f8c8d;
+}
+
+.empty-state-fullwidth .empty-state-icon {
+    font-size: 48px;
+    margin-bottom: 12px;
+}
+
+/* Padding estándar para el cuerpo de los modales */
+.modal-body {
+    padding: 20px;
+}
+
+/* ---- Formulario rápido de jaulas ---- */
+.jaula-form-rapido {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+}
+
+.jaula-form-rapido__input {
+    flex: 2;
+}
+
+.jaula-form-rapido__btn {
+    margin-bottom: 0;
+    height: 42px;
+}
+
+/* ---- Tabla de jaulas existentes ---- */
+.jaulas-tabla-wrap {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.jaulas-tabla {
+    width: 100%;
+    border-collapse: collapse;
+    color: #ecf0f1;
+}
+
+.jaulas-tabla__head-row {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: left;
+}
+
+.jaulas-tabla__head-row th {
+    padding: 10px;
+}
+
+.jaulas-tabla__row {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.jaulas-tabla__row td {
+    padding: 10px;
+}
+
+/* Referencia al lote ocupante de una jaula */
+.jaula-lote-ref {
+    color: #f1c40f;
+    font-weight: bold;
+}
+
+/* Texto cuando la jaula no tiene lote */
+.jaula-lote-vacia {
+    color: #7f8c8d;
+}
+
+/* Botón eliminar dentro de la tabla de jaulas */
+.btn-jaula-eliminar {
+    width: 30px;
+    height: 30px;
+    background: rgba(231, 76, 60, 0.2);
+    color: #e74c3c;
+}
+
+/* ---- Selector de jaulas en el formulario de nuevo lote ---- */
+.jaulas-selector {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    border-radius: 8px;
+    margin-top: 10px;
+}
+
+.jaulas-selector__label {
+    margin-bottom: 10px;
+    display: block;
+    color: #2ecc71;
+}
+
+.jaulas-selector__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+}
+
+/* Opción individual de jaula (checkbox + nombre) */
+.jaula-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 8px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.jaula-option__nombre {
+    font-size: 13px;
+}
+
+/* Nota de regla debajo del selector */
+.jaulas-selector__hint {
+    font-size: 11px;
+    color: #95a5a6;
+    margin-top: 8px;
+}
