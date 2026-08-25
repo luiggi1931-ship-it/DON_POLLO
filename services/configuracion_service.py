@@ -32,11 +32,11 @@ def inicializar_datos_si_vacio():
     # 3. Configuración por defecto (Variable × Etapa)
     defaults = {
         'humedad':      {'pequeno': (60, 70), 'mediano': (55, 65), 'grande': (50, 60)},
-        'temperatura':  {'pequeno': (32, 34), 'mediano': (21, 26), 'grande': (18, 24)},
-        'amonico':      {'pequeno': (0, 10),  'mediano': (10, 15), 'grande': (15, 20)},
-        'iluminacion':  {'pequeno': (30, 45), 'mediano': (15, 20), 'grande': (5, 10)},
-        'comida':       {'pequeno': (15, 30), 'mediano': (60, 90), 'grande': (110, 150)},
-        'agua':         {'pequeno': (30, 50), 'mediano': (120, 180), 'grande': (250, 300)},
+        'temperatura':  {'pequeno': (28, 34), 'mediano': (21, 25), 'grande': (18, 22)},
+        'amonico':      {'pequeno': (0, 10),  'mediano': (0, 15),  'grande': (0, 20)},
+        'iluminacion':  {'pequeno': (20, 40), 'mediano': (8, 15),  'grande': (5, 10)},
+        'comida':       {'pequeno': (15, 35), 'mediano': (50, 90), 'grande': (100, 150)},
+        'agua':         {'pequeno': (30, 60), 'mediano': (100, 180), 'grande': (200, 300)},
     }
 
     map_vars = {v.nombre: v.id for v in Variable.query.all()}

@@ -17,19 +17,57 @@
     <div class="header-controls">
       <div class="lote-selector-wrapper">
         <i class="fas fa-layer-group"></i>
-        <select id="lote-select" onchange="cambiarLote(this.value)">
-          <option value="lote1">Lote A-101 (Semana 1)</option>
-          <option value="lote2">Lote B-205 (Semana 3)</option>
-          <option value="lote3" selected>Lote C-308 (Semana 6)</option>
+        <select id="lote-select">
+          <option value="">Cargando lotes...</option>
         </select>
       </div>
+      <div id="etapa-badge" class="etapa-badge" style="display: none;">Etapa</div>
       <div class="live-indicator"><span class="dot"></span> LIVE</div>
     </div>
   </div>
 
+  <!-- Panel de resumen con datos reales -->
+  <div class="dash-resumen-grid">
+    <div class="dash-resumen-card">
+      <i class="fas fa-layer-group" style="color:#3b82f6;"></i>
+      <div>
+        <small>Lotes Activos</small>
+        <b id="dash-lotes-activos">—</b>
+      </div>
+    </div>
+    <div class="dash-resumen-card">
+      <i class="fas fa-check-circle" style="color:#10b981;"></i>
+      <div>
+        <small>Lotes Cerrados</small>
+        <b id="dash-lotes-cerrados">—</b>
+      </div>
+    </div>
+    <div class="dash-resumen-card">
+      <i class="fas fa-feather-alt" style="color:#f59e0b;"></i>
+      <div>
+        <small>Aves en Granja</small>
+        <b id="dash-total-aves">—</b>
+      </div>
+    </div>
+    <div class="dash-resumen-card">
+      <i class="fas fa-skull-crossbones" style="color:#ef4444;"></i>
+      <div>
+        <small>Bajas Totales</small>
+        <b id="dash-total-bajas">—</b>
+      </div>
+    </div>
+  </div>
+
   <div class="sensor-grid">
+    <!-- AMONIACO (Gage/Velocímetro) -->
     <div class="sensor-card status-normal" id="card-ammonia">
-      <i class="fas fa-flask icon-ammonia"></i>
+      <div class="sensor-icon-wrapper">
+         <div class="gauge-container">
+            <div class="gauge-bg"></div>
+            <div class="gauge-fill" id="gauge-ammonia"></div>
+            <div class="gauge-cover"><i class="fas fa-flask"></i></div>
+         </div>
+      </div>
       <div class="card-data">
         <p>Amoniaco</p>
         <b id="val-ammonia">12 ppm</b>
@@ -37,8 +75,16 @@
       </div>
     </div>
 
+    <!-- TEMPERATURA (Termómetro) -->
     <div class="sensor-card status-optimo" id="card-temp">
-      <i class="fas fa-thermometer-half icon-temp"></i>
+      <div class="sensor-icon-wrapper">
+          <div class="thermo-container">
+              <div class="thermo-tube">
+                  <div class="thermo-fill" id="fill-temp"></div>
+              </div>
+              <div class="thermo-bulb" id="bulb-temp"><i class="fas fa-temperature-half"></i></div>
+          </div>
+      </div>
       <div class="card-data">
         <p>Temperatura</p>
         <b id="val-temp">31.5 °C</b>
@@ -46,8 +92,17 @@
       </div>
     </div>
 
+    <!-- HUMEDAD (Gota/Círculo Líquido) -->
     <div class="sensor-card status-normal" id="card-humidity">
-      <i class="fas fa-tint icon-humidity"></i>
+      <div class="sensor-icon-wrapper">
+          <div class="liquid-container">
+              <div class="liquid-wrapper" id="wrapper-humidity">
+                  <div class="liquid-wave"></div>
+                  <div class="liquid-fill"></div>
+              </div>
+              <i class="fas fa-tint"></i>
+          </div>
+      </div>
       <div class="card-data">
         <p>Humedad</p>
         <b id="val-humidity">65%</b>
@@ -55,9 +110,12 @@
       </div>
     </div>
 
+    <!-- ILUMINACIÓN (Foco Reactivo) -->
     <div class="sensor-card status-normal" id="card-light">
-      <div class="light-container">
-        <i class="fas fa-lightbulb icon-light" id="light-bulb"></i>
+      <div class="sensor-icon-wrapper">
+          <div class="light-container" id="container-light">
+              <i class="fas fa-lightbulb icon-light" id="light-bulb"></i>
+          </div>
       </div>
       <div class="card-data">
         <p>Iluminación</p>
@@ -135,62 +193,12 @@
     </div>
   </div>
 
-  <div class="zones-hex-container">
-    <button
-      class="zone-hex-item"
-      id="zone-container-1"
-      onclick="verDetalleZona(1)"
-    >
-      <div class="hex-shape">
-        <i class="fas fa-egg"></i>
+  <!-- MAPA DE PLANTA DEL GALPÓN -->
+  <div class="barn-floor-plan-wrapper">
+      <div class="barn-title"><i class="fas fa-warehouse"></i> Vista de Planta (Distribución por Jaulas)</div>
+      <div class="barn-floor-grid" id="cages-grid">
+          <!-- Las jaulas se renderizarán dinámicamente vía JS -->
       </div>
-      <div class="zone-details">
-        <small>ZONA 1</small>
-        <b id="val-z1">32.0°C</b>
-      </div>
-    </button>
-
-    <button
-      class="zone-hex-item"
-      id="zone-container-2"
-      onclick="verDetalleZona(2)"
-    >
-      <div class="hex-shape">
-        <i class="fas fa-egg"></i>
-      </div>
-      <div class="zone-details">
-        <small>ZONA 2</small>
-        <b id="val-z2">31.2°C</b>
-      </div>
-    </button>
-
-    <button
-      class="zone-hex-item"
-      id="zone-container-3"
-      onclick="verDetalleZona(3)"
-    >
-      <div class="hex-shape">
-        <i class="fas fa-egg"></i>
-      </div>
-      <div class="zone-details">
-        <small>ZONA 3</small>
-        <b id="val-z3">30.8°C</b>
-      </div>
-    </button>
-
-    <button
-      class="zone-hex-item"
-      id="zone-container-4"
-      onclick="verDetalleZona(4)"
-    >
-      <div class="hex-shape">
-        <i class="fas fa-egg"></i>
-      </div>
-      <div class="zone-details">
-        <small>ZONA 4</small>
-        <b id="val-z4">30.8°C</b>
-      </div>
-    </button>
   </div>
 
   <div id="zone-modal" class="modal-overlay">
@@ -223,7 +231,7 @@
             <b id="modal-mortality" class="danger-text">0</b>
           </div>
           <div class="stat-item">
-            <small>CO2 Local</small>
+            <small>Amoniaco Local</small>
             <b id="modal-co2">0 ppm</b>
           </div>
           <div class="stat-item">

@@ -2,7 +2,7 @@ from flask import Flask
 from flask_login import LoginManager
 from config import Config
 from models import db, login_manager
-
+from extensions import limiter
 
 def _seed_admin(app):
     """Crea el usuario admin por defecto si no existe."""
@@ -29,6 +29,7 @@ def create_app():
 
     # Inicializar extensiones
     db.init_app(app)
+    limiter.init_app(app)
     login_manager.init_app(app)
 
     # Registrar Blueprints

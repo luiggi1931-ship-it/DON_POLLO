@@ -75,4 +75,6 @@ def guardar_configuracion():
         return jsonify({'success': True, 'mensaje': 'Configuración guardada correctamente'})
     except Exception as e:
         db.session.rollback()
-        return jsonify({'success': False, 'error': str(e)}), 400
+        import logging
+        logging.exception("Error al guardar configuración")
+        return jsonify({'success': False, 'error': 'Error interno al guardar. Intente de nuevo.'}), 400

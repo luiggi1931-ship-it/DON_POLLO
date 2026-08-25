@@ -30,15 +30,15 @@ document.addEventListener('DOMContentLoaded', function() {
             abrirModal(modalLote);
         });
 
-        // Validación al enviar: mínimo 4 jaulas seleccionadas
+        // Validación al enviar: mínimo 1 jaula seleccionada
         formLote.addEventListener('submit', function(e) {
             const idLote = document.getElementById('idLote').value;
             if (!idLote) {
                 const checkboxes = document.querySelectorAll('input[name="jaulas_seleccionadas"]:checked');
-                if (checkboxes.length !== 4) {
+                if (checkboxes.length < 1) {
                     e.preventDefault();
                     // Muestra error visual dentro del modal, sin alert() nativo
-                    mostrarErrorJaulas(`Debes seleccionar exactamente 4 jaulas. Has seleccionado: ${checkboxes.length}`);
+                    mostrarErrorJaulas(`Debes seleccionar al menos 1 jaula para asignar el lote.`);
                     return false;
                 }
             }

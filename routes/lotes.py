@@ -18,20 +18,60 @@ lotes_bp = Blueprint('lotes', __name__)
 @login_required
 def lotes():
     search = request.args.get('search', '')
+    filtro_estado = request.args.get('estado', '')
+    filtro_proveedor = request.args.get('proveedor', '')
+    filtro_tipo = request.args.get('tipo', '')
+    filtro_fecha = request.args.get('fecha', '')
+    
     query = Lote.query.options(joinedload(Lote.mortalidades))
 
     if search:
         search_term = f"%{search}%"
-        query = query.filter(
-            or_(Lote.proveedor.like(search_term), Lote.tipo_ave.like(search_term))
-        )
+        # Si el usuario ingresa un número, buscamos también por ID
+        if search.isdigit():
+            query = query.filter(
+                or_(
+                    Lote.id_lote_ == int(search),
+                    Lote.proveedor.like(search_term), 
+                    Lote.tipo_ave.like(search_term)
+                )
+            )
+        else:
+            query = query.filter(
+                or_(
+                    Lote.proveedor.like(search_term), 
+                    Lote.tipo_ave.like(search_term)
+                )
+            )
+        
+    if filtro_estado:
+        # 1 para activo, 0 para cerrado
+        query = query.filter(Lote.estado_activo_cerrado == int(filtro_estado))
+        
+    if filtro_proveedor:
+        query = query.filter(Lote.proveedor == filtro_proveedor)
+        
+    if filtro_tipo:
+        query = query.filter(Lote.tipo_ave == filtro_tipo)
+
+    if filtro_fecha:
+        query = query.filter(Lote.fecha_ingreso == filtro_fecha)
 
     lista_lotes = query.order_by(Lote.fecha_ingreso.desc()).all()
     lista_jaulas = Jaula.query.order_by(Jaula.id_jaula_).all()
 
-    total_aves = sum(l.saldo_actual for l in lista_lotes)
-    activos = sum(1 for l in lista_lotes if l.estado_activo_cerrado == 1)
-    cerrados = sum(1 for l in lista_lotes if l.estado_activo_cerrado == 0)
+    # Opciones para los filtros (valores únicos en la BD)
+    proveedores = [p[0] for p in db.session.query(Lote.proveedor).distinct().all()]
+    tipos_ave = [t[0] for t in db.session.query(Lote.tipo_ave).distinct().all()]
+    # Fechas únicas formateadas a string
+    fechas = [f[0].strftime('%Y-%m-%d') for f in db.session.query(Lote.fecha_ingreso).distinct().order_by(Lote.fecha_ingreso.desc()).all()]
+
+    # Totales (independientes de los filtros, calculamos en base a todos o a los filtrados? 
+    # Mejor calculamos globales para las tarjetas de arriba)
+    todos_lotes = Lote.query.all()
+    total_aves = sum(l.saldo_actual for l in todos_lotes)
+    activos = sum(1 for l in todos_lotes if l.estado_activo_cerrado == 1)
+    cerrados = sum(1 for l in todos_lotes if l.estado_activo_cerrado == 0)
 
     return render_template(
         'lotes.html',
@@ -39,7 +79,17 @@ def lotes():
         jaulas=lista_jaulas,
         total_aves=total_aves,
         activos=activos,
-        cerrados=cerrados
+        cerrados=cerrados,
+        proveedores=proveedores,
+        tipos_ave=tipos_ave,
+        fechas=fechas,
+        current_filters={
+            'search': search,
+            'estado': filtro_estado,
+            'proveedor': filtro_proveedor,
+            'tipo': filtro_tipo,
+            'fecha': filtro_fecha
+        }
     )
 
 

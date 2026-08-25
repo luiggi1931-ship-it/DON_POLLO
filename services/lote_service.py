@@ -30,12 +30,13 @@ def _parse_lote_data(form) -> dict:
 
 def crear_lote(form, ids_jaulas: list) -> tuple[bool, str]:
     """
-    Crea un nuevo lote y distribuye aves en exactamente 4 jaulas.
+    Crea un nuevo lote y distribuye aves equitativamente en las jaulas seleccionadas.
     Retorna (éxito: bool, mensaje: str).
     """
     try:
-        if len(ids_jaulas) != 4:
-            return False, 'Debes seleccionar exactamente 4 jaulas para crear un lote.'
+        num_jaulas = len(ids_jaulas)
+        if num_jaulas < 1:
+            return False, 'Debes seleccionar al menos 1 jaula para crear un lote.'
 
         datos = _parse_lote_data(form)
         nuevo_lote = Lote(**datos)
@@ -43,8 +44,8 @@ def crear_lote(form, ids_jaulas: list) -> tuple[bool, str]:
         db.session.flush()  # Genera el ID antes del commit
 
         jaulas = Jaula.query.filter(Jaula.id_jaula_.in_(ids_jaulas)).all()
-        aves_por_jaula = nuevo_lote.cantidad_inicial // 4
-        sobra = nuevo_lote.cantidad_inicial % 4
+        aves_por_jaula = nuevo_lote.cantidad_inicial // num_jaulas
+        sobra = nuevo_lote.cantidad_inicial % num_jaulas
 
         for i, jaula in enumerate(jaulas):
             cantidad = aves_por_jaula + (1 if i < sobra else 0)

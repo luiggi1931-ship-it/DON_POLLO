@@ -57,11 +57,46 @@
             </button>
         </div>
 
-        <form action="{{ url_for('lotes.lotes') }}" method="GET" class="search-form">
-            <i class="fas fa-search search-icon"></i>
-            <input type="text" name="search" placeholder="Buscar proveedor o tipo..."
-                value="{{ request.args.get('search', '') }}" autocomplete="off">
-            {% if request.args.get('search') %}
+        <form action="{{ url_for('lotes.lotes') }}" method="GET" class="filters-bar">
+            <div class="search-input-wrapper">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" name="search" placeholder="Buscar ID, proveedor o tipo..."
+                    value="{{ current_filters.search }}" autocomplete="off">
+            </div>
+
+            <!-- Filtro de Fecha de Ingreso -->
+            <select name="fecha" class="filter-select" onchange="this.form.submit()" title="Filtrar por fecha de ingreso">
+                <option value="">Todas las Fechas</option>
+                {% for f in fechas %}
+                <option value="{{ f }}" {% if current_filters.fecha == f %}selected{% endif %}>{{ f }}</option>
+                {% endfor %}
+            </select>
+
+            <select name="estado" class="filter-select" onchange="this.form.submit()">
+                <option value="">Todos los Estados</option>
+                <option value="1" {% if current_filters.estado == '1' %}selected{% endif %}>Activos</option>
+                <option value="0" {% if current_filters.estado == '0' %}selected{% endif %}>Cerrados</option>
+            </select>
+
+            <select name="proveedor" class="filter-select" onchange="this.form.submit()">
+                <option value="">Todos los Proveedores</option>
+                {% for prov in proveedores %}
+                <option value="{{ prov }}" {% if current_filters.proveedor == prov %}selected{% endif %}>{{ prov }}</option>
+                {% endfor %}
+            </select>
+
+            <select name="tipo" class="filter-select" onchange="this.form.submit()">
+                <option value="">Todos los Tipos</option>
+                {% for t in tipos_ave %}
+                <option value="{{ t }}" {% if current_filters.tipo == t %}selected{% endif %}>{{ t }}</option>
+                {% endfor %}
+            </select>
+
+            <button type="submit" class="btn-filter-submit" title="Buscar">
+                <i class="fas fa-search"></i>
+            </button>
+
+            {% if current_filters.search or current_filters.estado or current_filters.proveedor or current_filters.tipo or current_filters.fecha %}
             <a href="{{ url_for('lotes.lotes') }}" class="clear-search" title="Limpiar búsqueda">
                 <i class="fas fa-times"></i>
             </a>
@@ -116,6 +151,13 @@
                         <div class="stat-data">
                             <span class="stat-number">{{ lote.edad_dias }}</span>
                             <span class="stat-desc">Días</span>
+                        </div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-icon-circle icon-death" style="background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2);">💀</div>
+                        <div class="stat-data">
+                            <span class="stat-number">{{ lote.cantidad_inicial - lote.saldo_actual }}</span>
+                            <span class="stat-desc">Bajas</span>
                         </div>
                     </div>
                 </div>
@@ -212,27 +254,24 @@
             <div class="form-row">
                 <div class="form-group flex-grow">
                     <label for="proveedor">Proveedor *</label>
-                    <select id="proveedor" name="proveedor" required>
-                        <option value="">Seleccionar proveedor</option>
-                        <option value="Avícola Los Andes - 76.123.456-7">Avícola Los Andes - 76.123.456-7</option>
-                        <option value="Granja San Fernando - 77.234.567-8">Granja San Fernando - 77.234.567-8</option>
-                        <option value="Pollos del Sur - 78.345.678-9">Pollos del Sur - 78.345.678-9</option>
-                        <option value="Avícola El Roble - 79.456.789-0">Avícola El Roble - 79.456.789-0</option>
-                        <option value="Productora Nacional - 80.567.890-1">Productora Nacional - 80.567.890-1</option>
-                    </select>
+                    <input type="text" id="proveedor" name="proveedor" list="listaProveedores" placeholder="Escribe o selecciona..." required autocomplete="off">
+                    <datalist id="listaProveedores">
+                        {% for prov in proveedores %}
+                        <option value="{{ prov }}">
+                        {% endfor %}
+                    </datalist>
                 </div>
             </div>
 
             <div class="form-row">
                 <div class="form-group flex-grow">
                     <label for="tipoAve">Tipo de Ave *</label>
-                    <select id="tipoAve" name="tipo_ave" required>
-                        <option value="">Seleccionar tipo de ave</option>
-                        <option value="Pollo Broiler">Pollo Broiler</option>
-                        <option value="Pollo de Engorde">Pollo de Engorde</option>
-                        <option value="Pollo Campero">Pollo Campero</option>
-                        <option value="Gallina Ponedora">Gallina Ponedora</option>
-                    </select>
+                    <input type="text" id="tipoAve" name="tipo_ave" list="listaTiposAve" placeholder="Escribe o selecciona..." required autocomplete="off">
+                    <datalist id="listaTiposAve">
+                        {% for t in tipos_ave %}
+                        <option value="{{ t }}">
+                        {% endfor %}
+                    </datalist>
                 </div>
             </div>
 
@@ -277,7 +316,7 @@
                     {% endfor %}
                 </div>
                 <p class="jaulas-selector__hint">
-                    * REGLA: Debes seleccionar <strong>exactamente 4 jaulas</strong> para dividir el lote.
+                    * Selecciona <strong>1 o más jaulas</strong>. Las aves se dividirán equitativamente.
                 </p>
             </div>
 

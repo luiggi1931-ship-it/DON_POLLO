@@ -198,6 +198,12 @@ body {
 }
 
 /* ---- Navegación ---- */
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
 .sidebar nav ul { list-style: none; padding: 0; margin: 0; }
 
 .sidebar nav li {
@@ -420,6 +426,8 @@ body {
   border-bottom: 1px solid rgba(255,255,255,0.02);
   transition: background var(--t-fast);
   cursor: pointer;
+  position: relative;
+  align-items: center;
 }
 
 .notif-item:hover {
@@ -432,6 +440,21 @@ body {
 
 .notif-item.unread:hover {
   background: rgba(233,161,37,0.06);
+}
+
+.notif-close-btn {
+  background: transparent;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  padding: 5px;
+  font-size: 0.9rem;
+  margin-left: auto;
+  transition: color 0.2s;
+}
+
+.notif-close-btn:hover {
+  color: #ef4444;
 }
 
 .notif-icon {
@@ -627,29 +650,34 @@ body {
 }
 
 /* ============================================================
-   BOTÓN LOGOUT
+   BOTÓN LOGOUT (Incrustado al fondo)
    ============================================================ */
-.logout-form { margin: 12px 12px 8px; }
+.logout-form {
+  margin: 0;
+  margin-top: auto;
+}
 
 .btn-logout {
   width: 100%;
-  background: var(--red-dim);
-  border: 1px solid rgba(231,76,60,0.2);
+  background: rgba(231, 76, 60, 0.05);
+  border: none;
+  border-top: 1px solid rgba(231, 76, 60, 0.15);
   color: var(--red);
-  padding: 10px 14px;
-  border-radius: 8px;
+  padding: 16px 20px;
+  border-radius: 0;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 12px;
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  transition: background var(--t-fast), border-color var(--t-fast);
+  transition: background var(--t-fast), color var(--t-fast);
 }
 
 .btn-logout:hover {
-  background: rgba(231,76,60,0.2);
-  border-color: rgba(231,76,60,0.4);
+  background: rgba(231, 76, 60, 0.15);
+  color: #ff6b6b;
 }
 
 /* ============================================================
