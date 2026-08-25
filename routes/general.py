@@ -82,3 +82,49 @@ def api_dashboard():
         'lotes':               lotes_data,
         'mortalidad_tendencia': mortality_trend,
     })
+
+# --- ENDPOINTS DE ALERTAS ---
+from flask import request
+from models.alerta import Alerta
+
+@general_bp.route('/api/alertas', methods=['POST'])
+@login_required
+def crear_alerta():
+    data = request.get_json()
+    if not data or not data.get('tipo') or not data.get('mensaje'):
+        return jsonify({'error': 'Faltan datos'}), 400
+        
+    alerta = Alerta(tipo=data['tipo'], mensaje=data['mensaje'])
+    db.session.add(alerta)
+    db.session.commit()
+    
+    return jsonify(alerta.to_dict()), 201
+
+@general_bp.route('/api/alertas/activas', methods=['GET'])
+@login_required
+def obtener_alertas_activas():
+    # Obtener últimas 10 alertas no leídas (descendente por id)
+    alertas = Alerta.query.filter_by(leida=False).order_by(Alerta.id.desc()).limit(10).all()
+    return jsonify([a.to_dict() for a in alertas])
+
+@general_bp.route('/api/alertas/historial', methods=['GET'])
+@login_required
+def obtener_historial_alertas():
+    # Obtener últimas 100 alertas para el historial
+    alertas = Alerta.query.order_by(Alerta.id.desc()).limit(100).all()
+    return jsonify([a.to_dict() for a in alertas])
+
+@general_bp.route('/api/alertas/marcar_leida/<int:id>', methods=['POST'])
+@login_required
+def marcar_alerta_leida(id):
+    alerta = Alerta.query.get_or_404(id)
+    alerta.leida = True
+    db.session.commit()
+    return jsonify({'success': True})
+
+@general_bp.route('/api/alertas/marcar_todas', methods=['POST'])
+@login_required
+def marcar_todas_leidas():
+    Alerta.query.filter_by(leida=False).update({'leida': True})
+    db.session.commit()
+    return jsonify({'success': True})

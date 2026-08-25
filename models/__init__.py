@@ -15,6 +15,7 @@ from .mortalidad import Mortalidad
 from .usuario import Usuario
 from .jaula import Jaula
 from .asignacion import AsignacionJaula
+from .alerta import Alerta
 
 
 @login_manager.user_loader

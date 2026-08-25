@@ -530,9 +530,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 let msg = `Alerta: ${sensorName} en ${loteInfo} alcanzó ${value}${unit}.`;
                 if (status === 'danger') msg = `PELIGRO: ${sensorName} en ${loteInfo} llegó a un nivel crítico (${value}${unit}).`;
                 
-                if (window.addNotification) {
-                    window.addNotification(status, msg);
-                }
+                // Enviar a la base de datos
+                fetch('/api/alertas', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ tipo: status, mensaje: msg })
+                })
+                .then(r => r.json())
+                .then(data => {
+                    if (window.addNotification && data.id) {
+                        window.addNotification(data);
+                    }
+                })
+                .catch(e => console.error('Error enviando alerta:', e));
             }
             sensorStates[type] = status;
         }

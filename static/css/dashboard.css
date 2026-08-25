@@ -465,6 +465,42 @@
     display: flex;
     gap: 15px;
 }
+.dash-icon-blue {
+  color: #3b82f6;
+}
+.dash-icon-green {
+  color: #10b981;
+}
+.dash-icon-orange {
+  color: #f59e0b;
+}
+.dash-icon-red {
+  color: #ef4444;
+}
+
+/* Badges de Etapas */
+.badge-etapa {
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+.badge-default {
+  background: #334155;
+  color: #94a3b8;
+}
+.badge-pequeno {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+}
+.badge-crecimiento {
+  background: rgba(59, 130, 246, 0.2);
+  color: #3b82f6;
+}
+.badge-grande {
+  background: rgba(245, 158, 11, 0.2);
+  color: #f59e0b;
+}
 .cage-stat {
     color: #94a3b8;
     font-size: 0.9rem;

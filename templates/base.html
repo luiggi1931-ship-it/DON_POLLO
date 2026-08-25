@@ -115,16 +115,29 @@
               <span class="mark-read" id="markAllRead" style="cursor: pointer; color: #3b82f6;">Limpiar todas</span>
             </div>
             <div class="notif-body" id="notifBody">
-              <div class="empty-notif" style="text-align: center; color: #94a3b8; padding: 20px;">
+              <div class="empty-notif-text">
                 No hay alertas recientes
               </div>
             </div>
             <div class="notif-footer">
-              <a href="#">Ver todas</a>
+              <a href="#" onclick="abrirHistorialAlertas(event)">Ver Historial Completo</a>
             </div>
           </div>
         </div>
       </header>
+
+      <!-- Modal Historial de Alertas -->
+      <div id="historialAlertasModal" class="history-modal-overlay">
+        <div class="history-modal-content">
+          <div class="history-modal-header">
+            <h3>Historial de Alertas</h3>
+            <button onclick="cerrarHistorialAlertas()" class="history-close-btn"><i class="fas fa-times"></i></button>
+          </div>
+          <div id="historialBody" class="history-modal-body">
+            <p class="history-empty">Cargando historial...</p>
+          </div>
+        </div>
+      </div>
 
       <!-- Flash Messages -->
       {% with messages = get_flashed_messages(with_categories=true) %}

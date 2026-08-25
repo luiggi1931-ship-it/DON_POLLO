@@ -690,3 +690,97 @@ body {
 
   .top-bar span { display: none; }
 }
+
+/* Modal de Historial de Alertas */
+.history-modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.7);
+  z-index: 2000;
+  justify-content: center;
+  align-items: center;
+  opacity: 1;
+}
+
+.history-modal-content {
+  background: #1e293b;
+  border-radius: 12px;
+  width: 600px;
+  max-width: 90%;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid #334155;
+}
+
+.history-modal-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid #334155;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.history-modal-header h3 {
+  margin: 0;
+  color: white;
+}
+
+.history-close-btn {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.history-close-btn:hover {
+  color: #ef4444;
+}
+
+.history-modal-body {
+  padding: 10px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.history-empty, .empty-notif-text {
+  text-align: center;
+  color: #94a3b8;
+  padding: 20px;
+}
+
+.history-item {
+  background: rgba(255,255,255,0.03);
+  padding: 12px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.history-item-danger {
+  border-left: 4px solid #ef4444;
+}
+
+.history-item-warning {
+  border-left: 4px solid #f59e0b;
+}
+
+.history-item-info {
+  border-left: 4px solid #3b82f6;
+}
+
+.history-item-title {
+  font-weight: 500;
+  color: #f1f5f9;
+  margin-bottom: 4px;
+}
+
+.history-item-date {
+  font-size: 0.8rem;
+  color: #94a3b8;
+}
