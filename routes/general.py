@@ -16,11 +16,6 @@ def dashboard():
     return render_template('dashboard.html')
 
 
-@general_bp.route('/reportes')
-@login_required
-def reportes():
-    return render_template('reportes.html')
-
 
 @general_bp.route('/api/dashboard')
 @login_required

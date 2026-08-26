@@ -21,6 +21,21 @@ document.addEventListener('DOMContentLoaded', function() {
     if (btnNuevoLote) {
         btnNuevoLote.addEventListener('click', () => {
             formLote.reset();
+            
+            // Reset Proveedor
+            document.getElementById('proveedor').style.display = 'block';
+            document.getElementById('proveedor').name = 'proveedor';
+            document.getElementById('proveedor_nuevo').style.display = 'none';
+            document.getElementById('proveedor_nuevo').name = '';
+            document.getElementById('proveedor_nuevo').required = false;
+
+            // Reset Tipo Ave
+            document.getElementById('tipoAve').style.display = 'block';
+            document.getElementById('tipoAve').name = 'tipo_ave';
+            document.getElementById('tipoAve_nuevo').style.display = 'none';
+            document.getElementById('tipoAve_nuevo').name = '';
+            document.getElementById('tipoAve_nuevo').required = false;
+
             document.getElementById('idLote').value = '';
             document.getElementById('modalTitle').textContent = 'Registrar Nuevo Lote';
             document.getElementById('btnSubmit').textContent = 'Registrar Lote';
@@ -73,8 +88,47 @@ document.addEventListener('DOMContentLoaded', function() {
         else inputIngreso.value = fecha;
         document.getElementById('cantidadInicial').value = cantidad;
         document.getElementById('edadInicial').value     = edad || 0;
-        document.getElementById('proveedor').value       = proveedor;
-        document.getElementById('tipoAve').value         = tipo;
+        // Lógica de llenado para Proveedor y Tipo de Ave
+        function setSelectOrInput(selectId, inputId, valueToSet) {
+            const selectEl = document.getElementById(selectId);
+            const inputEl = document.getElementById(inputId);
+            
+            // Restablecer estilos y nombres
+            selectEl.style.display = 'block';
+            selectEl.name = selectId;
+            inputEl.style.display = 'none';
+            inputEl.name = '';
+            inputEl.value = '';
+            inputEl.required = false;
+
+            // Verificar si el valor existe en las opciones del select
+            let exists = false;
+            for (let i = 0; i < selectEl.options.length; i++) {
+                if (selectEl.options[i].value === valueToSet && valueToSet !== '') {
+                    exists = true;
+                    break;
+                }
+            }
+
+            if (exists) {
+                selectEl.value = valueToSet;
+            } else if (valueToSet) {
+                // El valor no está en la lista, usamos el input
+                selectEl.value = '__NUEVO__';
+                selectEl.style.display = 'none';
+                selectEl.name = '';
+                inputEl.style.display = 'block';
+                inputEl.name = selectId;
+                inputEl.value = valueToSet;
+                inputEl.required = true;
+            } else {
+                selectEl.value = '';
+            }
+        }
+
+        setSelectOrInput('proveedor', 'proveedor_nuevo', proveedor);
+        setSelectOrInput('tipoAve', 'tipoAve_nuevo', tipo);
+        
         document.getElementById('pesoInicial').value     = peso;
         document.getElementById('observaciones').value   = obs;
 
@@ -180,11 +234,11 @@ document.addEventListener('DOMContentLoaded', function() {
     function cerrarModal(modal) {
         const content = modal.querySelector('.modal-content');
         // Animación de salida fluida
-        content.style.animation = 'slideUp 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) forwards';
+        content.style.animation = 'fadeOutModal 0.2s ease-out forwards';
         setTimeout(() => {
             modal.style.display = 'none';
             content.style.animation = '';
-        }, 240);
+        }, 200);
     }
 
     // --- HELPERS: Mensajes de error en el modal de jaulas ---

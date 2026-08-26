@@ -1,0 +1,144 @@
+/* tank and silo layout */
+.tank-layout, .silo-layout {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 1.5rem;
+  height: 250px;
+}
+
+/* Water Tank */
+.water-tank-container {
+  width: 100px;
+  height: 180px;
+  position: relative;
+}
+
+.tank-glass {
+  width: 100%;
+  height: 100%;
+  border: 4px solid #3182ce;
+  border-radius: 8px 8px 12px 12px;
+  border-top: 10px solid #2b6cb0;
+  position: relative;
+  overflow: hidden;
+  background: rgba(49, 130, 206, 0.05);
+}
+
+.tank-water {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: linear-gradient(180deg, #63b3ed 0%, #3182ce 100%);
+  transition: height 1s ease-out;
+  box-shadow: 0 -2px 10px rgba(49, 130, 206, 0.4);
+}
+
+.tank-water::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  background: rgba(255,255,255,0.4);
+}
+
+.tank-bubbles {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(rgba(255,255,255,0.3) 2px, transparent 2px);
+  background-size: 20px 20px;
+  background-position: 0 0;
+  animation: bubbles 4s linear infinite;
+  opacity: 0.5;
+}
+
+@keyframes bubbles {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 -40px; }
+}
+
+
+/* Silo */
+.silo-container {
+  width: 120px;
+  height: 200px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.silo-cone {
+  width: 100%;
+  height: 30px;
+  background: #a0aec0;
+  border-radius: 50% 50% 0 0;
+  border: 3px solid #718096;
+  border-bottom: none;
+}
+
+.silo-body {
+  width: 100%;
+  height: 140px;
+  border-left: 3px solid #718096;
+  border-right: 3px solid #718096;
+  background: repeating-linear-gradient(90deg, #e2e8f0, #e2e8f0 10px, #cbd5e0 10px, #cbd5e0 12px);
+  position: relative;
+}
+
+.silo-grain {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: #f6ad55;
+  /* Textura de granos usando gradientes radiales más grandes para que parezcan granos de maíz/soya */
+  background-image: 
+    radial-gradient(#dd6b20 3.5px, transparent 3.5px),
+    radial-gradient(#dd6b20 3.5px, transparent 3.5px);
+  background-size: 20px 20px;
+  background-position: 0 0, 10px 10px;
+  transition: height 1s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: inset 0 10px 20px -5px rgba(0,0,0,0.3);
+  animation: settleGrains 6s linear infinite;
+}
+
+@keyframes settleGrains {
+  0% { background-position: 0 0, 10px 10px; }
+  100% { background-position: 0 20px, 10px 30px; }
+}
+
+.silo-grain::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 5px;
+  background: rgba(0,0,0,0.1);
+}
+
+.silo-bottom {
+  width: 100%;
+  height: 30px;
+  background: #a0aec0;
+  clip-path: polygon(0 0, 100% 0, 70% 100%, 30% 100%);
+  border: 3px solid #718096;
+  border-top: none;
+}
+
+/* Responsividad para móviles y tablets */
+@media (max-width: 992px) {
+  .tank-layout, .silo-layout {
+    flex-direction: column;
+    height: auto;
+    gap: 2rem;
+    padding: 1rem 0;
+  }
+}

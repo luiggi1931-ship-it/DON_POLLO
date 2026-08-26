@@ -48,6 +48,7 @@
 
     <!-- Barra de acciones: botones + buscador -->
     <div class="actions-toolbar">
+        {% if current_user.rol == 'ADMIN' %}
         <div class="buttons-group">
             <button class="btn-primary btn-toolbar" id="btnNuevoLote">
                 <span>➕</span> Nuevo Lote
@@ -56,6 +57,7 @@
                 <span>🔳</span> Gestionar Jaulas
             </button>
         </div>
+        {% endif %}
 
         <form action="{{ url_for('lotes.lotes') }}" method="GET" class="filters-bar">
             <div class="search-input-wrapper">
@@ -194,6 +196,7 @@
 
                 <!-- Botones de acción de la tarjeta -->
                 <div class="lote-actions-modern">
+                    {% if current_user.rol == 'ADMIN' %}
                     <button class="btn-icon-modern edit" type="button" data-id="{{ lote.id_lote_ }}"
                         data-fecha="{{ lote.fecha_ingreso }}" data-cantidad="{{ lote.cantidad_inicial }}"
                         data-edad="{{ lote.edad_inicial }}" data-proveedor="{{ lote.proveedor }}"
@@ -204,16 +207,19 @@
                         onclick="cargarDatosEdicion(this)" title="Editar">
                         <i class="fas fa-pen"></i>
                     </button>
+                    {% endif %}
 
                     <button class="btn-icon-modern death" onclick="abrirModalMortalidad('{{ lote.id_lote_ }}')"
                         title="Registrar Baja">
                         <i class="fas fa-skull"></i>
                     </button>
 
+                    {% if current_user.rol == 'ADMIN' %}
                     <button class="btn-icon-modern delete" onclick="eliminarLote('{{ lote.id_lote_ }}')"
                         title="Eliminar">
                         <i class="fas fa-trash"></i>
                     </button>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -254,24 +260,28 @@
             <div class="form-row">
                 <div class="form-group flex-grow">
                     <label for="proveedor">Proveedor *</label>
-                    <input type="text" id="proveedor" name="proveedor" list="listaProveedores" placeholder="Escribe o selecciona..." required autocomplete="off">
-                    <datalist id="listaProveedores">
+                    <select id="proveedor" name="proveedor" onchange="checkNuevo('proveedor', 'proveedor_nuevo')" required>
+                        <option value="">Selecciona un proveedor...</option>
                         {% for prov in proveedores %}
-                        <option value="{{ prov }}">
+                        <option value="{{ prov }}">{{ prov }}</option>
                         {% endfor %}
-                    </datalist>
+                        <option value="__NUEVO__">+ Añadir nuevo proveedor...</option>
+                    </select>
+                    <input type="text" id="proveedor_nuevo" placeholder="Escribe el nuevo proveedor" style="display:none;" autocomplete="off">
                 </div>
             </div>
 
             <div class="form-row">
                 <div class="form-group flex-grow">
                     <label for="tipoAve">Tipo de Ave *</label>
-                    <input type="text" id="tipoAve" name="tipo_ave" list="listaTiposAve" placeholder="Escribe o selecciona..." required autocomplete="off">
-                    <datalist id="listaTiposAve">
+                    <select id="tipoAve" name="tipo_ave" onchange="checkNuevo('tipoAve', 'tipoAve_nuevo')" required>
+                        <option value="">Selecciona un tipo de ave...</option>
                         {% for t in tipos_ave %}
-                        <option value="{{ t }}">
+                        <option value="{{ t }}">{{ t }}</option>
                         {% endfor %}
-                    </datalist>
+                        <option value="__NUEVO__">+ Añadir nuevo tipo...</option>
+                    </select>
+                    <input type="text" id="tipoAve_nuevo" placeholder="Escribe el nuevo tipo de ave" style="display:none;" autocomplete="off">
                 </div>
             </div>
 
@@ -504,6 +514,19 @@ JS reemplaza el '1' final por el ID real cuando el usuario confirma eliminar. #}
 <script>
     window.URL_ELIMINAR_LOTE = "{{ url_for('lotes.eliminar_lote', id_lote=1) }}"
         .replace(/\/1$/, '/');
+        
+    function checkNuevo(selectId, inputId) {
+        var sel = document.getElementById(selectId);
+        var input = document.getElementById(inputId);
+        if (sel.value === '__NUEVO__') {
+            sel.style.display = 'none';
+            sel.name = '';
+            input.style.display = 'block';
+            input.name = selectId;
+            input.required = true;
+            input.focus();
+        }
+    }
 </script>
 <script src="{{ url_for('static', filename='js/lotes.js') }}" defer></script>
 {% endblock %}

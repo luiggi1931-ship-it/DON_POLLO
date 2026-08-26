@@ -713,22 +713,21 @@
   max-width: 680px;
   border: 1px solid var(--border);
   box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(233,161,37,0.06);
-  animation: slideDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  animation: fadeInModal 0.25s ease-out forwards;
   max-height: 90vh;
   overflow-y: auto;
 }
 
 .modal-small { max-width: 440px; }
 
-@keyframes slideDown {
-  from { transform: translateY(20px) scale(0.95); opacity: 0; }
-  to   { transform: translateY(0) scale(1);        opacity: 1; }
+@keyframes fadeInModal {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
 }
 
-/* Animación de cierre (aplicada desde JS) */
-@keyframes slideUp {
-  from { transform: translateY(0) scale(1);        opacity: 1; }
-  to   { transform: translateY(15px) scale(0.97);  opacity: 0; }
+@keyframes fadeOutModal {
+    from { opacity: 1; transform: scale(1); }
+    to { opacity: 0; transform: scale(0.95); }
 }
 
 .modal-header {

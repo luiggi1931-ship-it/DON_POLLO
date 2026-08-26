@@ -29,7 +29,6 @@
     <!-- ASIDE / SIDEBAR -->
     <aside class="sidebar" id="mainSidebar">
       <div class="logo">
-        <img src="{{ url_for('static', filename='img/DON_pollo_ITB.png') }}" class="logo-img" alt="Don Pollo Logo" />
         <span>DON POLLITO</span>
       </div>
       
@@ -46,15 +45,23 @@
               <i class="fas fa-boxes-stacked"></i> <span>Lotes</span>
             </a>
           </li>
+
+          <li class="{% if request.endpoint and request.endpoint.startswith('ventas.') %}active{% endif %}">
+            <a href="{{ url_for('ventas.ventas_dashboard') }}" class="nav-btn">
+              <i class="fas fa-wallet"></i> <span>Ventas y Finanzas</span>
+            </a>
+          </li>
           
+          {% if current_user.rol == 'ADMIN' %}
           <li class="{% if request.endpoint and request.endpoint.startswith('configuracion.') %}active{% endif %}">
             <a href="{{ url_for('configuracion.configuracion') }}" class="nav-btn">
               <i class="fas fa-cogs"></i> <span>Configuración</span>
             </a>
           </li>
+          {% endif %}
           
-          <li class="{% if request.endpoint == 'general.reportes' %}active{% endif %}">
-            <a href="{{ url_for('general.reportes') }}" class="nav-btn">
+          <li class="{% if request.endpoint == 'reportes.dashboard_reportes' %}active{% endif %}">
+            <a href="{{ url_for('reportes.dashboard_reportes') }}" class="nav-btn">
               <i class="fas fa-clipboard-list"></i> <span>Reportes</span>
             </a>
           </li>
@@ -64,30 +71,7 @@
 
         <div class="sidebar-spacer" style="flex-grow: 1;"></div>
 
-        <!-- Reproductor de música -->
-        <div class="music-player-card">
-          <div class="music-info">
-            <h4 id="song-title">Cargando...</h4>
-            <p id="song-artist">Seleccione música</p>
-          </div>
 
-          <div class="progress-container" id="progress-container">
-            <div class="progress" id="progress"></div>
-          </div>
-
-          <div class="music-controls">
-            <button id="prev-btn" class="control-btn"><i class="fas fa-backward"></i></button>
-            <button id="play-btn" class="control-btn play-main"><i class="fas fa-play"></i></button>
-            <button id="next-btn" class="control-btn"><i class="fas fa-forward"></i></button>
-          </div>
-
-          <div class="volume-control">
-            <i class="fas fa-volume-down small-icon"></i>
-            <input type="range" id="volume-slider" min="0" max="1" step="0.1" value="0.5">
-          </div>
-
-          <audio id="audio-player"></audio>
-        </div>
 
         <!-- Botón de cierre de sesión -->
         <form action="{{ url_for('auth.logout') }}" method="POST" class="logout-form">
@@ -164,7 +148,6 @@
   <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
   <script src="https://npmcdn.com/flatpickr/dist/l10n/es.js"></script>
   <script src="{{ url_for('static', filename='js/base.js') }}"></script>
-  <script src="{{ url_for('static', filename='js/musica.js') }}"></script>
   {% block extra_js %}{% endblock %}
 </body>
 </html>

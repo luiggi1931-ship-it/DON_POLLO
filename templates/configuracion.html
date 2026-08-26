@@ -18,6 +18,9 @@
         <button class="tab-button" data-tab="jaula">
             Jaula
         </button>
+        <button class="tab-button" data-tab="usuarios">
+            Gestión de Usuarios
+        </button>
     </div>
     <div class="contentC">
         <div id="parametros" class="tab-panel active">
@@ -216,6 +219,12 @@
                     </table>
                 </div>
             </div>
+
+            <!-- Botones de acción solo para Parámetros -->
+            <div class="botones-container" style="margin-top: 2rem;">
+                <button class="btn-guardar" onclick="guardarDatos()"> Guardar Datos</button>
+                <button class="btn-reset" onclick="resetearDatos()"> Resetear</button>
+            </div>
         </div>
         <div id="p.actuadores" class="tab-panel">
             <h2>Prueba de actuadores generales</h2>  
@@ -242,63 +251,138 @@
                         <span id="estado-ventilador">Apagado</span>
                     </div>
                 </div>
-                <!-- Puedes agregar más actuadores aquí -->
+                <!-- CALEFACCIÓN -->
                 <div class="actuador-card">
-                    <h3>Ventilador</h3>
-                    <div class="ventilador-container">
-                        <div class="ventilador" id="ventilador">
-                            <div class="aspa"></div>
-                            <div class="aspa"></div>
-                            <div class="aspa"></div>
-                            <div class="centro"></div>
+                    <h3>Calefacción (Focos Infrarrojos)</h3>
+                    <div class="actuador-visual-container">
+                        <div class="heater-icon" id="calefaccion">
+                            <i class="fas fa-fire"></i>
                         </div>
                     </div>
                     <div class="control-buttons">
-                        <button class="btn-encender" onclick="encenderVentilador()">
+                        <button class="btn-encender" onclick="toggleActuador('calefaccion', true)">
                             Encender
                         </button>
-                        <button class="btn-apagar" onclick="apagarVentilador()">
+                        <button class="btn-apagar" onclick="toggleActuador('calefaccion', false)">
                             Apagar
                         </button>
                     </div>
-                    <div class="estado-display apagado">
-                        <span id="estado-ventilador">Apagado</span>
+                    <div class="estado-display apagado" id="estado-bg-calefaccion">
+                        <span id="estado-calefaccion">Apagado</span>
                     </div>
                 </div>
+                <!-- COMEDERO/BEBEDERO -->
                 <div class="actuador-card">
-                    <h3>Ventilador</h3>
-                    <div class="ventilador-container">
-                        <div class="ventilador" id="ventilador">
-                            <div class="aspa"></div>
-                            <div class="aspa"></div>
-                            <div class="aspa"></div>
-                            <div class="centro"></div>
+                    <h3>Sist. de Alimentación</h3>
+                    <div class="actuador-visual-container">
+                        <div class="feeder-icon" id="alimentacion">
+                            <i class="fas fa-tint"></i>
                         </div>
                     </div>
                     <div class="control-buttons">
-                        <button class="btn-encender" onclick="encenderVentilador()">
-                            Encender
+                        <button class="btn-encender" onclick="toggleActuador('alimentacion', true)">
+                            Activar
                         </button>
-                        <button class="btn-apagar" onclick="apagarVentilador()">
-                            Apagar
+                        <button class="btn-apagar" onclick="toggleActuador('alimentacion', false)">
+                            Detener
                         </button>
                     </div>
-                    <div class="estado-display apagado">
-                        <span id="estado-ventilador">Apagado</span>
+                    <div class="estado-display apagado" id="estado-bg-alimentacion">
+                        <span id="estado-alimentacion">Detenido</span>
                     </div>
                 </div>
             </div>
         </div>
-            <div id="jaula" class="tab-panel">
-                <h2>Prueba de jaula</h2>
+        <!-- PESTAÑA JAULA -->
+        <div id="jaula" class="tab-panel">
+            <h2>Configuración Estándar de Jaulas</h2>
+            <div class="jaula-config-container">
+                <div class="bloque-form">
+                    <label for="jaula_capacidad">Capacidad Máxima (Aves por jaula)</label>
+                    <input type="number" id="jaula_capacidad" value="1000" min="100">
+                    <small>Se usa para calcular si una zona está sobrepoblada.</small>
+                </div>
+                <div class="bloque-form">
+                    <label for="jaula_area">Área por Jaula (Metros cuadrados)</label>
+                    <input type="number" id="jaula_area" value="50" min="10">
+                    <small>Para cálculos de densidad poblacional.</small>
+                </div>
+                <div class="bloque-form">
+                    <label for="jaula_bebederos">Cantidad de Bebederos por Jaula</label>
+                    <input type="number" id="jaula_bebederos" value="10" min="1">
+                </div>
+                <div class="bloque-form">
+                    <label for="jaula_comederos">Cantidad de Comederos por Jaula</label>
+                    <input type="number" id="jaula_comederos" value="15" min="1">
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <!-- PESTAÑA USUARIOS -->
+        <div id="usuarios" class="tab-panel">
+            <div class="usuarios-header">
+                <h2>Gestión de Personal</h2>
+                <button class="btn-primary" onclick="abrirModalUsuario()">
+                    <i class="fas fa-user-plus"></i> Nuevo Usuario
+                </button>
+            </div>
+            
+            <div class="usuarios-table-container">
+                <table class="tabla-usuarios">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Correo</th>
+                            <th>Rol</th>
+                            <th>Creación</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usuarios-tbody">
+                        <!-- Llenado dinámico por JS -->
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
-    <!-- Botones de acción -->
-<div class="botones-container">
-    <button class="btn-guardar" onclick="guardarDatos()"> Guardar Datos</button>
-    <button class="btn-reset" onclick="resetearDatos()"> Resetear</button>
-</div>
+
+    <!-- MODAL USUARIO -->
+    <div id="modalUsuario" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalUsuarioTitle">Crear Nuevo Usuario</h2>
+                <span class="close" onclick="cerrarModalUsuario()">&times;</span>
+            </div>
+            <form id="formUsuario" onsubmit="guardarUsuario(event)">
+                <input type="hidden" id="userId">
+                <div class="form-group">
+                    <label>Nombre de Usuario</label>
+                    <input type="text" id="userNombre" required pattern="^\S+$" title="El nombre de usuario no puede contener espacios" autocomplete="off">
+                </div>
+                <div class="form-group" id="groupCorreo">
+                    <label>Correo Electrónico (Opcional)</label>
+                    <input type="email" id="userCorreo" autocomplete="off">
+                </div>
+                <div class="form-group" id="groupRol">
+                    <label>Rol de Acceso</label>
+                    <select id="userRol" required>
+                        <option value="OPERADOR">Operador (Galponero, sin edición)</option>
+                        <option value="TECNICO">Técnico (Reportes y alertas)</option>
+                        <option value="ADMIN">Administrador (Acceso total)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label id="labelPassword">Contraseña</label>
+                    <input type="password" id="userPassword" required minlength="6" autocomplete="new-password">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" onclick="cerrarModalUsuario()">Cancelar</button>
+                    <button type="submit" class="btn-primary">Guardar Usuario</button>
+                </div>
+            </form>
+        </div>
+    </div>
 {% endblock %}
 
 {% block extra_js %}

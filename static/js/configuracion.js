@@ -195,3 +195,149 @@ function apagarVentilador() {
     mostrarNotificacion('Ventilador apagado', 'info');
 }
 
+// Control genérico para otros actuadores
+function toggleActuador(actuadorId, estado) {
+    const icon = document.getElementById(actuadorId);
+    const estadoText = document.getElementById(`estado-${actuadorId}`);
+    const estadoBg = document.getElementById(`estado-bg-${actuadorId}`);
+
+    if (estado) {
+        icon.classList.add('activo');
+        estadoText.textContent = actuadorId === 'calefaccion' ? 'Encendido' : 'Activo';
+        estadoBg.classList.remove('apagado');
+        estadoBg.classList.add('encendido');
+        mostrarNotificacion(actuadorId === 'calefaccion' ? 'Calefacción encendida' : 'Alimentación activada', 'success');
+    } else {
+        icon.classList.remove('activo');
+        estadoText.textContent = actuadorId === 'calefaccion' ? 'Apagado' : 'Detenido';
+        estadoBg.classList.remove('encendido');
+        estadoBg.classList.add('apagado');
+        mostrarNotificacion(actuadorId === 'calefaccion' ? 'Calefacción apagada' : 'Alimentación detenida', 'info');
+    }
+}
+
+// ==========================================
+// GESTIÓN DE USUARIOS
+// ==========================================
+document.addEventListener('DOMContentLoaded', () => {
+    // Al cargar, si estamos en la pestaña usuarios, cargar datos
+    const tabUsuarios = document.querySelector('[data-tab="usuarios"]');
+    if(tabUsuarios) {
+        tabUsuarios.addEventListener('click', cargarUsuarios);
+        // Si ya está activa por defecto (poco probable, pero por si acaso)
+        if(tabUsuarios.classList.contains('active')) cargarUsuarios();
+    }
+});
+
+function cargarUsuarios() {
+    fetch('/api/usuarios')
+        .then(res => res.json())
+        .then(data => {
+            const tbody = document.getElementById('usuarios-tbody');
+            if(!tbody) return;
+            tbody.innerHTML = '';
+            
+            data.forEach(user => {
+                const tr = document.createElement('tr');
+                let rolClass = 'badge-rol rol-operador';
+                if(user.rol === 'ADMIN') rolClass = 'badge-rol rol-admin';
+                if(user.rol === 'TECNICO') rolClass = 'badge-rol rol-tecnico';
+                
+                tr.innerHTML = `
+                    <td>${user.nombre}</td>
+                    <td>${user.correo}</td>
+                    <td><span class="${rolClass}">${user.rol}</span></td>
+                    <td>${user.fecha_creacion}</td>
+                    <td>
+                        <button class="btn-accion btn-editar" onclick="abrirModalUsuario(${user.id}, '${user.nombre}', '${user.rol}', '${user.correo}')" title="Editar Usuario"><i class="fas fa-edit"></i></button>
+                        ${user.id !== 1 ? `<button class="btn-accion btn-eliminar" onclick="eliminarUsuario(${user.id})" title="Eliminar"><i class="fas fa-trash"></i></button>` : ''}
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        })
+        .catch(err => console.error("Error cargando usuarios:", err));
+}
+
+function abrirModalUsuario(id = null, nombre = '', rol = 'OPERADOR', correo = '') {
+    const modal = document.getElementById('modalUsuario');
+    const form = document.getElementById('formUsuario');
+    
+    document.getElementById('userId').value = id || '';
+    document.getElementById('userNombre').value = nombre;
+    document.getElementById('userNombre').readOnly = false; // Permitir edición
+    
+    document.getElementById('userCorreo').value = correo === 'null' ? '' : correo;
+    
+    document.getElementById('userRol').value = rol;
+    document.getElementById('userRol').disabled = false; // Permitir edición
+    
+    document.getElementById('userPassword').value = '';
+    document.getElementById('userPassword').required = !id; // Opcional al editar
+    
+    if (id) {
+        document.getElementById('modalUsuarioTitle').innerText = 'Editar Usuario';
+        document.getElementById('groupCorreo').style.display = 'block';
+        document.getElementById('labelPassword').innerText = 'Nueva Contraseña (Opcional)';
+    } else {
+        document.getElementById('modalUsuarioTitle').innerText = 'Crear Nuevo Usuario';
+        document.getElementById('groupCorreo').style.display = 'block';
+        document.getElementById('labelPassword').innerText = 'Contraseña Inicial *';
+    }
+    
+    modal.style.display = 'flex';
+}
+
+function cerrarModalUsuario() {
+    document.getElementById('modalUsuario').style.display = 'none';
+}
+
+function guardarUsuario(e) {
+    e.preventDefault();
+    const id = document.getElementById('userId').value;
+    const nombre = document.getElementById('userNombre').value;
+    const correo = document.getElementById('userCorreo').value;
+    
+    const rol = document.getElementById('userRol').value;
+    const password = document.getElementById('userPassword').value;
+    
+    const url = id ? `/api/usuarios/${id}` : '/api/usuarios';
+    const method = id ? 'PUT' : 'POST';
+    
+    const payload = { nombre, correo, rol, password };
+    
+    fetch(url, {
+        method: method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            cerrarModalUsuario();
+            mostrarNotificacion(data.mensaje, 'success');
+            cargarUsuarios();
+        } else {
+            mostrarNotificacion(data.error, 'warning');
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        mostrarNotificacion('Error de red', 'warning');
+    });
+}
+
+function eliminarUsuario(id) {
+    if (confirm("¿Estás seguro de que deseas eliminar este usuario? No podrá volver a ingresar.")) {
+        fetch(`/api/usuarios/${id}`, { method: 'DELETE' })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                mostrarNotificacion(data.mensaje, 'success');
+                cargarUsuarios();
+            } else {
+                mostrarNotificacion(data.error, 'warning');
+            }
+        });
+    }
+}

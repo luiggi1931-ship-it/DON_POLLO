@@ -37,11 +37,44 @@ def create_app():
     from routes.general import general_bp
     from routes.lotes import lotes_bp
     from routes.configuracion import configuracion_bp
+    from routes.usuarios import usuarios_bp
+    from routes.telemetria import telemetria_bp
+    from routes.reportes import reportes_bp
+    from routes.exportacion import exportacion_bp
+    from routes.ventas import ventas_bp
 
-    app.register_blueprint(auth_bp)
     app.register_blueprint(general_bp)
+    app.register_blueprint(auth_bp)
     app.register_blueprint(lotes_bp)
     app.register_blueprint(configuracion_bp)
+    app.register_blueprint(usuarios_bp)
+    app.register_blueprint(telemetria_bp)
+    app.register_blueprint(reportes_bp)
+    app.register_blueprint(exportacion_bp)
+    app.register_blueprint(ventas_bp)
+
+    @app.after_request
+    def add_cache_control(response):
+        response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+        response.headers['Pragma'] = 'no-cache'
+        response.headers['Expires'] = '0'
+        return response
+
+    @app.errorhandler(404)
+    def not_found_error(error):
+        from flask import request, jsonify, render_template
+        if request.path.startswith('/api/'):
+            return jsonify({'error': 'Not found'}), 404
+        return "404 No Encontrado", 404
+
+    @app.errorhandler(Exception)
+    def internal_error(error):
+        from flask import request, jsonify
+        import traceback
+        if request.path.startswith('/api/'):
+            # En producción, no mostrar el traceback real
+            return jsonify({'error': 'Error interno del servidor', 'message': str(error)}), 500
+        return f"500 Error Interno: {str(error)}", 500
 
     return app
 

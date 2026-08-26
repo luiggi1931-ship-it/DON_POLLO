@@ -8,9 +8,11 @@ from services.configuracion_service import inicializar_datos_si_vacio
 
 configuracion_bp = Blueprint('configuracion', __name__)
 
+from decorators import admin_required
 
 @configuracion_bp.route('/configuracion')
 @login_required
+@admin_required
 def configuracion():
     inicializar_datos_si_vacio()
     return render_template('configuracion.html')
@@ -53,6 +55,7 @@ def parametros_etapa(etapa):
 
 @configuracion_bp.route('/api/guardar_configuracion', methods=['POST'])
 @login_required
+@admin_required
 def guardar_configuracion():
     """Guarda la configuración recibida desde el frontend."""
     try:

@@ -140,19 +140,15 @@ body {
   left: 0;
   top: 0;
   height: 100vh;
-  /* Animación tipo popup: Deslizamiento acelerado por GPU + Fade */
-  transform: translateX(-10px) scale(0.98);
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.35s var(--ease-spring), transform 0.35s var(--ease-spring), visibility 0.35s;
+  /* Animación fluida de deslizamiento */
+  transform: translateX(-100%);
+  transition: transform 0.3s ease-in-out;
   /* Separador dorado sutil en el borde derecho */
   box-shadow: 4px 0 24px rgba(0,0,0,0.4), 1px 0 0 var(--gold-border);
 }
 
 .sidebar.open { 
-  transform: translateX(0) scale(1);
-  opacity: 1;
-  visibility: visible;
+  transform: translateX(0);
 }
 
 /* ---- Logo / Cabecera del sidebar ---- */
@@ -557,97 +553,7 @@ body {
   color: var(--red);
 }
 
-/* ============================================================
-   REPRODUCTOR DE MÚSICA (sidebar)
-   ============================================================ */
-.music-player-card {
-  background: rgba(233, 161, 37, 0.04);
-  padding: 12px 14px;
-  margin: 0 8px 12px;
-  border-radius: 10px;
-  border: 1px solid var(--gold-border);
-  text-align: center;
-}
 
-.music-info h4 {
-  font-size: 12px;
-  color: var(--text);
-  margin: 0;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.music-info p {
-  font-size: 10px;
-  color: var(--text-muted);
-  margin: 2px 0 8px;
-}
-
-.progress-container {
-  background: var(--surface-3);
-  border-radius: 4px;
-  cursor: pointer;
-  margin-bottom: 10px;
-  height: 3px;
-}
-
-.progress {
-  background: var(--gold);
-  border-radius: 4px;
-  height: 100%;
-  width: 0%;
-  transition: width 0.1s linear;
-}
-
-.music-controls {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 14px;
-  margin-bottom: 8px;
-}
-
-.control-btn {
-  background: none;
-  border: none;
-  color: var(--text-dim);
-  cursor: pointer;
-  font-size: 13px;
-  transition: color var(--t-fast);
-}
-
-.control-btn:hover { color: var(--gold); }
-
-.play-main {
-  background: var(--gold);
-  color: #0a0e14;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  box-shadow: 0 0 14px rgba(233,161,37,0.3);
-  transition: opacity var(--t-fast), transform var(--t-fast);
-}
-
-.play-main:hover { opacity: 0.85; transform: scale(1.08); }
-
-.volume-control {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  margin-top: 8px;
-  color: var(--text-dim);
-}
-
-.volume-control input[type="range"] {
-  width: 70px;
-  accent-color: var(--gold);
-}
 
 /* ============================================================
    BOTÓN LOGOUT (Incrustado al fondo)
@@ -784,3 +690,14 @@ body {
   font-size: 0.8rem;
   color: #94a3b8;
 }
+
+/* Tom Select Dark Theme Overrides (Global) */
+.ts-wrapper { width: 100%; min-width: 250px; max-width: 100%; }
+.ts-control, .ts-wrapper.single.input-active .ts-control { background: transparent !important; border: none !important; color: var(--text) !important; padding: 8px 15px 8px 10px !important; width: 100%; box-shadow: none !important; display: flex !important; flex-wrap: nowrap !important; align-items: center !important; }
+.ts-control input { color: var(--text) !important; font-size: 0.95rem; min-width: 10px !important; }
+.ts-control .item { color: var(--text) !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex-shrink: 1; margin-right: 5px; font-weight: 500; }
+.ts-dropdown { background: #0f172a !important; border: 1px solid #334155 !important; border-radius: 8px; color: var(--text) !important; overflow: hidden; box-shadow: 0 10px 25px rgba(0,0,0,0.5); z-index: 9999; margin-top: 5px; }
+.ts-dropdown .option { padding: 12px 15px; border-bottom: 1px solid #334155; transition: background 0.2s; color: #f8fafc !important; }
+.ts-dropdown .option:hover, .ts-dropdown .active { background: #334155 !important; color: white !important; cursor: pointer; }
+.lote-selector-wrapper .ts-wrapper { flex: 1; display: flex; align-items: center; }
+.ts-control.single .ts-input { display: flex; align-items: center; }

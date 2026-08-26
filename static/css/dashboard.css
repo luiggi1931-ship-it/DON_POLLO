@@ -678,12 +678,15 @@
 .lote-selector-wrapper {
     background: #1e293b;
     border: 1px solid #334155;
-    padding: 8px 15px;
     border-radius: 8px;
     display: flex;
     align-items: center;
-    gap: 10px;
     color: #94a3b8;
+}
+
+.lote-selector-wrapper i {
+    padding-left: 15px;
+    font-size: 1.1rem;
 }
 
 .lote-selector-wrapper select {

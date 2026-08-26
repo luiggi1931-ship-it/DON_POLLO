@@ -1,9 +1,15 @@
 {% extends 'base.html' %} {% block extra_css %}
+<link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet">
 <link
   rel="stylesheet"
   href="{{ url_for('static', filename='css/dashboard.css') }}"
 />
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/animations.css') }}"
+/>
 {% endblock %} {% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
 <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 {% endblock %} {% block content %}
 <div class="monitor-wrapper">
@@ -129,29 +135,24 @@
     <div class="water-widget main-card">
       <div class="card-header-flex">
         <div class="chart-title">
-          <i class="fas fa-tint"></i> Consumo de Agua
-        </div>
-        <div class="timeframe-selector">
-          <button
-            class="active"
-            onclick="changeTimeframe(this, 'water', 'actual')"
-          >
-            ACTUAL
-          </button>
-          <button onclick="changeTimeframe(this, 'water', '1d')">1D</button>
-          <button onclick="changeTimeframe(this, 'water', '5d')">5D</button>
-          <button onclick="changeTimeframe(this, 'water', '1m')">1Mes</button>
-          <button onclick="changeTimeframe(this, 'water', '1y')">1Año</button>
+          <i class="fas fa-tint"></i> Tanque de Agua (Lote)
         </div>
       </div>
-      <div class="chart-content-layout">
-        <div class="canvas-container">
-          <canvas id="waterChart"></canvas>
+      <div class="tank-layout">
+        <div class="water-tank-container">
+          <div class="tank-glass">
+            <div class="tank-water" id="tank-water-level" style="height: 0%;"></div>
+            <div class="tank-bubbles"></div>
+          </div>
         </div>
         <div class="stats-sidebar">
           <div class="mini-stat-box blue">
             <small>CONSUMO HOY</small>
-            <b id="water-today">145.5 L</b>
+            <b id="water-today">0 L</b>
+          </div>
+          <div class="mini-stat-box">
+            <small>ESTADO TANQUE</small>
+            <b id="water-status-text">Normal</b>
           </div>
         </div>
       </div>
@@ -160,33 +161,29 @@
     <div class="food-widget main-card">
       <div class="card-header-flex">
         <div class="chart-title">
-          <i class="fas fa-seedling"></i> Consumo de Alimento
-        </div>
-        <div class="timeframe-selector">
-          <button
-            class="active"
-            onclick="changeTimeframe(this, 'food', 'actual')"
-          >
-            ACTUAL
-          </button>
-          <button onclick="changeTimeframe(this, 'food', '1d')">1D</button>
-          <button onclick="changeTimeframe(this, 'food', '5d')">5D</button>
-          <button onclick="changeTimeframe(this, 'food', '1m')">1Mes</button>
-          <button onclick="changeTimeframe(this, 'food', '1y')">1Año</button>
+          <i class="fas fa-seedling"></i> Silo de Alimento
         </div>
       </div>
-      <div class="chart-content-layout">
-        <div class="canvas-container">
-          <canvas id="foodChart"></canvas>
+      <div class="silo-layout">
+        <div class="silo-container">
+          <div class="silo-cone"></div>
+          <div class="silo-body">
+            <div class="silo-grain" id="silo-food-level" style="height: 0%;"></div>
+          </div>
+          <div class="silo-bottom"></div>
         </div>
         <div class="stats-sidebar">
-          <div class="mini-stat-box purple">
-            <small>ENTREGADO</small>
-            <b id="food-delivered">82.4 Kg</b>
+          <div class="mini-stat-box orange">
+            <small>ENTREGADA HOY</small>
+            <b id="food-delivered">0 Kg</b>
           </div>
           <div class="mini-stat-box red">
-            <small>PÉRDIDA EST.</small>
-            <b id="food-loss">1.2 Kg</b>
+            <small>PERDIDA EST.</small>
+            <b id="food-lost">0 Kg</b>
+          </div>
+          <div class="mini-stat-box green">
+            <small>RESTANTE (SILO)</small>
+            <b id="food-remaining">0 Kg</b>
           </div>
         </div>
       </div>

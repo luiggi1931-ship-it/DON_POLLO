@@ -1,13 +1,182 @@
-{% extends "base.html" %}
+{% extends 'base.html' %} 
 
-{% block title %}Reportes - Don Pollo{% endblock %}
+{% block extra_css %}
+<link href="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/css/tom-select.css" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/reportes.css') }}" />
+{% endblock %} 
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tom-select@2.2.2/dist/js/tom-select.complete.min.js"></script>
+<script src="{{ url_for('static', filename='js/reportes.js') }}"></script>
+{% endblock %} 
 
 {% block content %}
-<div class="content-header">
-    <h1>Reportes y Estadísticas</h1>
-    <p>Consulta el historial y rendimiento de la producción.</p>
-</div>
+<div class="reportes-wrapper">
+  <div class="reportes-header">
+    <div class="header-top" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+      <div class="header-left">
+        <h2>Reportes y Analítica</h2>
+      </div>
 
-<div class="reportes-container">
+      <div class="header-controls" style="display: flex; align-items: center;">
+        <div id="export-buttons" style="display: none; gap: 10px; margin-right: 15px;">
+          <button class="btn-export" style="background: #ef4444;" onclick="exportarReporte('pdf')" title="Exportar Clínico (PDF)"><i class="fas fa-file-pdf"></i></button>
+          <button class="btn-export" style="background: #10b981;" onclick="exportarReporte('excel')" title="Exportar Analítica (Excel)"><i class="fas fa-file-excel"></i></button>
+          <button class="btn-export" style="background: #3b82f6;" onclick="exportarReporte('word')" title="Exportar Informe (Word)"><i class="fas fa-file-word"></i></button>
+        </div>
+        
+        <!-- Controles Clínico (Selector de Lote) -->
+        <div class="lote-selector-wrapper" id="controles-clinico">
+          <i class="fas fa-search"></i>
+          <select id="lote-reporte-select">
+            <option value="">Seleccione un Lote</option>
+            {% for l in lotes %}
+              <option value="{{ l.id_lote_ }}">Lote #{{ l.id_lote_ }} - {{ l.tipo_ave }} (Edad: {{ l.edad_dias }}d)</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <!-- Controles Financieros (Filtros de Fecha) -->
+        <div class="date-selector-wrapper" id="controles-financiero" style="display: none; gap: 10px; align-items: center;">
+            <input type="date" id="fecha-inicio" class="form-input">
+            <span style="color:var(--text-dim);">a</span>
+            <input type="date" id="fecha-fin" class="form-input">
+            <button class="btn btn-primary" onclick="cargarReporteFinanciero()"><i class="fas fa-filter"></i> Filtrar</button>
+        </div>
+      </div>
     </div>
+    
+    <!-- Pestañas de Navegación -->
+    <div class="reportes-tabs" style="margin-top: 20px;">
+        <button class="tab-btn active" id="btn-tab-clinico" onclick="switchTab('clinico')"><i class="fas fa-stethoscope"></i> Clínico por Lote</button>
+        <button class="tab-btn" id="btn-tab-financiero" onclick="switchTab('financiero')"><i class="fas fa-dollar-sign"></i> Financiero Global</button>
+    </div>
+  </div>
+
+  <!-- TAB 1: CLÍNICO -->
+  <div id="tab-clinico" class="tab-content active">
+      <div id="reporte-content" style="display: none;">
+          <!-- Primera Fila: Gráficos -->
+          <div class="reportes-row">
+              <div class="reporte-card chart-card flex-2">
+                  <div class="card-title">
+                      <i class="fas fa-chart-line"></i> Histórico Ambiental (Telemetría Reciente)
+                  </div>
+                  <div class="chart-container">
+                      <canvas id="historicoAmbientalChart"></canvas>
+                  </div>
+              </div>
+              
+              <div class="reporte-card chart-card flex-1">
+                  <div class="card-title">
+                      <i class="fas fa-chart-pie"></i> Distribución de Consumos Hoy
+                  </div>
+                  <div class="chart-container pie-container">
+                      <canvas id="consumosPieChart"></canvas>
+                  </div>
+              </div>
+          </div>
+
+          <!-- Segunda Fila: Sanidad -->
+          <div class="reportes-row mt-4">
+              <div class="reporte-card flex-1">
+                  <div class="card-title">
+                      <i class="fas fa-syringe"></i> Control Sanitario y Vacunas
+                  </div>
+                  
+                  <div id="alertas-vacunacion-container"></div>
+
+                  <div class="table-responsive mt-3">
+                      <table class="table-minimal">
+                          <thead>
+                              <tr>
+                                  <th>Vacuna</th>
+                                  <th>Fecha</th>
+                                  <th>Estado</th>
+                              </tr>
+                          </thead>
+                          <tbody id="tabla-vacunas-body"></tbody>
+                      </table>
+                  </div>
+
+                  <div class="registro-rapido mt-3">
+                      <h4>Registrar Aplicación</h4>
+                      <div class="form-row">
+                          <select id="select-vacuna-aplicar" class="form-input">
+                              {% for v in vacunas %}
+                              <option value="{{ v.id_vacuna }}">{{ v.nombre }}</option>
+                              {% endfor %}
+                          </select>
+                          <button class="btn btn-primary" onclick="registrarVacuna()">Guardar</button>
+                      </div>
+                  </div>
+              </div>
+
+              <div class="reporte-card flex-1">
+                  <div class="card-title">
+                      <i class="fas fa-skull"></i> Registro de Mortalidad
+                  </div>
+                  <div class="stat-big red" id="mortalidad-total-text">0 Bajas</div>
+                  <div class="table-responsive mt-3">
+                      <table class="table-minimal">
+                          <thead>
+                              <tr>
+                                  <th>Causa Identificada</th>
+                                  <th>Cantidad</th>
+                              </tr>
+                          </thead>
+                          <tbody id="tabla-mortalidad-body"></tbody>
+                      </table>
+                  </div>
+              </div>
+          </div>
+      </div>
+      
+      <div id="reporte-empty-state" class="empty-state">
+          <i class="fas fa-chart-area empty-icon"></i>
+          <h3>Seleccione un Lote</h3>
+          <p>Elija un lote del menú superior para ver su historial, telemetría y datos sanitarios.</p>
+      </div>
+  </div>
+
+  <!-- TAB 2: FINANCIERO -->
+  <div id="tab-financiero" class="tab-content">
+      <!-- KPIs Financieros -->
+      <div class="reportes-row" style="margin-bottom: 24px;">
+          <div class="reporte-card flex-1" style="display:flex; align-items:center; gap: 15px;">
+              <div class="stat-icon green" style="font-size:24px; color:var(--green);"><i class="fas fa-arrow-up"></i></div>
+              <div>
+                  <p style="margin:0; font-size:12px; color:var(--text-dim); text-transform:uppercase;">Ingresos Totales</p>
+                  <h3 style="margin:0; font-size:24px; color:#fff;" id="fin-ingresos">$0.00</h3>
+              </div>
+          </div>
+          <div class="reporte-card flex-1" style="display:flex; align-items:center; gap: 15px;">
+              <div class="stat-icon red" style="font-size:24px; color:var(--red);"><i class="fas fa-arrow-down"></i></div>
+              <div>
+                  <p style="margin:0; font-size:12px; color:var(--text-dim); text-transform:uppercase;">Gastos Totales</p>
+                  <h3 style="margin:0; font-size:24px; color:#fff;" id="fin-gastos">$0.00</h3>
+              </div>
+          </div>
+          <div class="reporte-card flex-1" style="display:flex; align-items:center; gap: 15px;">
+              <div class="stat-icon gold" style="font-size:24px; color:var(--gold);"><i class="fas fa-wallet"></i></div>
+              <div>
+                  <p style="margin:0; font-size:12px; color:var(--text-dim); text-transform:uppercase;">Ganancia Neta</p>
+                  <h3 style="margin:0; font-size:24px; color:#fff;" id="fin-ganancia">$0.00</h3>
+              </div>
+          </div>
+      </div>
+
+      <!-- Gráfico de Evolución -->
+      <div class="reporte-card chart-card">
+          <div class="card-title">
+              <i class="fas fa-chart-area"></i> Evolución Financiera (Ingresos vs Gastos)
+          </div>
+          <div class="chart-container" style="height: 400px; position: relative;">
+              <canvas id="evolucionFinancieraChart"></canvas>
+          </div>
+      </div>
+  </div>
+
+</div>
 {% endblock %}

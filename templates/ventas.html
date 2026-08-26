@@ -1,0 +1,240 @@
+{% extends "base.html" %}
+
+{% block title %}Ventas e Inventario - Don Pollo{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/ventas.css') }}" />
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="content-header">
+    <div class="header-with-icon">
+        <div class="header-icon"><i class="fas fa-chart-line"></i></div>
+        <div class="header-text">
+            <h1>Ventas e Inventario</h1>
+            <p>Rendimiento financiero y cierre de lotes</p>
+        </div>
+    </div>
+</div>
+
+<div class="ventas-container">
+    <div class="stats-container">
+        <div class="stat-card">
+            <div class="stat-icon-glow green"><i class="fas fa-dollar-sign"></i></div>
+            <div class="stat-info">
+                <p>Ingresos Totales</p>
+                <h3>${{ "{:,.2f}".format(total_ingresos) }}</h3>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon-glow red"><i class="fas fa-arrow-down"></i></div>
+            <div class="stat-info">
+                <p>Gastos Totales</p>
+                <h3>${{ "{:,.2f}".format(total_gastos) }}</h3>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon-glow gold"><i class="fas fa-wallet"></i></div>
+            <div class="stat-info">
+                <p>Ganancia Neta</p>
+                <h3>${{ "{:,.2f}".format(ganancia_neta) }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="dashboard-grid">
+        <div class="chart-panel">
+            <div class="panel-title"><i class="fas fa-chart-bar"></i> Balance Financiero</div>
+            <canvas id="financeChart" height="100" data-ingresos="{{ total_ingresos }}" data-gastos="{{ total_gastos }}"></canvas>
+        </div>
+        
+        <div class="actions-panel">
+            <div class="panel-title"><i class="fas fa-bolt"></i> Acciones Rápidas</div>
+            <button class="btn-large btn-sell" onclick="openModal('modalVenta')">
+                <i class="fas fa-check-circle"></i> Cerrar Lote y Vender
+            </button>
+            <button class="btn-large btn-expense" onclick="openModal('modalGasto')">
+                <i class="fas fa-receipt"></i> Registrar Gasto
+            </button>
+        </div>
+    </div>
+
+    <div class="table-panel">
+        <div class="table-header">
+            <h3><i class="fas fa-history" style="color:var(--gold);margin-right:8px;"></i> Historial de Ventas</h3>
+        </div>
+        <div style="overflow-x: auto;">
+            <table class="modern-table">
+                <thead>
+                    <tr>
+                        <th>ID Venta</th>
+                        <th>Fecha</th>
+                        <th>Lote Origen</th>
+                        <th>Cant. Aves</th>
+                        <th>Peso (kg)</th>
+                        <th>Precio/kg</th>
+                        <th>Ingreso Total</th>
+                        <th>Cliente</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for v in ventas %}
+                    <tr>
+                        <td>#{{ v.id_venta }}</td>
+                        <td>{{ v.fecha_venta.strftime('%Y-%m-%d') }}</td>
+                        <td>Lote {{ v.id_lote }}</td>
+                        <td>{{ v.cantidad_aves }}</td>
+                        <td>{{ v.peso_total_kg }} kg</td>
+                        <td>${{ "{:,.2f}".format(v.precio_por_kg) }}</td>
+                        <td><span class="badge-green">${{ "{:,.2f}".format(v.ingreso_total) }}</span></td>
+                        <td>{{ v.cliente or 'General' }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="8" style="text-align:center; color:var(--text-muted); padding:30px;">
+                            No hay ventas registradas aún.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Tabla Historial Gastos -->
+    <div class="table-panel">
+        <div class="table-header">
+            <h3><i class="fas fa-receipt" style="color:var(--gold);margin-right:8px;"></i> Historial de Gastos</h3>
+        </div>
+        <div style="overflow-x: auto;">
+            <table class="modern-table">
+                <thead>
+                    <tr>
+                        <th>ID Gasto</th>
+                        <th>Fecha</th>
+                        <th>Lote Asociado</th>
+                        <th>Concepto</th>
+                        <th>Observaciones</th>
+                        <th>Monto</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for g in gastos %}
+                    <tr>
+                        <td>#{{ g.id_gasto }}</td>
+                        <td>{{ g.fecha_gasto.strftime('%Y-%m-%d') }}</td>
+                        <td>
+                            {% if g.id_lote %}
+                            Lote #{{ g.id_lote }}
+                            {% else %}
+                            <span style="color:var(--text-muted);">Gasto General</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ g.concepto }}</td>
+                        <td>{{ g.observaciones or '-' }}</td>
+                        <td><span style="color:var(--red); font-weight:700;">-${{ "{:,.2f}".format(g.monto) }}</span></td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" style="text-align:center; color:var(--text-muted); padding:30px;">
+                            No hay gastos registrados aún.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Venta -->
+<div class="modal-overlay" id="modalVenta">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h2>Cerrar Lote y Vender</h2>
+            <button class="close-modal" onclick="closeModal('modalVenta')">&times;</button>
+        </div>
+        <form id="formVenta">
+            <div class="form-group">
+                <label>Lote a Cerrar</label>
+                <select class="form-control" id="v_lote" required>
+                    <option value="">Selecciona un lote activo...</option>
+                    {% for l in lotes_activos %}
+                    <option value="{{ l.id_lote_ }}">Lote #{{ l.id_lote_ }} ({{ l.saldo_actual }} aves)</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Peso Total (Kg)</label>
+                <input type="number" step="0.01" class="form-control" id="v_peso" required placeholder="Ej: 2500.50">
+            </div>
+            <div class="form-group">
+                <label>Precio por Kg ($)</label>
+                <input type="number" step="0.01" class="form-control" id="v_precio" required placeholder="Ej: 3.50">
+            </div>
+            <div class="form-group">
+                <label>Cliente / Comprador (Opcional)</label>
+                <input type="text" class="form-control" id="v_cliente" placeholder="Nombre del cliente o empresa">
+            </div>
+            <div class="form-group">
+                <label>Observaciones (Opcional)</label>
+                <input type="text" class="form-control" id="v_obs">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-cancel" onclick="closeModal('modalVenta')">Cancelar</button>
+                <button type="submit" class="btn-submit">Registrar Venta</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Modal Gasto -->
+<div class="modal-overlay" id="modalGasto">
+    <div class="modal-box">
+        <div class="modal-header">
+            <h2>Registrar Gasto</h2>
+            <button class="close-modal" onclick="closeModal('modalGasto')">&times;</button>
+        </div>
+        <form id="formGasto">
+            <div class="form-group">
+                <label>Asignar al Lote (Opcional)</label>
+                <select class="form-control" id="g_lote">
+                    <option value="">Gasto general de la granja (Sin lote)</option>
+                    {% for l in lotes_activos %}
+                    <option value="{{ l.id_lote_ }}">Lote #{{ l.id_lote_ }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Concepto</label>
+                <select class="form-control" id="g_concepto" required>
+                    <option value="Alimento">Alimento</option>
+                    <option value="Vacunas/Medicinas">Vacunas / Medicinas</option>
+                    <option value="Transporte">Transporte</option>
+                    <option value="Mantenimiento">Mantenimiento</option>
+                    <option value="Otros">Otros</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Monto ($)</label>
+                <input type="number" step="0.01" class="form-control" id="g_monto" required placeholder="Ej: 500.00">
+            </div>
+            <div class="form-group">
+                <label>Observaciones (Opcional)</label>
+                <input type="text" class="form-control" id="g_obs">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn-cancel" onclick="closeModal('modalGasto')">Cancelar</button>
+                <button type="submit" class="btn-submit">Guardar Gasto</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/ventas.js') }}"></script>
+
+{% endblock %}

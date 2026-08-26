@@ -30,11 +30,24 @@ header h1 {
 /* Tabs Modernas (Pills) */
 .tabs {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start; /* Start para scroll en móviles */
     background-color: #1e293b;
     padding: 1rem;
     gap: 10px;
     border-bottom: 1px solid #334155;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+}
+
+.tabs::-webkit-scrollbar {
+    display: none; /* Chrome/Safari */
+}
+
+@media (min-width: 768px) {
+    .tabs {
+        justify-content: center; /* Centrado en desktop */
+    }
 }
 
 .tab-button {
@@ -47,6 +60,8 @@ header h1 {
     font-weight: 500;
     color: #94a3b8;
     transition: all 0.3s ease;
+    white-space: nowrap; /* Evita que el texto se rompa */
+    flex-shrink: 0;      /* Evita que se encoja el botón */
 }
 
 .tab-button:hover {
@@ -455,6 +470,306 @@ header h1 {
     color: #ef4444;
 }
 
+/* Nuevos Actuadores (Calefacción, Alimentación) */
+.actuador-visual-container {
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.heater-icon, .feeder-icon {
+    font-size: 5rem;
+    color: #475569;
+    transition: all 0.4s ease;
+    filter: drop-shadow(0 0 5px rgba(0,0,0,0.5));
+}
+
+.heater-icon.activo {
+    color: #ef4444;
+    filter: drop-shadow(0 0 20px rgba(239, 68, 68, 0.8));
+    animation: pulse-fire 1.5s infinite alternate;
+}
+
+.feeder-icon.activo {
+    color: #06b6d4;
+    filter: drop-shadow(0 0 20px rgba(6, 182, 212, 0.8));
+    animation: drop-water 1s infinite linear;
+}
+
+@keyframes pulse-fire {
+    from { transform: scale(1); filter: drop-shadow(0 0 10px rgba(239, 68, 68, 0.6)); }
+    to { transform: scale(1.1); filter: drop-shadow(0 0 30px rgba(239, 68, 68, 1)); }
+}
+
+@keyframes drop-water {
+    0% { transform: translateY(-5px); opacity: 0.8; }
+    50% { transform: translateY(5px); opacity: 1; }
+    100% { transform: translateY(-5px); opacity: 0.8; }
+}
+
+/* Formulario Jaula */
+.jaula-config-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    background: #1e293b;
+    padding: 30px;
+    border-radius: 12px;
+    border: 1px solid #334155;
+    margin-top: 20px;
+}
+
+.bloque-form {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.bloque-form label {
+    font-size: 0.95rem;
+    color: #cbd5e1;
+    font-weight: 500;
+}
+
+.bloque-form input {
+    padding: 10px 15px;
+    border-radius: 8px;
+    border: 1px solid #334155;
+    background: #0f172a;
+    color: #f8fafc;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.bloque-form input:focus {
+    outline: none;
+    border-color: #3b82f6;
+}
+
+.bloque-form small {
+    color: #64748b;
+    font-size: 0.8rem;
+}
+
+/* ============================================================
+   USUARIOS
+   ============================================================ */
+.usuarios-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.usuarios-header h2 {
+    color: #f1f5f9;
+    font-size: 1.5rem;
+    margin: 0;
+}
+
+.usuarios-table-container {
+    background: #1e293b;
+    border-radius: 12px;
+    border: 1px solid #334155;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.tabla-usuarios {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tabla-usuarios th {
+    background: #0f172a;
+    padding: 15px;
+    text-align: left;
+    color: #94a3b8;
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+}
+
+.tabla-usuarios td {
+    padding: 15px;
+    border-bottom: 1px solid #334155;
+    color: #f8fafc;
+    white-space: nowrap;
+}
+
+.tabla-usuarios tr:hover td {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.tabla-usuarios tr:last-child td {
+    border-bottom: none;
+}
+
+.badge-rol {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.rol-admin { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+.rol-operador { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+.rol-tecnico { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+
+.btn-accion {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    padding: 5px;
+    margin-right: 10px;
+    transition: color 0.2s;
+}
+
+.btn-editar { color: #f59e0b; }
+.btn-editar:hover { color: #fbbf24; }
+.btn-eliminar { color: #ef4444; }
+.btn-eliminar:hover { color: #f87171; }
+
+/* Modal Usuario */
+#modalUsuario .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #cbd5e1;
+    font-weight: 500;
+}
+
+#modalUsuario .form-group input,
+#modalUsuario .form-group select {
+    width: 100%;
+    padding: 10px;
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    color: #fff;
+    margin-bottom: 15px;
+}
+
+#modalUsuario .form-group input:focus,
+#modalUsuario .form-group select:focus {
+    border-color: #3b82f6;
+    outline: none;
+}
+
+/* ============================================================
+   MODAL USUARIOS (Estilos bases que faltaban)
+   ============================================================ */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 9999;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px);
+}
+
+@keyframes fadeInModal {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+.modal-content {
+    background: #1e293b;
+    border-radius: 12px;
+    width: 450px;
+    max-width: 90%;
+    padding: 0;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    border: 1px solid #334155;
+    animation: fadeInModal 0.25s ease-out;
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 25px;
+    border-bottom: 1px solid #334155;
+    background: #0f172a;
+    border-radius: 12px 12px 0 0;
+}
+
+.modal-header h2 {
+    margin: 0;
+    color: #f1f5f9;
+    font-size: 1.3rem;
+}
+
+.close {
+    color: #94a3b8;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.close:hover {
+    color: #f1f5f9;
+}
+
+#formUsuario {
+    padding: 25px;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #334155;
+}
+
+.btn-secondary {
+    background: #334155;
+    color: #f8fafc;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-secondary:hover {
+    background: #475569;
+}
+
+/* El botón btn-primary ya debería estar en base.css o se usa aquí */
+.btn-primary {
+    background: linear-gradient(135deg, #3b82f6, #2563eb);
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(59, 130, 246, 0.4);
+}
+
 /* Responsive */
 @media (max-width: 1200px) {
     .parametros-grid {
@@ -474,5 +789,11 @@ header h1 {
     .botones-container button {
         width: 100%;
         max-width: 300px;
+    }
+
+    .usuarios-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
     }
 }

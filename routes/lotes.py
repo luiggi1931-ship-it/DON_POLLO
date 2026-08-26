@@ -12,6 +12,8 @@ from services.lote_service import (
 lotes_bp = Blueprint('lotes', __name__)
 
 
+from decorators import admin_required
+
 # --- RUTAS DE LOTES ---
 
 @lotes_bp.route('/lotes')
@@ -66,9 +68,8 @@ def lotes():
     # Fechas únicas formateadas a string
     fechas = [f[0].strftime('%Y-%m-%d') for f in db.session.query(Lote.fecha_ingreso).distinct().order_by(Lote.fecha_ingreso.desc()).all()]
 
-    # Totales (independientes de los filtros, calculamos en base a todos o a los filtrados? 
-    # Mejor calculamos globales para las tarjetas de arriba)
-    todos_lotes = Lote.query.all()
+    # Totales globales (con joinedload para evitar N+1 queries al calcular saldo_actual)
+    todos_lotes = Lote.query.options(joinedload(Lote.mortalidades)).all()
     total_aves = sum(l.saldo_actual for l in todos_lotes)
     activos = sum(1 for l in todos_lotes if l.estado_activo_cerrado == 1)
     cerrados = sum(1 for l in todos_lotes if l.estado_activo_cerrado == 0)
@@ -95,6 +96,7 @@ def lotes():
 
 @lotes_bp.route('/guardar_lote', methods=['POST'])
 @login_required
+@admin_required
 def guardar_lote():
     id_lote = request.form.get('id_lote')
     ids_seleccionados = request.form.getlist('jaulas_seleccionadas')
@@ -112,6 +114,7 @@ def guardar_lote():
 
 @lotes_bp.route('/eliminar_lote/<int:id_lote>', methods=['POST'])
 @login_required
+@admin_required
 def eliminar_lote(id_lote):
     ok, msg = eliminar_lote_completo(id_lote)
     flash(msg, 'success' if ok else 'error')
@@ -144,6 +147,7 @@ def registrar_mortalidad():
 
 @lotes_bp.route('/guardar_jaula', methods=['POST'])
 @login_required
+@admin_required
 def guardar_jaula():
     try:
         data = request.form
@@ -171,6 +175,7 @@ def guardar_jaula():
 
 @lotes_bp.route('/eliminar_jaula/<int:id_jaula>', methods=['POST'])
 @login_required
+@admin_required
 def eliminar_jaula(id_jaula):
     try:
         jaula = db.session.get(Jaula, id_jaula)

@@ -16,6 +16,11 @@ from .usuario import Usuario
 from .jaula import Jaula
 from .asignacion import AsignacionJaula
 from .alerta import Alerta
+from .lectura_sensor import LecturaSensor
+from .vacuna import Vacuna
+from .vacunacion import Vacunacion
+from .venta import Venta
+from .gasto import Gasto
 
 
 @login_manager.user_loader
