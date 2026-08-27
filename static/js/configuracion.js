@@ -161,58 +161,70 @@ function mostrarNotificacion(mensaje, tipo) {
     }, 3000);
 }
 
-// Control de ventilador
-let ventiladorEncendido = false;
-let velocidadActual = 'medio';
+// Control único de actuadores (Power Button)
+const actuadoresEstado = {
+    ventilador: false,
+    calefaccion: false,
+    agua: false,
+    comida: false
+};
 
-function encenderVentilador() {
-    const ventilador = document.getElementById('ventilador');
-    const estado = document.getElementById('estado-ventilador');
-    const estadoDisplay = estado.parentElement;
-    
-    ventilador.classList.remove('girando-lento', 'girando-medio', 'girando-rapido');
-    ventilador.classList.add(`girando-${velocidadActual}`);
-    
-    estado.textContent = 'Encendido';
-    estadoDisplay.classList.remove('apagado');
-    estadoDisplay.classList.add('encendido');
-    ventiladorEncendido = true;
-    
-    mostrarNotificacion('Ventilador encendido', 'success');
-}
+function togglePower(actuadorId) {
+    const estadoActual = actuadoresEstado[actuadorId];
+    const nuevoEstado = !estadoActual;
+    actuadoresEstado[actuadorId] = nuevoEstado;
 
-function apagarVentilador() {
-    const ventilador = document.getElementById('ventilador');
-    const estado = document.getElementById('estado-ventilador');
-    const estadoDisplay = estado.parentElement;
-    
-    ventilador.classList.remove('girando-lento', 'girando-medio', 'girando-rapido');
-    estado.textContent = 'Apagado';
-    estadoDisplay.classList.remove('encendido');
-    estadoDisplay.classList.add('apagado');
-    ventiladorEncendido = false;
-    
-    mostrarNotificacion('Ventilador apagado', 'info');
-}
+    const btn = document.getElementById(`btn-${actuadorId}`);
+    const badge = document.getElementById(`badge-${actuadorId}`);
+    const textoEstado = document.getElementById(`estado-${actuadorId}`);
+    const iconContainer = document.getElementById(actuadorId);
 
-// Control genérico para otros actuadores
-function toggleActuador(actuadorId, estado) {
-    const icon = document.getElementById(actuadorId);
-    const estadoText = document.getElementById(`estado-${actuadorId}`);
-    const estadoBg = document.getElementById(`estado-bg-${actuadorId}`);
+    if (nuevoEstado) {
+        // Encender
+        btn.classList.add('active');
+        badge.classList.remove('apagado');
+        badge.classList.add('encendido');
 
-    if (estado) {
-        icon.classList.add('activo');
-        estadoText.textContent = actuadorId === 'calefaccion' ? 'Encendido' : 'Activo';
-        estadoBg.classList.remove('apagado');
-        estadoBg.classList.add('encendido');
-        mostrarNotificacion(actuadorId === 'calefaccion' ? 'Calefacción encendida' : 'Alimentación activada', 'success');
+        if (actuadorId === 'ventilador') {
+            textoEstado.textContent = 'Encendido';
+            iconContainer.classList.add('girando-rapido'); // Podemos usar medio o rápido
+            mostrarNotificacion('Ventilador encendido', 'success');
+        } else if (actuadorId === 'calefaccion') {
+            textoEstado.textContent = 'Encendido';
+            iconContainer.classList.add('activo');
+            mostrarNotificacion('Calefacción encendida', 'success');
+        } else if (actuadorId === 'agua') {
+            textoEstado.textContent = 'Activo';
+            iconContainer.classList.add('activo');
+            mostrarNotificacion('Sist. de Agua activado', 'success');
+        } else if (actuadorId === 'comida') {
+            textoEstado.textContent = 'Activo';
+            iconContainer.classList.add('activo');
+            mostrarNotificacion('Sist. de Comida activado', 'success');
+        }
     } else {
-        icon.classList.remove('activo');
-        estadoText.textContent = actuadorId === 'calefaccion' ? 'Apagado' : 'Detenido';
-        estadoBg.classList.remove('encendido');
-        estadoBg.classList.add('apagado');
-        mostrarNotificacion(actuadorId === 'calefaccion' ? 'Calefacción apagada' : 'Alimentación detenida', 'info');
+        // Apagar
+        btn.classList.remove('active');
+        badge.classList.remove('encendido');
+        badge.classList.add('apagado');
+
+        if (actuadorId === 'ventilador') {
+            textoEstado.textContent = 'Apagado';
+            iconContainer.classList.remove('girando-rapido', 'girando-medio', 'girando-lento');
+            mostrarNotificacion('Ventilador apagado', 'info');
+        } else if (actuadorId === 'calefaccion') {
+            textoEstado.textContent = 'Apagado';
+            iconContainer.classList.remove('activo');
+            mostrarNotificacion('Calefacción apagada', 'info');
+        } else if (actuadorId === 'agua') {
+            textoEstado.textContent = 'Detenido';
+            iconContainer.classList.remove('activo');
+            mostrarNotificacion('Sist. de Agua detenido', 'info');
+        } else if (actuadorId === 'comida') {
+            textoEstado.textContent = 'Detenido';
+            iconContainer.classList.remove('activo');
+            mostrarNotificacion('Sist. de Comida detenido', 'info');
+        }
     }
 }
 

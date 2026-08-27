@@ -278,26 +278,48 @@ header h1 {
     margin-top: 20px;
 }
 
+
 .actuador-card {
-    background: #1e293b;
-    border: 1px solid #334155;
-    padding: 30px;
+    background: rgba(20, 26, 34, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.3);
+    padding: 25px;
     border-radius: 16px;
     text-align: center;
-    transition: transform 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
 }
-
+.actuador-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    pointer-events: none;
+}
 .actuador-card:hover {
-    border-color: #475569;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 
-.actuador-card h3 {
-    color: #f8fafc;
-    font-size: 1.3em;
+.actuador-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 20px;
-    font-weight: 500;
 }
+.actuador-header h3 {
+    color: #f8fafc;
+    font-size: 1.1em;
+    font-weight: 500;
+    margin: 0;
+}
+
 
 /*ventilador*/
 .ventilador-container {
@@ -400,75 +422,91 @@ header h1 {
     border-color: #3b82f6;
 }
 
-/* ========== BOTONES Y ESTADOS ========== */
-.control-buttons {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-    margin-top: 20px;
+
+/* ========== BADGE ESTADO ========== */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.control-buttons button {
-    padding: 10px 20px;
-    font-size: 0.95em;
-    font-weight: 500;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-}
-
-.btn-encender {
-    background-color: rgba(16, 185, 129, 0.15);
-    color: #10b981;
-    border: 1px solid rgba(16, 185, 129, 0.3);
-}
-
-.btn-encender:hover {
-    background-color: rgba(16, 185, 129, 0.25);
-}
-
-.btn-apagar {
-    background-color: rgba(239, 68, 68, 0.15);
-    color: #ef4444;
-    border: 1px solid rgba(239, 68, 68, 0.3);
-}
-
-.btn-apagar:hover {
-    background-color: rgba(239, 68, 68, 0.25);
-}
-
-.estado-display {
-    margin-top: 25px;
-    padding: 12px;
-    border-radius: 8px;
-    background: #0f172a;
-    border: 1px solid #334155;
+.status-badge .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
     transition: all 0.3s ease;
 }
 
-.estado-display span {
-    font-size: 1em;
-    font-weight: 500;
+.status-badge.apagado {
+    color: #94a3b8;
+}
+.status-badge.apagado .dot {
+    background-color: #ef4444;
+    box-shadow: 0 0 5px rgba(239, 68, 68, 0.5);
 }
 
-.estado-display.encendido {
-    border-color: rgba(16, 185, 129, 0.4);
-    box-shadow: 0 0 15px rgba(16, 185, 129, 0.1);
-}
-
-.estado-display.encendido span {
+.status-badge.encendido {
     color: #10b981;
+    border-color: rgba(16, 185, 129, 0.3);
+    background: rgba(16, 185, 129, 0.05);
+}
+.status-badge.encendido .dot {
+    background-color: #10b981;
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.8);
 }
 
-.estado-display.apagado {
-    border-color: rgba(239, 68, 68, 0.4);
-    box-shadow: 0 0 15px rgba(239, 68, 68, 0.1);
+/* ========== BOTON POWER ========== */
+.control-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
 }
 
-.estado-display.apagado span {
-    color: #ef4444;
+.power-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: none;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: #1e293b;
+    color: #475569;
+    box-shadow: 
+        inset 0 2px 4px rgba(255, 255, 255, 0.05),
+        inset 0 -2px 4px rgba(0, 0, 0, 0.2),
+        0 4px 10px rgba(0, 0, 0, 0.5);
 }
+
+.power-btn:hover {
+    color: #94a3b8;
+    transform: scale(1.05);
+}
+
+.power-btn.active {
+    background: #0f172a;
+    color: #10b981;
+    box-shadow: 
+        inset 0 2px 4px rgba(0, 0, 0, 0.5),
+        inset 0 -2px 4px rgba(255, 255, 255, 0.05),
+        0 0 15px rgba(16, 185, 129, 0.4);
+    text-shadow: 0 0 8px rgba(16, 185, 129, 0.8);
+}
+
+.power-btn.active:active {
+    transform: scale(0.95);
+}
+
 
 /* Nuevos Actuadores (Calefacción, Alimentación) */
 .actuador-visual-container {
@@ -492,11 +530,53 @@ header h1 {
     animation: pulse-fire 1.5s infinite alternate;
 }
 
+
 .feeder-icon.activo {
     color: #06b6d4;
     filter: drop-shadow(0 0 20px rgba(6, 182, 212, 0.8));
     animation: drop-water 1s infinite linear;
 }
+
+.feeder-icon.food.activo {
+    color: #f59e0b;
+    filter: drop-shadow(0 0 20px rgba(245, 158, 11, 0.8));
+    animation: pulse-food 1.5s infinite alternate;
+}
+
+@keyframes pulse-food {
+    from { transform: scale(1); filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.6)); }
+    to { transform: scale(1.1); filter: drop-shadow(0 0 25px rgba(245, 158, 11, 1)); }
+}
+
+/* Dual Actuador */
+.dual-actuador-container {
+    display: flex;
+    justify-content: space-around;
+    gap: 10px;
+    height: 100%;
+}
+.sub-actuador {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    width: 45%;
+}
+.sub-label {
+    margin-top: 10px;
+    font-size: 0.9em;
+    font-weight: 500;
+    color: #94a3b8;
+}
+.actuador-visual-container.mini {
+    height: 100px;
+}
+.mini-btn {
+    width: 45px;
+    height: 45px;
+    font-size: 1.2rem;
+}
+
 
 @keyframes pulse-fire {
     from { transform: scale(1); filter: drop-shadow(0 0 10px rgba(239, 68, 68, 0.6)); }

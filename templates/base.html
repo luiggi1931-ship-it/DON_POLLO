@@ -25,7 +25,7 @@
     <i class="fas fa-bars"></i>
   </button>
 
-  <div class="container">
+  <div class="app-container">
     <!-- ASIDE / SIDEBAR -->
     <aside class="sidebar" id="mainSidebar">
       <div class="logo">
@@ -43,6 +43,12 @@
           <li class="{% if request.endpoint and request.endpoint.startswith('lotes.') %}active{% endif %}">
             <a href="{{ url_for('lotes.lotes') }}" class="nav-btn">
               <i class="fas fa-boxes-stacked"></i> <span>Lotes</span>
+            </a>
+          </li>
+
+          <li class="{% if request.endpoint and request.endpoint.startswith('inventario.') %}active{% endif %}">
+            <a href="{{ url_for('inventario.inventario_dashboard') }}" class="nav-btn">
+              <i class="fas fa-warehouse"></i> <span>Inventario</span>
             </a>
           </li>
 

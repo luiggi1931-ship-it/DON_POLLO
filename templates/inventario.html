@@ -1,0 +1,203 @@
+{% extends 'base.html' %}
+
+{% block extra_css %}
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+    tailwind.config = {
+        darkMode: "class",
+        theme: {
+            extend: {
+                colors: {
+                    "background": "var(--bg)",
+                    "surface": "var(--surface)",
+                    "surface-variant": "var(--surface-2)",
+                    "on-surface": "var(--text)",
+                    "on-surface-variant": "var(--text-dim)",
+                    "primary": "var(--gold)",
+                    "on-primary": "#ffffff",
+                    "primary-container": "var(--gold-dim)",
+                    "on-primary-container": "var(--gold)",
+                    "secondary": "#3498db",
+                    "on-secondary": "#ffffff",
+                    "secondary-container": "rgba(52, 152, 219, 0.15)",
+                    "on-secondary-container": "#3498db",
+                    "outline": "var(--border)",
+                    "outline-variant": "var(--border-hover)",
+                    "primary-fixed": "var(--gold-light)",
+                    "primary-fixed-dim": "var(--gold)",
+                    "primary-fixed-variant": "#e9a125",
+                    "error": "var(--red)",
+                    "error-container": "var(--red-dim)",
+                    "on-error": "#ffffff",
+                    "on-error-container": "var(--red)"
+                },
+                borderRadius: {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+                },
+                spacing: {
+                    "base": "8px",
+                    "gutter": "24px",
+                    "sm": "12px",
+                    "xl": "64px",
+                    "lg": "40px",
+                    "xs": "4px",
+                    "margin": "32px",
+                    "md": "24px"
+                }
+            }
+        }
+    }
+</script>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/inventario.css') }}" />
+{% endblock %}
+
+{% block content %}
+<div class="bg-background text-on-surface font-body-md relative overflow-hidden rounded-xl border border-outline-variant/30" style="min-height: 80vh;">
+    <!-- Ambient Background Effect -->
+    <div class="absolute top-0 right-0 w-full h-[500px] bg-gradient-to-br from-surface-variant/40 to-transparent pointer-events-none z-0"></div>
+    <div class="absolute -top-40 -right-40 w-96 h-96 bg-primary-fixed/5 rounded-full blur-[100px] pointer-events-none z-0"></div>
+    
+    <div class="p-4 md:p-margin space-y-lg relative z-10">
+        <div class="flex items-center gap-4 mb-6">
+            <h2 class="text-2xl font-bold text-primary" style="color: var(--gold);">Gestión de Inventario</h2>
+        </div>
+        
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-md">
+<!-- Metric Card 1 -->
+<div class="glass-card rounded-xl p-md flex flex-col justify-between hover:shadow-lg transition-shadow duration-300 group">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary-container/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">nutrition</span>
+</div>
+<h3 class="font-headline-md text-on-surface">Alimento Disponible</h3>
+</div>
+</div>
+<div class="flex items-end justify-between mt-6">
+<div class="font-display text-4xl md:text-5xl text-on-surface font-bold tracking-tight">{{ '{:,.2f}'.format(alimento_disponible) }} <span class="text-headline-md text-outline">Kg</span></div>
+<div class="flex items-center gap-1 text-primary bg-primary-container/10 px-2 py-1 rounded-full text-label-md">
+<span class="material-symbols-outlined text-sm">trending_up</span>
+<span>+4.2%</span>
+</div>
+</div>
+</div>
+<!-- Metric Card 2 -->
+<div class="glass-card rounded-xl p-md flex flex-col justify-between hover:shadow-lg transition-shadow duration-300 group">
+<div class="flex justify-between items-start mb-4">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-secondary-container/20 flex items-center justify-center text-secondary">
+<span class="material-symbols-outlined">water_drop</span>
+</div>
+<h3 class="font-headline-md text-on-surface">Agua Disponible</h3>
+</div>
+</div>
+<div class="flex items-end justify-between mt-6">
+<div class="font-display text-4xl md:text-5xl text-on-surface font-bold tracking-tight">{{ '{:,.2f}'.format(agua_disponible) }} <span class="text-headline-md text-outline">L</span></div>
+<div class="flex items-center gap-1 text-secondary bg-secondary-container/10 px-2 py-1 rounded-full text-label-md">
+<span class="material-symbols-outlined text-sm">water</span>
+<span>Estable</span>
+</div>
+</div>
+</div>
+</section>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-md">
+<!-- Section 2: Quick Action Card -->
+<section class="lg:col-span-1">
+<div class="glass-card rounded-xl p-md h-full">
+<div class="flex items-center gap-2 mb-6">
+<span class="material-symbols-outlined text-primary">add_circle</span>
+<h3 class="font-headline-md text-on-surface">Registrar Consumo</h3>
+</div>
+<form id="formRegistrarConsumo" class="space-y-4">
+<div>
+<label class="block font-label-md text-on-surface-variant mb-1">Lote</label>
+<div class="relative">
+<select name="id_lote" id="id_lote" required class="w-full glass-input rounded-lg px-4 py-2.5 text-body-md text-on-surface appearance-none focus:ring-0">
+<option disabled="" selected="" value="">Seleccionar Lote...</option>
+{% for lote in lotes %}
+<option value="{{ lote.id_lote_ }}">Lote {{ lote.id_lote_ }} (Saldo: {{ lote.saldo_actual }})</option>
+{% endfor %}
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline pointer-events-none">expand_more</span>
+</div>
+</div>
+<div>
+<label class="block font-label-md text-on-surface-variant mb-1">Ítem</label>
+<div class="relative">
+<select name="tipo_item" id="tipo_item" required class="w-full glass-input rounded-lg px-4 py-2.5 text-body-md text-on-surface appearance-none focus:ring-0">
+<option disabled="" selected="" value="">Seleccionar Ítem...</option>
+<option value="Alimento">Alimento (Kg)</option>
+<option value="Agua">Agua (L)</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline pointer-events-none">expand_more</span>
+</div>
+</div>
+<div>
+<label class="block font-label-md text-on-surface-variant mb-1">Cantidad</label>
+<div class="relative">
+<input name="cantidad" id="cantidad" required class="w-full glass-input rounded-lg px-4 py-2.5 text-body-md text-on-surface focus:ring-0" placeholder="0.00" type="number" step="0.01"/>
+<span class="absolute right-4 top-1/2 -translate-y-1/2 text-outline font-body-sm">Kg/L</span>
+</div>
+</div>
+<div class="pt-4">
+<button class="w-full bg-primary text-on-primary rounded-lg py-3 px-4 font-body-md font-semibold flex items-center justify-center gap-2 primary-glow transition-all hover:bg-primary-container hover:scale-[1.02] active:scale-95 shadow-md" type="submit">
+<span class="material-symbols-outlined">save</span>
+                                    Registrar Consumo
+                                </button>
+</div>
+</form>
+</div>
+</section>
+<!-- Section 3: Main Data Table -->
+<section class="lg:col-span-2">
+<div class="glass-card rounded-xl p-md h-full overflow-hidden flex flex-col">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-md text-on-surface">Últimos Movimientos</h3>
+<a href="{{ url_for('reportes.dashboard_reportes') }}" class="text-primary hover:bg-primary/5 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1 font-label-md cursor-pointer">
+                                Ver todos <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</a>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="border-b border-outline-variant/30">
+<th class="pb-3 px-2 font-label-md text-on-surface-variant font-semibold">Fecha</th>
+<th class="pb-3 px-2 font-label-md text-on-surface-variant font-semibold">Ítem</th>
+<th class="pb-3 px-2 font-label-md text-on-surface-variant font-semibold">Lote Destino</th>
+<th class="pb-3 px-2 font-label-md text-on-surface-variant font-semibold text-right">Cantidad</th>
+<th class="pb-3 px-2 font-label-md text-on-surface-variant font-semibold text-center">Estado</th>
+</tr>
+</thead>
+<tbody class="text-body-sm font-body-sm">
+{% for mov in ultimos_movimientos %}
+<tr class="border-b border-outline-variant/10 table-row-hover transition-colors">
+<td class="py-4 px-2 text-on-surface">{{ mov.fecha_registro.strftime('%d %b, %H:%M') if mov.fecha_registro else 'N/A' }}</td>
+<td class="py-4 px-2 font-medium text-on-surface">{{ 'Alimento' if mov.__tablename__ == 'consumo_alimento' else 'Agua' }}</td>
+<td class="py-4 px-2 text-on-surface-variant">Lote {{ mov.id_lote_ }}</td>
+<td class="py-4 px-2 text-right font-medium text-on-surface">{{ '{:,.2f}'.format(mov.cantidad) }}</td>
+<td class="py-4 px-2 text-center">
+<span class="inline-flex items-center justify-center px-2.5 py-1 rounded-full bg-primary-container/20 text-primary-fixed-variant text-label-md font-semibold tracking-wide">
+                                                Completado
+                                            </span>
+</td>
+</tr>
+{% else %}
+<tr><td colspan="5" class="py-4 text-center">No hay movimientos recientes.</td></tr>
+{% endfor %}
+</tbody>
+</table>
+</div>
+</div>
+</section>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{{ url_for('static', filename='js/inventario.js') }}"></script>
+{% endblock %}

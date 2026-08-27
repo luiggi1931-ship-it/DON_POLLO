@@ -26,3 +26,8 @@ from .gasto import Gasto
 @login_manager.user_loader
 def load_user(user_id):
     return db.session.get(Usuario, int(user_id))
+from .inventario import Inventario
+from .movimiento_inventario import MovimientoInventario
+from .consumo_agua import ConsumoAgua
+from .consumo_alimento import ConsumoAlimento
+from .alimento import Alimento

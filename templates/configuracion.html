@@ -229,9 +229,14 @@
         <div id="p.actuadores" class="tab-panel">
             <h2>Prueba de actuadores generales</h2>  
             <div class="actuadores-grid">
-                <div class="actuador-card">
-                    <h3>Ventilador</h3>
-                    <div class="ventilador-container">
+                <div class="actuador-card glass-card">
+                    <div class="actuador-header">
+                        <h3>Ventilador</h3>
+                        <div class="status-badge apagado" id="badge-ventilador">
+                            <span class="dot"></span><span class="text" id="estado-ventilador">Apagado</span>
+                        </div>
+                    </div>
+                    <div class="actuador-visual-container">
                         <div class="ventilador" id="ventilador">
                             <div class="aspa"></div>
                             <div class="aspa"></div>
@@ -240,55 +245,73 @@
                         </div>
                     </div>
                     <div class="control-buttons">
-                        <button class="btn-encender" onclick="encenderVentilador()">
-                            Encender
+                        <button class="power-btn" onclick="togglePower('ventilador')" id="btn-ventilador">
+                            <i class="fas fa-power-off"></i>
                         </button>
-                        <button class="btn-apagar" onclick="apagarVentilador()">
-                            Apagar
-                        </button>
-                    </div>
-                    <div class="estado-display apagado">
-                        <span id="estado-ventilador">Apagado</span>
                     </div>
                 </div>
+
                 <!-- CALEFACCIÓN -->
-                <div class="actuador-card">
-                    <h3>Calefacción (Focos Infrarrojos)</h3>
+                <div class="actuador-card glass-card">
+                    <div class="actuador-header">
+                        <h3>Calefacción (Focos)</h3>
+                        <div class="status-badge apagado" id="badge-calefaccion">
+                            <span class="dot"></span><span class="text" id="estado-calefaccion">Apagado</span>
+                        </div>
+                    </div>
                     <div class="actuador-visual-container">
                         <div class="heater-icon" id="calefaccion">
                             <i class="fas fa-fire"></i>
                         </div>
                     </div>
                     <div class="control-buttons">
-                        <button class="btn-encender" onclick="toggleActuador('calefaccion', true)">
-                            Encender
+                        <button class="power-btn" onclick="togglePower('calefaccion')" id="btn-calefaccion">
+                            <i class="fas fa-power-off"></i>
                         </button>
-                        <button class="btn-apagar" onclick="toggleActuador('calefaccion', false)">
-                            Apagar
-                        </button>
-                    </div>
-                    <div class="estado-display apagado" id="estado-bg-calefaccion">
-                        <span id="estado-calefaccion">Apagado</span>
                     </div>
                 </div>
+
                 <!-- COMEDERO/BEBEDERO -->
-                <div class="actuador-card">
-                    <h3>Sist. de Alimentación</h3>
-                    <div class="actuador-visual-container">
-                        <div class="feeder-icon" id="alimentacion">
-                            <i class="fas fa-tint"></i>
+                <div class="actuador-card glass-card">
+                    <div class="actuador-header" style="justify-content: center;">
+                        <h3 style="margin-bottom: 0;">Sist. Alimentación</h3>
+                    </div>
+                    <div class="dual-actuador-container">
+                        <!-- Agua -->
+                        <div class="sub-actuador">
+                            <div class="status-badge apagado" id="badge-agua">
+                                <span class="dot"></span><span class="text" id="estado-agua">Detenido</span>
+                            </div>
+                            <div class="actuador-visual-container mini">
+                                <div class="feeder-icon water" id="agua">
+                                    <i class="fas fa-tint"></i>
+                                </div>
+                            </div>
+                            <div class="control-buttons">
+                                <button class="power-btn mini-btn" onclick="togglePower('agua')" id="btn-agua">
+                                    <i class="fas fa-power-off"></i>
+                                </button>
+                            </div>
+                            <span class="sub-label">Agua</span>
                         </div>
-                    </div>
-                    <div class="control-buttons">
-                        <button class="btn-encender" onclick="toggleActuador('alimentacion', true)">
-                            Activar
-                        </button>
-                        <button class="btn-apagar" onclick="toggleActuador('alimentacion', false)">
-                            Detener
-                        </button>
-                    </div>
-                    <div class="estado-display apagado" id="estado-bg-alimentacion">
-                        <span id="estado-alimentacion">Detenido</span>
+                        
+                        <!-- Comida -->
+                        <div class="sub-actuador">
+                            <div class="status-badge apagado" id="badge-comida">
+                                <span class="dot"></span><span class="text" id="estado-comida">Detenido</span>
+                            </div>
+                            <div class="actuador-visual-container mini">
+                                <div class="feeder-icon food" id="comida">
+                                    <i class="fas fa-seedling"></i>
+                                </div>
+                            </div>
+                            <div class="control-buttons">
+                                <button class="power-btn mini-btn" onclick="togglePower('comida')" id="btn-comida">
+                                    <i class="fas fa-power-off"></i>
+                                </button>
+                            </div>
+                            <span class="sub-label">Comida</span>
+                        </div>
                     </div>
                 </div>
             </div>
